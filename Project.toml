@@ -1,0 +1,7 @@
+name = "Demos"
+uuid = "72c85766-979b-4e79-9236-3c38948b2cfb"
+authors = ["Jeff Fessler <fessler@umich.edu>"]
+version = "0.1.0"
+
+[compat]
+julia = "1.7"
