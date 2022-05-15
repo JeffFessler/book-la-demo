@@ -36,6 +36,7 @@ end
 ismd(f) = splitext(f)[2] == ".md"
 pages(folder) =
     [joinpath("generated/", folder, f) for f in readdir(joinpath(gen, folder)) if ismd(f)]
+demos(folder) = pages(joinpath("demos", folder))
 
 isci = get(ENV, "CI", nothing) == "true"
 
@@ -53,16 +54,16 @@ makedocs(;
     format,
     pages = [
         "Home" => "index.md",
-#       "00 Matrix" => pages("00"),
-#       "01 Matrix" => pages("01"),
-#       "02 Eig/SVD" => pages("02"),
-        "03 Subspaces" => pages("demos/03"),
-#       "04 LS" => pages("04"),
-#       "05 Norm" => pages("05"),
-#       "06 Low-Rank" => pages("06"),
-#       "07 Special" => pages("07"),
-#       "08 Optimize" => pages("08"),
-#       "09 Complete" => pages("09"),
+#       "00 Matrix" => demos("00"),
+#       "01 Matrix" => demos("01"),
+#       "02 Eig/SVD" => demos("02"),
+        "03 Subspaces" => demos("03"),
+        "04 LS" => demos("04"),
+#       "05 Norm" => demos("05"),
+#       "06 Low-Rank" => demos("06"),
+#       "07 Special" => demos("07"),
+#       "08 Optimize" => demos("08"),
+#       "09 Complete" => demos("09"),
     ],
 )
 
