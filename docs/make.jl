@@ -59,7 +59,7 @@ makedocs(;
 #       "02 Eig/SVD" => demos("02"),
         "03 Subspaces" => demos("03"),
         "04 LS" => demos("04"),
-#       "05 Norm" => demos("05"),
+        "05 Norm" => demos("05"),
 #       "06 Low-Rank" => demos("06"),
 #       "07 Special" => demos("07"),
 #       "08 Optimize" => demos("08"),
