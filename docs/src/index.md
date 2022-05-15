@@ -41,7 +41,7 @@ at the University of Michigan.
   [unicode](https://docs.julialang.org/en/v1/manual/unicode-input/#Unicode-Input)
   characters like `÷ ⊗ ⊕ ∘ ×` and `α β γ`.
 
-* Peruse the reconstruction examples listed in the menu here.
+* Peruse the demos listed in the menu here.
   If your browser window is wide enough,
   you should see a menu to the left.
   If your window is narrow,
@@ -78,12 +78,12 @@ that generated any of these examples.
 
 For example,
 the code for the
-[NUFFT example](https://juliaimagerecon.github.io/Examples/mri/1-nufft)
+[SVD demo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/03/svd-diff)
 is at
-[this url](https://github.com/JuliaImageRecon/Examples/blob/main/docs/lit/mri/1-nufft.jl).
+[this url](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/03/svd-diff.jl).
 After downloading such a file such as
-[1-nufft.jl](https://github.com/JuliaImageRecon/Examples/blob/main/docs/lit/mri/1-nufft.jl),
+[svd-demo.jl](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/03/svd-diff.jl),
 you can run it
 by typing
-`include("1-nufft.jl")`
+`include("svd-demo.jl")`
 at the Julia REPL.

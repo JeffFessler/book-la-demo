@@ -1,6 +1,5 @@
-# Demos for book [WIP]
+# Demos for Matrix Methods in Julia book [WIP]
 
-[![docs][docs-img]][docs-url]
 [![license][license-img]][license-url]
 [![demos][demos-img]][demos-url]
 
@@ -12,7 +11,8 @@ in the
 to accompany the book
 "Matrix Methods and Applications in Julia"
 by Jeff Fessler
-and Raj Nadakuditi.
+and Raj Nadakuditi
+of the University of Michigan.
 
 To view the demos,
 click this button:
@@ -20,8 +20,6 @@ click this button:
 
 
 <!-- URLs -->
-[docs-img]: https://img.shields.io/badge/-Documentation-blue
-[docs-url]: https://JeffFessler.github.io/book-mmaj-demo
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-mmaj-demo
 [license-img]: https://licensebuttons.net/l/by-nc-nd/3.0/88x31.png
