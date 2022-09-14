@@ -55,7 +55,7 @@ makedocs(;
     pages = [
         "Home" => "index.md",
 #       "00 Matrix" => demos("00"),
-#       "01 Matrix" => demos("01"),
+        "01 Matrix" => demos("01"),
 #       "02 Eig/SVD" => demos("02"),
         "03 Subspaces" => demos("03"),
         "04 LS" => demos("04"),
