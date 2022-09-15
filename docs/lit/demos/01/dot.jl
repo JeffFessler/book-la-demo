@@ -123,36 +123,37 @@ N = 2^16; x = rand(ComplexF32, N); y = rand(ComplexF32, N)
 # Verify the methods are equivalent
 @assert f1(x,y) == f2(x,y) ≈ f3(x,y) ≈ f4(x,y) ≈ f5(x,y) ≈ f6(x,y) ≈ f7(x,y)
 
+
 # ## Benchmark the methods
 # The results will depend on the computer used, of course.
 
-#
-t = @benchmark f1($x,$y); # y'x
+# y'x
+t = @benchmark f1($x,$y)
 timeu = t -> btime(t, unit=:μs)
 timeu(t)
 
-#
-t = @benchmark f2($x,$y); # dot(y,x)
+# dot(y,x)
+t = @benchmark f2($x,$y)
 timeu(t)
 
-#
-t = @benchmark f3($x,$y); # sum with conj()
+# sum with conj()
+t = @benchmark f3($x,$y)
 timeu(t)
 
-#
-t = @benchmark f4($x,$y); # zip sum
+# zip sum
+t = @benchmark f4($x,$y)
 timeu(t)
 
-#
-t = @benchmark f5($x,$y); # basic loop
+# basic loop
+t = @benchmark f5($x,$y)
 timeu(t)
 
-#
-t = @benchmark f6($x,$y); # fancy loop (@inbounds & @simd may help)
+# fancy loop with @inbounds & @simd
+t = @benchmark f6($x,$y)
 timeu(t)
 
-#
-t = @benchmark f7($x,$y); # zip accum loop
+# zip accum loop
+t = @benchmark f7($x,$y)
 timeu(t)
 
 
