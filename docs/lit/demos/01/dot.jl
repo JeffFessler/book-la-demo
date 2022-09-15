@@ -33,6 +33,7 @@ if false
     Pkg.add([
         "LinearAlgebra"
         "BenchmarkTools"
+        "LazyGrids"
         "InteractiveUtils"
     ])
 end
@@ -42,8 +43,9 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using LinearAlgebra: dot
-using BenchmarkTools: @btime
+using BenchmarkTools: @benchmark
 using InteractiveUtils: versioninfo
+using LazyGrids: btime
 
 
 #=
@@ -68,21 +70,21 @@ is to use functions.
 =#
 
 # ### The built-in `dot` method:
-f1(x,y) = dot(y,x)
+f1(x,y) = dot(y,x);
 
 # ### An equivalent method using the adjoint `'`
 # It can be written `y' * x` or `*(y', x)`.
 # By checking `@which *(y', x)`
 # one can verify that these all call `dot`.
-f2(x,y) = y'x
+f2(x,y) = y'x;
 
 # ### Using `sum` with vector conjugate
 # This is suboptimal because it must allocate memory for `conj(y)`
-f3(x,y) = sum(conj(y) .* x) # must allocate "conj(y)"
+f3(x,y) = sum(conj(y) .* x); # must allocate "conj(y)"
 
 # ### Using `zip` and `sum` with a function argument
 # This approach avoids the needless allocation.
-f4(x,y) = sum(z -> z[1] * conj(z[2]), zip(x,y))
+f4(x,y) = sum(z -> z[1] * conj(z[2]), zip(x,y));
 
 # ### A basic `for` loop like one would write in a low-level language
 function f5(x,y)
@@ -91,7 +93,7 @@ function f5(x,y)
         accum += x[i] * conj(y[i])
     end
     return accum
-end
+end;
 
 # ### An advanced `for` loop that uses bounds checking and SIMD operations
 function f6(x,y)
@@ -101,9 +103,10 @@ function f6(x,y)
         @inbounds accum += x[i] * conj(y[i])
     end
     return accum
-end
+end;
 
-# ### The Julia way (from source code as of v1.8.1)
+# ### The Julia fallback method (from source code as of v1.8.1)
+# This code is what is used for general `AbstractArray` types.
 function f7(x,y)
     accum = zero(promote_type(eltype(x), eltype(y)))
     @boundscheck length(x) == length(y) || throw("incompatible")
@@ -111,7 +114,7 @@ function f7(x,y)
         @inbounds accum += x[ix] * conj(y[iy]) # same as dot(y[iy], x[ix])
     end
     return accum
-end
+end;
 
 
 # ### Data for timing tests
@@ -124,25 +127,33 @@ N = 2^16; x = rand(ComplexF32, N); y = rand(ComplexF32, N)
 # The results will depend on the computer used, of course.
 
 #
-@btime f1($x,$y); # y'x
+t = @benchmark f1($x,$y); # y'x
+timeu = t -> btime(t, unit=:μs)
+timeu(t)
 
 #
-@btime f2($x,$y); # dot(y,x)
+t = @benchmark f2($x,$y); # dot(y,x)
+timeu(t)
 
 #
-@btime f3($x,$y); # sum with conj()
+t = @benchmark f3($x,$y); # sum with conj()
+timeu(t)
 
 #
-@btime f4($x,$y); # zip sum
+t = @benchmark f4($x,$y); # zip sum
+timeu(t)
 
 #
-@btime f5($x,$y); # basic loop
+t = @benchmark f5($x,$y); # basic loop
+timeu(t)
 
 #
-@btime f6($x,$y); # fancy loop (@inbounds & @simd may help)
+t = @benchmark f6($x,$y); # fancy loop (@inbounds & @simd may help)
+timeu(t)
 
 #
-@btime f7($x,$y); # zip accum loop
+t = @benchmark f7($x,$y); # zip accum loop
+timeu(t)
 
 
 #=
