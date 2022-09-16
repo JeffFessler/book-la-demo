@@ -158,14 +158,33 @@ timeu(t)
 
 
 #=
-### Observations:
+### Remarks
 
 The built-in `dot` method is the fastest.
-Behind the scenes it calls `BLAS.dot`
-which seems to be highly optimized.
-I was hoping that using `@simd` and `@inbounds`
-would lead to speeds
-closer to `dot`.
+Behind the scenes it calls
+[`BLAS.dot`](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/blas.jl)
+which is highly optimized
+because it uses
+[cpu specific assembly code](https://discourse.julialang.org/t/why-is-blas-dot-product-so-much-faster-than-julia-loop/44994)
+based on
+[Single instruction, multiple data (SIMD)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
+to perform, say, 4 multiplies
+in a single instruction.
+Thus the basic loop is several times slower than `dot()`.
+
+Sometimes we can speed up code
+by promising the Julia compiler
+that array indexing operations
+like `x[i]` are valid,
+by adding the `@inbounds` macro.
+
+Depending on the CPU,
+using `@simd` and `@inbounds`
+can lead to speeds
+close to that of `dot`.
+
+The `promote_type` function ensures that the accumulator
+uses the better precision of the two arguments.
 =#
 
 
