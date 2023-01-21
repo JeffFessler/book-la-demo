@@ -64,6 +64,7 @@ makedocs(;
 #       "07 Special" => demos("07"),
 #       "08 Optimize" => demos("08"),
 #       "09 Complete" => demos("09"),
+        "Other => demos("other"),
     ],
 )
 
