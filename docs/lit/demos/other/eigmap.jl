@@ -54,7 +54,7 @@ using ImagePhantoms: rect, phantom
 using LinearAlgebra: norm, Diagonal, eigen, svdvals
 using Random: seed!
 using MIRTjim: jim, prompt
-using Plots: scatter, savefig, default
+using Plots: plot, scatter, savefig, default
 using LaTeXStrings
 using InteractiveUtils: versioninfo
 default(label = "", markerstrokecolor = :auto)
