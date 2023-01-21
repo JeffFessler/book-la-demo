@@ -19,7 +19,7 @@ This entire page was generated using a single Julia file:
 #md # using the "Edit on GitHub" link in the top right.
 
 #md # The corresponding notebook can be viewed in
-#md # [nbviewer](http://nbviewer.jupyter.org/) here:
+#md # [nbviewer](https://nbviewer.org/) here:
 #md # [`svd-diff.ipynb`](@__NBVIEWER_ROOT_URL__/03/svd-diff.ipynb),
 #md # and opened in [binder](https://mybinder.org/) here:
 #md # [`svd-diff.ipynb`](@__BINDER_ROOT_URL__/03/svd-diff.ipynb),

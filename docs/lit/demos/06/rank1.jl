@@ -16,7 +16,7 @@ This entire page was generated using a single Julia file:
 #md # using the "Edit on GitHub" link in the top right.
 
 #md # The corresponding notebook can be viewed in
-#md # [nbviewer](http://nbviewer.jupyter.org/) here:
+#md # [nbviewer](https://nbviewer.org/) here:
 #md # [`rank1.ipynb`](@__NBVIEWER_ROOT_URL__/06/rank1.ipynb),
 #md # and opened in [binder](https://mybinder.org/) here:
 #md # [`rank1.ipynb`](@__BINDER_ROOT_URL__/06/rank1.ipynb),
