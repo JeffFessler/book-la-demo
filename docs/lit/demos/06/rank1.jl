@@ -1,16 +1,13 @@
-#---------------------------------------------------------
-# # [Rank-1 approximation](@id rank-1)
-#---------------------------------------------------------
-
 #=
+# [Rank-1 approximation](@id rank-1)
+
 This example illustrates rank-1 approximations
 using the Julia language.
-=#
 
-#=
 This entire page was generated using a single Julia file:
 [rank1.jl](@__REPO_ROOT_URL__/06/rank1.jl).
 =#
+
 #md # In any such Julia documentation,
 #md # you can access the source code
 #md # using the "Edit on GitHub" link in the top right.

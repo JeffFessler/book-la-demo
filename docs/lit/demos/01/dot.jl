@@ -1,17 +1,14 @@
-#---------------------------------------------------------
-# # [Vector dot product](@id dot)
-#---------------------------------------------------------
-
 #=
+# [Vector dot product](@id dot)
+
 This example illustrates different ways of computing
 vector dot products
 using the Julia language.
-=#
 
-#=
 This entire page was generated using a single Julia file:
 [dot.jl](@__REPO_ROOT_URL__/01/dot.jl).
 =#
+
 #md # In any such Julia documentation,
 #md # you can access the source code
 #md # using the "Edit on GitHub" link in the top right.
