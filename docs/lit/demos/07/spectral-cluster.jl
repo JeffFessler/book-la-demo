@@ -64,7 +64,7 @@ if !@isdefined(data)
     tmp = randperm(nrep * ndigit)
     data = data[:,:,tmp]
     labels = labels[tmp]
-    @show size(data) # (nx, ny, nrep*ndigit)
+    size(data) # (nx, ny, nrep*ndigit)
 end
 
 
@@ -111,7 +111,7 @@ for k in 1:K # each cluster
         result[k,j] = count(rck .& (l .== labels))
     end
 end
-@show result
+result
 
 # Visualize the clustered digits
 pc = jim(
