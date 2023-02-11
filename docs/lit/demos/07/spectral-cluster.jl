@@ -48,8 +48,8 @@ Read the MNIST data for some handwritten digits.
 This code will automatically download the data from web if needed
 and put it in a folder like: `~/.julia/datadeps/MNIST/`.
 =#
-if !@isdefined(data) || true
-    digitn = (0, 1) # which digits to use
+if !@isdefined(data)
+    digitn = (0, 1, 3) # which digits to use
     dataset = MNIST(Float32, :train)
     nrep = 30
     ## function to extract the 1st 1000 examples of digit n:
@@ -61,10 +61,9 @@ if !@isdefined(data) || true
     ny = size(data,2)
     data = reshape(data, nx, ny, :)
     seed!(0)
-#   tmp = randperm(nrep * ndigit)
-#todo
-#   data = data[:,:,tmp]
-#   labels = labels[tmp]
+    tmp = randperm(nrep * ndigit)
+    data = data[:,:,tmp]
+    labels = labels[tmp]
     @show size(data) # (nx, ny, nrep*ndigit)
 end
 
@@ -80,32 +79,54 @@ sfun(x,z) = exp(-norm(x-z)^2/nx/ny/σ^2)
 # Weight matrix
 slices = eachslice(data, dims=3)
 W = [sfun(x,z) for x in slices, z in slices]
-jim(W, "weight matrix")
+pw = jim(W, "weight matrix W")
 
 # Degree matrix
 D = Diagonal(vec(sum(W; dims=2)))
 
 # Normalized graph Laplacian
 L = I - inv(D) * W
-jim(L, "Normalized graph Laplacian")
+jim(L, "Normalized graph Laplacian L")
 
-# Eigendecomposition
+# Eigendecomposition and eigenvalues
 eig = eigen(L)
-scatter(eig.values, xlabel = L"k", ylabel="Eigenvalues")
+pe = scatter(eig.values, xlabel = L"k", ylabel="Eigenvalues")
+
+#
+prompt()
 
 # Apply k-means++ to eigenvectors
 K = length(digitn) # cheat: using the known number of digits
 Y = eig.vectors[:,1:K]'
 rc = kmeans(Y, K)
 
-jim(rc.centers) # class means from kmeans++
+# Confusion matrix using class assignments from kmeans++
+label_list = unique(labels)
+#src assign_list = unique(rc.assignments) # 1:K
 
-# todo: sort data using
-rc.assignments # class assignments from kmeans++
+result = zeros(Int, K, length(label_list))
+for k in 1:K # each cluster
+    rck = rc.assignments .== k
+    for (j,l) in enumerate(label_list)
+        result[k,j] = count(rck .& (l .== labels))
+    end
+end
+@show result
 
-#
-prompt()
-gui(); throw()
+# Visualize the clustered digits
+pc = jim(
+ [jim(data[:,:,rc.assignments .== k], "Class $k"; prompt=false) for k in 1:K]...
+)
+
+#=
+The clustering here seems only so-so,
+at least from the digit classification point of view.
+Each of these digits lives reasonably close
+to a manifold,
+and apparently the simply Gaussian similarity function
+used here does not adequately capture
+within-manifold similarities.
+=#
 
 
 # ### Reproducibility
