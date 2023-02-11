@@ -50,6 +50,7 @@ and put it in a folder like: `~/.julia/datadeps/MNIST/`.
 =#
 if !@isdefined(data)
     digitn = (0, 1, 3) # which digits to use
+    isinteractive() || (ENV["DATADEPS_ALWAYS_ACCEPT"] = true) # avoid prompt
     dataset = MNIST(Float32, :train)
     nrep = 30
     ## function to extract the 1st 1000 examples of digit n:
