@@ -1,16 +1,13 @@
-#---------------------------------------------------------
-# # [LS fitting](@id ls-fit1)
-#---------------------------------------------------------
-
 #=
+# [LS fitting](@id ls-fit1)
+
 This example illustrates least squares (LS) polynomial fitting
 using the Julia language.
-=#
 
-#=
 This entire page was generated using a single Julia file:
 [ls-fit1.jl](@__REPO_ROOT_URL__/04/ls-fit1.jl).
 =#
+
 #md # In any such Julia documentation,
 #md # you can access the source code
 #md # using the "Edit on GitHub" link in the top right.

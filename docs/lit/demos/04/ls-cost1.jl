@@ -1,17 +1,14 @@
-#---------------------------------------------------------
-# # [LS cost functions](@id ls-cost1)
-#---------------------------------------------------------
-
 #=
+# [LS cost functions](@id ls-cost1)
+
 This example illustrates linear least-squares (LS) cost functions
 and minimum-norm LS (MNLS) solutions  
 using the Julia language.
-=#
 
-#=
 This entire page was generated using a single Julia file:
 [ls-cost1.jl](@__REPO_ROOT_URL__/04/ls-cost1.jl).
 =#
+
 #md # In any such Julia documentation,
 #md # you can access the source code
 #md # using the "Edit on GitHub" link in the top right.
