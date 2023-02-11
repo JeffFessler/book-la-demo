@@ -1,5 +1,6 @@
 [deps]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
 ImagePhantoms = "71a99df6-f52c-4da1-bd2a-69d6f37f3252"
