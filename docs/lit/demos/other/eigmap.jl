@@ -1,5 +1,5 @@
 #=
-# [Laplacian Eigenmaps](@id eigmap)
+# [Laplacian eigenmaps](@id eigmap)
 
 This example illustrates
 Laplacian eigenmaps
@@ -181,6 +181,8 @@ pw = jim(W; title = L"W_{ij}", xlabel = L"i", ylabel = L"j")
 
 
 #=
+## Graph Laplacian
+
 Compute the
 [graph Laplacian](https://en.wikipedia.org/wiki/Laplacian_matrix)
 from the weight matrix.
@@ -268,7 +270,14 @@ suppose we examine all images
 where feature 1 is in some interval like ``(-1.5,-1)``.
 These images are all of rectangles
 of similar orientation, but various widths.
+=#
 
+tmp = data[:,:, -1.5 .< features[:,1] .< -1]
+pf1 = jim(tmp; title = "Feature 1 set")
+#src savefig(pf1, "eigmap-pf1.pdf")
+
+
+#=
 Conversely,
 the images
 where feature 2 is in some interval like ``(0.2,0.5)``
@@ -276,19 +285,9 @@ are all rectangles
 of similar widths, but various rotations.
 =#
 
-tmp = data[:,:, -1.5 .< features[:,1] .< -1]
-pf1 = jim(tmp; title = "Feature 1 set")
-#src savefig(pf1, "eigmap-pf1.pdf")
-
-#
-prompt()
-
 tmp = data[:,:, 0.2 .< features[:,2] .< 0.5]
 pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
 #src savefig(pf2, "eigmap-pf2.pdf")
-
-#
-prompt()
 
 
 #src X = [features ones(nrep)]
@@ -299,13 +298,10 @@ prompt()
 #src scatter(features[:,2], Y * (Y \ features[:,2]))
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

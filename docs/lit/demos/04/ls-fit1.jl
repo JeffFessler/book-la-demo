@@ -117,7 +117,7 @@ U, s, V = svd(A)
 s
 
 
-# ### Verify equivalence of SVD and backslash solutions to LS problem
+# ## Verify equivalence of SVD and backslash solutions to LS problem
 
 xh2 = V * Diagonal(1 ./ s) * (U' * y) # SVD-based solution
 xh3 = V * ( (1 ./ s) .* (U' * y) ) # mathematically equivalent alternate expression
@@ -128,13 +128,10 @@ xh3 = V * ( (1 ./ s) .* (U' * y) ) # mathematically equivalent alternate express
 
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

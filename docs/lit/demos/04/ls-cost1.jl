@@ -55,7 +55,7 @@ using InteractiveUtils: versioninfo
 isinteractive() && prompt(:prompt);
 
 
-# ### Under-determined case
+# ## Under-determined case
 
 A = [1 2] # 1st case: M < N
 y = [3] # obviously x=[1 1] is one possible solution (but not MNLS)
@@ -82,7 +82,7 @@ prompt()
 #src savefig("demo_ls_cost1a.pdf")
 
 
-# ### Square but singular case
+# ## Square but singular case
 
 A = [1 2; 2 4] # 2nd case: M = N but singular A
 y = [3, 6] # again [1,1] is a solution (but not MNLS solution) 
@@ -106,7 +106,7 @@ prompt()
 #src savefig("demo_ls_cost1b.pdf")
 
 
-# ### Square non-singular case
+# ## Square non-singular case
 
 A = [1 2; 1 3] # 3rd case: M = N with non-singular A
 y = [3, 4] # now x=[1,1] is the unique solution (by design)
@@ -127,7 +127,7 @@ prompt()
 #src savefig("demo_ls_cost1c.pdf")
 
 
-# ### Typical over-determined case
+# ## Typical over-determined case
 
 A = [1 2; 1 -1; 2 1] # 4th case: M > N with (typical) inconsistent data
 y = [3, 2, 1] # no consistent solution
@@ -152,13 +152,10 @@ prompt()
 
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

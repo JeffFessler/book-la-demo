@@ -1,5 +1,5 @@
 #=
-# [SVD of Finite Differences](@id svd-diff)
+# [SVD of finite differences](@id svd-diff)
 
 This example illustrates the SVD of a first-order finite-difference matrix
 using the Julia language.
@@ -121,10 +121,7 @@ jim(
 # ## Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

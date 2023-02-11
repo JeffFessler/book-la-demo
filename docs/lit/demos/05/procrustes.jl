@@ -37,8 +37,6 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using LinearAlgebra: svd, norm, Diagonal
-#src using Plots; default(label="", markerstrokecolor=:auto)
-#src using LaTeXStrings
 using MIRTjim: prompt
 using InteractiveUtils: versioninfo
 
@@ -49,7 +47,7 @@ using InteractiveUtils: versioninfo
 isinteractive() && prompt(:prompt);
 
 
-# ### Coordinate data
+# ## Coordinate data
 
 # coordinates from rotated image example in n-05-norm/fig/
 A = [-59 -25 49;
@@ -61,7 +59,7 @@ B = [-54.1 -5.15 32.44;
 #src yc1 = 127 - [121, 160, 107]
 
 
-# ### Procrustes solution steps
+# ## Procrustes solution steps
 
 C = B * A'
 
@@ -73,7 +71,7 @@ s
 Q = U * V'
 
 
-# ### Fitting residual
+# ## Fitting residual
 
 residual = B - Q * A # small!
 
@@ -82,7 +80,7 @@ residual = B - Q * A # small!
 acos(Q[1]) * (180/π) # very close to 30° as expected
 
 
-# ### Fitting function
+# ## Fitting function
 
 function procrustes(A, B)
     C = B * A'
@@ -93,7 +91,7 @@ function procrustes(A, B)
 end
 
 
-# ### Explore additional special cases
+# ## Explore additional special cases
 
 # three points along a line, symmetrical
 
@@ -136,13 +134,10 @@ acos(Q[1]) * 180/π
 
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

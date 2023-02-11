@@ -105,7 +105,7 @@ scatter!(pl, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
 prompt()
 
 
-# ### Now instead use least-squares estimation to estimate slope:
+# ## Use least-squares estimation to estimate slope:
 slope = y'*x / (x'*x) # cf inv(A'A) * A'b
 slope = (x \ y)[1] # cf A \ b
 
@@ -119,7 +119,7 @@ prompt()
 #src savefig("06_low_rank1_all.pdf")
 
 
-# ### Illustrate the Frobenius norm approximation error graphically
+# ## Illustrate the Frobenius norm approximation error graphically
 pl = plotdata()
 for i in 1:length(xb)
     plot!(pl, [x[i], xb[i]], [y[i], yb[i]], color=:black, label="", width=2)
@@ -133,7 +133,7 @@ prompt()
 #src savefig("06_low_rank1_r1.pdf")
 
 
-# ### Illustrate the LS residual graphically
+# ## Illustrate the LS residual graphically
 xl = x; yl = slope*xl # LS points
 pl = plotdata()
 for i in 1:length(x)
@@ -148,13 +148,10 @@ prompt()
 #src savefig("06_low_rank1_ls.pdf")
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

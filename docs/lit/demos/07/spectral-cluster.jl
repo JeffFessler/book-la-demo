@@ -1,9 +1,11 @@
 #=
-# [spectral-cluster](@id spectral-cluster)
+# [Spectral clustering](@id spectral-cluster)
 
 ## Spectral clustering illustration
 
-This example illustrates spectral clustering
+This example illustrates
+[spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering)
+via normalized graph Laplacian
 applied to hand-written digits.
 
 This page was generated from a single Julia file:
@@ -85,7 +87,7 @@ pw = jim(W, "weight matrix W")
 # Degree matrix
 D = Diagonal(vec(sum(W; dims=2)))
 
-# Normalized graph Laplacian
+# ## Normalized graph Laplacian
 L = I - inv(D) * W
 jim(L, "Normalized graph Laplacian L")
 
@@ -96,7 +98,7 @@ pe = scatter(eig.values, xlabel = L"k", ylabel="Eigenvalues")
 #
 prompt()
 
-# Apply k-means++ to eigenvectors
+# ## Apply k-means++ to eigenvectors
 K = length(digitn) # cheat: using the known number of digits
 Y = eig.vectors[:,1:K]'
 rc = kmeans(Y, K)

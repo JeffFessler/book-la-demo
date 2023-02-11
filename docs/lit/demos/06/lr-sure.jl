@@ -146,13 +146,20 @@ prompt()
 #src savefig("06_lr_sure1b.pdf")
 
 
-# ## Explore SURE for selecting $\beta$
-#
-# $SURE(\beta) = \Vert \hat{X} - Y \Vert^2 - MN \sigma_0^2 + 2 \sigma_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(\sigma_i;\beta)}{\sigma_i} + \sum_{i=1}^{\min(M,N)} \dot{h}_i(\sigma_i;\beta) + 2 \sum_{i \neq j}^{\min(M,N)} \frac{\sigma_i h_i(\sigma_i;\beta)}{\sigma_i^2 - \sigma_j^2} \right) $
+#=
+## Explore SURE for selecting ``β``
 
-# sy: singular values of Y
-# reg: regularization parameter
-# v0 = sigma_0^2 noise variance
+```math
+SURE(β) = ‖ \hat{X} - Y ‖^2 - MN \sigma_0^2
+ + 2 σ_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(σ_iσ)}{σ_i}
+ + \sum_{i=1}^{\min(M,N)} \dot{h}_i(σ_i;β)
+ + 2 \sum_{i \neq j}^{\min(M,N)} \frac{σ_i h_i(σ_i;β)}{σ_i^2 - σ_j^2} \right)
+```
+
+- `sy` singular values of Y
+- `reg` regularization parameter
+- `v0 = sigma_0^2` noise variance
+=#
 function sure(sy, reg, v0, M, N)
     sh = soft.(sy, reg) # estimated singular values
     big = sy.^2 .- (sy.^2)'
@@ -197,13 +204,10 @@ prompt()
 #src savefig("06_lr_sure1t.pdf")
 
 
-# ## Reproducibility
+# ### Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()

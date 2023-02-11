@@ -2,7 +2,7 @@
 # [Vector dot product](@id dot)
 
 This example illustrates different ways of computing
-vector dot products
+[vector dot products](https://en.wikipedia.org/wiki/Dot_product)
 using the Julia language.
 
 This entire page was generated using a single Julia file:
@@ -188,10 +188,7 @@ uses the better precision of the two arguments.
 # ## Reproducibility
 
 # This page was generated with the following version of Julia:
-
 io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
 
-
 # And with the following package versions
-
 import Pkg; Pkg.status()
