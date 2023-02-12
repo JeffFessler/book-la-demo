@@ -1,25 +1,11 @@
-#---------------------------------------------------------
-# # [LS fitting](@id ls-fit1)
-#---------------------------------------------------------
-
 #=
+# [LS fitting](@id ls-fit1)
+
 This example illustrates least squares (LS) polynomial fitting
 using the Julia language.
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[ls-fit1.jl](@__REPO_ROOT_URL__/04/ls-fit1.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`ls-fit1.ipynb`](@__NBVIEWER_ROOT_URL__/04/ls-fit1.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`ls-fit1.ipynb`](@__BINDER_ROOT_URL__/04/ls-fit1.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -30,12 +16,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
-        "Plots"
-        "LaTeXStrings"
-        "MIRTjim"
-        "Random"
         "InteractiveUtils"
+        "LaTeXStrings"
+        "LinearAlgebra"
+        "MIRTjim"
+        "Plots"
+        "Random"
     ])
 end
 
@@ -43,12 +29,12 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: Diagonal, svd
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto)
-#using LaTeXStrings
-using MIRTjim: prompt
 using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: Diagonal, svd
+using MIRTjim: prompt
+using Plots; default(label="", markerstrokecolor=:auto)
+using Random: seed!
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -67,7 +53,7 @@ y = s.(tm) + 0.1 * randn(M) # noisy samples
 
 t0 = LinRange(0, 1, 101) # fine sampling for showing curve
 p0 = scatter(tm, y, color=:blue,
-    label="y (noisy data)", xlabel="t", ylabel="y", ylim=(-1.3, 1.3))
+    label="y (noisy data)", xlabel=L"t", ylabel=L"y", ylim=(-1.3, 1.3))
 plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
 
 #
@@ -79,7 +65,7 @@ prompt()
 deg = 3 # polynomial degree
 Afun = (tt) -> [t.^i for t in tt, i in 0:deg] # matrix of monomials
 A = Afun(tm) # M × 4 matrix
-p1 = plot(title="Columns of matrix A", xlabel="t", legend=:left)
+p1 = plot(title="Columns of matrix A", xlabel=L"t", legend=:left)
 for i in 0:deg
     plot!(p1, tm, A[:,i+1], marker=:circle, label = "A[:,$(i+1)]")
 end
@@ -120,7 +106,7 @@ U, s, V = svd(A)
 s
 
 
-# ### Verify equivalence of SVD and backslash solutions to LS problem
+# ## Verify equivalence of SVD and backslash solutions to LS problem
 
 xh2 = V * Diagonal(1 ./ s) * (U' * y) # SVD-based solution
 xh3 = V * ( (1 ./ s) .* (U' * y) ) # mathematically equivalent alternate expression
@@ -129,15 +115,4 @@ xh3 = V * ( (1 ./ s) .* (U' * y) ) # mathematically equivalent alternate express
 @assert xh ≈ xh3
 
 
-
-
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

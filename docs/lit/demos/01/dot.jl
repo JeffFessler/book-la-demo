@@ -1,26 +1,12 @@
-#---------------------------------------------------------
-# # [Vector dot product](@id dot)
-#---------------------------------------------------------
-
 #=
+# [Vector dot product](@id dot)
+
 This example illustrates different ways of computing
-vector dot products
+[vector dot products](https://en.wikipedia.org/wiki/Dot_product)
 using the Julia language.
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[dot.jl](@__REPO_ROOT_URL__/01/dot.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`svd-diff.ipynb`](@__NBVIEWER_ROOT_URL__/01/dot.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`svd-diff.ipynb`](@__BINDER_ROOT_URL__/01/dot.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -31,10 +17,10 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
         "BenchmarkTools"
-        "LazyGrids"
         "InteractiveUtils"
+        "LazyGrids"
+        "LinearAlgebra"
     ])
 end
 
@@ -42,10 +28,10 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: dot
 using BenchmarkTools: @benchmark
 using InteractiveUtils: versioninfo
 using LazyGrids: btime
+using LinearAlgebra: dot
 
 
 #=
@@ -188,13 +174,4 @@ uses the better precision of the two arguments.
 =#
 
 
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

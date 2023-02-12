@@ -1,25 +1,12 @@
-#---------------------------------------------------------
-# # [Source localization approximation](@id source-local)
-#---------------------------------------------------------
-
 #=
-This example illustrates source localization via multi-dimensional scaling
+# [Source localization](@id source-local)
+
+This example illustrates source localization via
+[multi-dimensional scaling](https://en.wikipedia.org/wiki/Multidimensional_scaling)
 using the Julia language.
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[source-local.jl](@__REPO_ROOT_URL__/06/source-local.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`source-local.ipynb`](@__NBVIEWER_ROOT_URL__/06/source-local.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`source-local.ipynb`](@__BINDER_ROOT_URL__/06/source-local.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -30,12 +17,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
         "Random"
         "Statistics"
-        "InteractiveUtils"
     ])
 end
 
@@ -43,13 +30,12 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: svd, norm, Diagonal
-using Statistics: mean
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto)
-#src using LaTeXStrings
-using MIRTjim: jim, prompt
 using InteractiveUtils: versioninfo
+using LinearAlgebra: svd, norm, Diagonal
+using MIRTjim: jim, prompt
+using Plots; default(label="", markerstrokecolor=:auto)
+using Random: seed!
+using Statistics: mean
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -110,7 +96,7 @@ prompt()
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]' # here is the key step
 
 # ### Plot estimated source locations
-scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, label="", aspect_ratio=1,
+scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates")
 
 #
@@ -136,7 +122,7 @@ prompt()
 
 # ### Plot estimated source locations from noisy distance measurements
 Cn = Diagonal(sqrt.(sn[1:2])) * Vn[:,1:2]' # here is the key step
-scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, label="", aspect_ratio=1,
+scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates")
 
 #
@@ -147,21 +133,10 @@ prompt()
 G = [-2 1 1; 1 -2 1; 1 1 -2] / (-6.)
 (~, σ, V) = svd(G)
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]'
-scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, label="",
- title="Location estimates")
+scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, title="Location estimates")
 
 #
 prompt()
 
 
-
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

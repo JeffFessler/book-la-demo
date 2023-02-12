@@ -1,25 +1,12 @@
-#---------------------------------------------------------
-# # [Procrustes](@id procrustes)
-#---------------------------------------------------------
-
 #=
-This example illustrates the Procrustes method
+# [Procrustes method](@id procrustes)
+
+This example illustrates the
+[orthogonal Procrustes method](https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem)
 using the Julia language.
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[procrustes.jl](@__REPO_ROOT_URL__/05/procrustes.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`procrustes.ipynb`](@__NBVIEWER_ROOT_URL__/05/procrustes.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`procrustes.ipynb`](@__BINDER_ROOT_URL__/05/procrustes.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -30,8 +17,9 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
         "InteractiveUtils"
+        "LinearAlgebra"
+        "MIRTjim"
     ])
 end
 
@@ -39,11 +27,9 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: svd, norm, Diagonal
-#src using Plots; default(label="", markerstrokecolor=:auto)
-#src using LaTeXStrings
-using MIRTjim: prompt
 using InteractiveUtils: versioninfo
+using LinearAlgebra: svd, norm, Diagonal
+using MIRTjim: prompt
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -52,7 +38,7 @@ using InteractiveUtils: versioninfo
 isinteractive() && prompt(:prompt);
 
 
-# ### Coordinate data
+# ## Coordinate data
 
 # coordinates from rotated image example in n-05-norm/fig/
 A = [-59 -25 49;
@@ -64,7 +50,7 @@ B = [-54.1 -5.15 32.44;
 #src yc1 = 127 - [121, 160, 107]
 
 
-# ### Procrustes solution steps
+# ## Procrustes solution steps
 
 C = B * A'
 
@@ -76,7 +62,7 @@ s
 Q = U * V'
 
 
-# ### Fitting residual
+# ## Fitting residual
 
 residual = B - Q * A # small!
 
@@ -85,7 +71,7 @@ residual = B - Q * A # small!
 acos(Q[1]) * (180/π) # very close to 30° as expected
 
 
-# ### Fitting function
+# ## Fitting function
 
 function procrustes(A, B)
     C = B * A'
@@ -96,38 +82,38 @@ function procrustes(A, B)
 end
 
 
-# ### Explore additional special cases
+# ## Explore additional special cases
 
-# three points along a line, symmetrical
+# Three points along a line, symmetrical:
 
 A = [-1 0 1; 0 0 0]
 B = [0 0 0; -2 0 2]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
 
-# three points along a line, not symmetrical
+# Three points along a line, not symmetrical:
 
 A = [-1 0 2; 0 0 0]
 B = [0 0 0; -2 0 4]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
 
-# a single point - works fine!
+# A single point - works fine!
 
 A = [1; 0]
 B = [1; 1]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
-# angle
+# Angle:
 acos(Q[1]) * 180/π
 
 
@@ -138,14 +124,4 @@ acos(Q[1]) * 180/π
 #src prompt()
 
 
-
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")
