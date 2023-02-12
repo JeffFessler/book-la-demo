@@ -1,7 +1,8 @@
 #=
-# [Procrustes](@id procrustes)
+# [Procrustes method](@id procrustes)
 
-This example illustrates the Procrustes method
+This example illustrates the
+[orthogonal Procrustes method](https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem)
 using the Julia language.
 =#
 
@@ -17,6 +18,7 @@ if false
     import Pkg
     Pkg.add([
         "LinearAlgebra"
+        "MIRTjim"
         "InteractiveUtils"
     ])
 end
@@ -82,36 +84,36 @@ end
 
 # ## Explore additional special cases
 
-# three points along a line, symmetrical
+# Three points along a line, symmetrical:
 
 A = [-1 0 1; 0 0 0]
 B = [0 0 0; -2 0 2]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
 
-# three points along a line, not symmetrical
+# Three points along a line, not symmetrical:
 
 A = [-1 0 2; 0 0 0]
 B = [0 0 0; -2 0 4]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
 
-# a single point - works fine!
+# A single point - works fine!
 
 A = [1; 0]
 B = [1; 1]
 Q, scale = procrustes(A, B)
 
-# check
+# Check:
 @assert B ≈ scale * Q * A
 
-# angle
+# Angle:
 acos(Q[1]) * 180/π
 
 
