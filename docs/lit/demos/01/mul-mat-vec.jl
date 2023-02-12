@@ -1,26 +1,12 @@
-#---------------------------------------------------------
-# # [Vector dot product](@id dot)
-#---------------------------------------------------------
-
 #=
+# [Matrix-vector multiply](@id dot)
+
 This example illustrates different ways of computing
-vector dot products
+matrix-vector products
 using the Julia language.
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[dot.jl](@__REPO_ROOT_URL__/01/dot.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](http://nbviewer.jupyter.org/) here:
-#md # [`svd-diff.ipynb`](@__NBVIEWER_ROOT_URL__/01/dot.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`svd-diff.ipynb`](@__BINDER_ROOT_URL__/01/dot.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -31,9 +17,7 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
         "BenchmarkTools"
-        "LazyGrids"
         "InteractiveUtils"
     ])
 end
@@ -42,26 +26,24 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: dot
 using BenchmarkTools: @benchmark
 using InteractiveUtils: versioninfo
-using LazyGrids: btime
 
 
 #=
-## Overview of dot products
+## Overview of matrix-vector multiplication
 
-The dot product between two vectors
+The product between a matrix and a compatible vector
 is such a basic method in linear algebra
 that, of course,
-Julia has a function `dot` built-in for it.
+Julia has a function `*` built-in for it.
 
-In practice one should simply call that `dot` method.
+In practice one should simply call that method via
+`A * x`
+or possibly `*(A, x)`.
 
-This demo explores other ways of coding the dot product,
-to illustrate,
-in a simple setting,
-techniques for writing efficient code.
+This demo explores other ways of coding the product,
+to explore techniques for writing efficient code.
 
 We write each method as a function
 because the most reliable way
@@ -69,132 +51,232 @@ to benchmark different methods
 is to use functions.
 =#
 
-# ### The built-in `dot` method:
-f1(x,y) = dot(y,x);
 
-# ### An equivalent method using the adjoint `'`
-# It can be written `y' * x` or `*(y', x)`.
-# By checking `@which *(y', x)`
-# one can verify that these all call `dot`.
-f2(x,y) = y'x;
-
-# ### Using `sum` with vector conjugate
-# This is suboptimal because it must allocate memory for `conj(y)`
-f3(x,y) = sum(conj(y) .* x); # must allocate "conj(y)"
-
-# ### Using `zip` and `sum` with a function argument
-# This approach avoids the needless allocation.
-f4(x,y) = sum(z -> z[1] * conj(z[2]), zip(x,y));
-
-# ### A basic `for` loop like one would write in a low-level language
-function f5(x,y)
-    accum = zero(promote_type(eltype(x), eltype(y)))
-    for i in 1:length(x)
-        accum += x[i] * conj(y[i])
-    end
-    return accum
-end;
-
-# ### An advanced `for` loop that uses bounds checking and SIMD operations
-function f6(x,y)
-    accum = zero(promote_type(eltype(x), eltype(y)))
-    @boundscheck length(x) == length(y) || throw("incompatible")
-    @simd for i in 1:length(x)
-        @inbounds accum += x[i] * conj(y[i])
-    end
-    return accum
-end;
-
-# ### The Julia fallback method (from source code as of v1.8.1)
-# This code is what is used for general `AbstractArray` types.
-function f7(x,y)
-    accum = zero(promote_type(eltype(x), eltype(y)))
-    @boundscheck length(x) == length(y) || throw("incompatible")
-    for (ix,iy) in zip(eachindex(x), eachindex(y))
-        @inbounds accum += x[ix] * conj(y[iy]) # same as dot(y[iy], x[ix])
-    end
-    return accum
+## Built-in
+# Conventional high-level matrix-vector multiply function:
+function mul0(A::Matrix, x::Vector)
+    @boundscheck size(A,2) == length(x) || error("DimensionMismatch(A,x)")
+    return A * x
 end;
 
 
-# ### Data for timing tests
-N = 2^16; x = rand(ComplexF32, N); y = rand(ComplexF32, N)
+# ## Double loop over m,n
+# This is the textbook version.
 
-# Verify the methods are equivalent
-@assert f1(x,y) == f2(x,y) ≈ f3(x,y) ≈ f4(x,y) ≈ f5(x,y) ≈ f6(x,y) ≈ f7(x,y)
+function mul_mn(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        inprod = zero(eltype(x)) # accumulator
+        for n in 1:N
+            inprod += A[m,n] * x[n]
+        end
+        y[m] = inprod
+    end
+    return y
+end;
+
+# Using `@inbounds`
+function mul_mn_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        inprod = zero(x[1]) # accumulator
+        for n in 1:N
+            @inbounds inprod += A[m,n] * x[n]
+        end
+        @inbounds y[m] = inprod
+    end
+    return y
+end;
+
+# ## Double loop over `n,m`
+# We expect this way to be faster because of cache access over `m`.
+
+function mul_nm(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        for m in 1:M
+            y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;
+
+# With @inbounds
+function mul_nm_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        for m in 1:M
+            @inbounds y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;
+
+# With `@inbounds` and `@simd`
+function mul_nm_inbounds_simd(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @simd for m in 1:M
+            @inbounds y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;
+
+# And with `@views`
+function mul_nm_inbounds_simd_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @simd for m in 1:M
+            @inbounds @views y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;
 
 
-# ## Benchmark the methods
+# ## Row versions
+# Loop over `m`.
+
+function mul_row(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;
+
+# with `@inbounds`
+function mul_row_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        @inbounds y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;
+
+# with `@views`
+function mul_row_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        @views y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;
+
+# with both
+function mul_row_inbounds_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        @inbounds @views y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;
+
+
+# ## Col versions
+# Loop over `n`.
+
+function mul_col(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        y += A[:,n] * x[n]
+    end
+    return y
+end;
+
+# with "dots" (broadcast) to coalesce
+function mul_col_dot(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @. y += A[:,n] * x[n]
+    end
+    return y
+end;
+
+# and `@views`
+function mul_col_dot_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @views @. y += A[:,n] * x[n]
+#src    @inbounds @views @. y += A[:,n] * x[n] # did not help
+    end
+    return y
+end;
+
+
+# ## Test and time each version
 # The results will depend on the computer used, of course.
 
-# y'x
-t = @benchmark f1($x,$y)
-timeu = t -> btime(t, unit=:μs)
-timeu(t)
+M = 2^11
+N = M - 4 # non-square to stress test
+A = randn(Float32, M, N)
+x = randn(Float32, N);
 
-# dot(y,x)
-t = @benchmark f2($x,$y)
-timeu(t)
+flist = (mul0,
+    mul_mn, mul_mn_inbounds,
+    mul_nm, mul_nm_inbounds, mul_nm_inbounds_simd, mul_nm_inbounds_simd_views,
+    mul_row, mul_row_inbounds, mul_row_views, mul_row_inbounds_views,
+    mul_col, mul_col_dot, mul_col_dot_views,
+);
 
-# sum with conj()
-t = @benchmark f3($x,$y)
-timeu(t)
+for f in flist # warm-up and test each version
+    @assert A * x ≈ f(A, x)
+end;
 
-# zip sum
-t = @benchmark f4($x,$y)
-timeu(t)
-
-# basic loop
-t = @benchmark f5($x,$y)
-timeu(t)
-
-# fancy loop with @inbounds & @simd
-t = @benchmark f6($x,$y)
-timeu(t)
-
-# zip accum loop
-t = @benchmark f7($x,$y)
-timeu(t)
+out = Vector{String}(undef, length(flist))
+for (i, f) in enumerate(flist) # benchmark timing for each
+    b = @benchmark $f($A,$x)
+    tim = round(minimum(b.times)/10^6, digits=1) # in ms
+    tim = lpad(tim, 4)
+    name = rpad(f, 27)
+	alloc = lpad(b.allocs, 5)
+	mem = round(b.memory/2^10, digits=1)
+    tmp = "$name : $tim ms $alloc alloc $mem KiB"
+    out[i] = tmp
+    isinteractive() && println(tmp)
+end
+out
 
 
 #=
-### Remarks
+The following results were for a
+2017 iMac with 4.2GHz quad-core Intel Core i7
+with macOS Mojave 10.14.6 and Julia 1.6.2.
 
-The built-in `dot` method is the fastest.
-Behind the scenes it calls
-[`BLAS.dot`](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/blas.jl)
-which is highly optimized
-because it uses
-[cpu specific assembly code](https://discourse.julialang.org/t/why-is-blas-dot-product-so-much-faster-than-julia-loop/44994)
-based on
-[Single instruction, multiple data (SIMD)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
-to perform, say, 4 multiplies
-in a single instruction.
-Thus the basic loop is several times slower than `dot()`.
+As expected, simple `A*x` is the fastest,
+but one can come quite close to that using proper double loop order
+with `@inbounds` or using "dots" and `@views` to coalesce.
+Without `@views` the vector versions have huge memory overhead! 
 
-Sometimes we can speed up code
-by promising the Julia compiler
-that array indexing operations
-like `x[i]` are valid,
-by adding the `@inbounds` macro.
-
-Depending on the CPU,
-using `@simd` and `@inbounds`
-can lead to speeds
-close to that of `dot`.
-
-The `promote_type` function ensures that the accumulator
-uses the better precision of the two arguments.
+- mul0                       :  0.9 ms     1 alloc 16.1 KiB
+- mul_mn                     : 22.5 ms     1 alloc 16.1 KiB
+- mul_mn_inbounds            : 22.0 ms     1 alloc 16.1 KiB
+- mul_nm                     :  3.1 ms     1 alloc 16.1 KiB
+- mul_nm_inbounds            :  1.5 ms     1 alloc 16.1 KiB
+- mul_nm_inbounds_simd       :  1.5 ms     1 alloc 16.1 KiB
+- mul_nm_inbounds_simd_views :  1.5 ms     1 alloc 16.1 KiB
+- mul_row                    : 32.8 ms  2049 alloc 33040.1 KiB
+- mul_row_inbounds           : 32.7 ms  2049 alloc 33040.1 KiB
+- mul_row_views              : 22.4 ms     1 alloc 16.1 KiB
+- mul_row_inbounds_views     : 22.4 ms     1 alloc 16.1 KiB
+- mul_col                    : 16.0 ms  6133 alloc 98894.6 KiB
+- mul_col_dot                :  7.0 ms  2045 alloc 32975.6 KiB
+- mul_col_dot_views          :  1.5 ms     1 alloc 16.1 KiB
 =#
 
 
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")
