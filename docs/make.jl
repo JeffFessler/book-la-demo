@@ -24,9 +24,11 @@ binder_root_url =
 inc1 = "include(\"../../../inc/reproduce.jl\")"
 
 function prep_markdown(str, root, file)
-    repro = read("inc/reproduce.jl", String)
+    inc_root = isinteractive() ? "inc" : "docs/inc"
+    inc_read(file) = read(joinpath(inc_root, file), String)
+    repro = inc_read("reproduce.jl")
     str = replace(str, inc1 => repro)
-    urls = read("inc/urls.jl", String)
+    urls = inc_read("urls.jl")
     file = joinpath(splitpath(root)[end], splitext(file)[1])
     tmp = splitpath(root)[end-2:end] # lit demos 00
     urls = replace(urls,
