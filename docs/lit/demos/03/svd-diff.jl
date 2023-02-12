@@ -1,25 +1,14 @@
 #=
-# [SVD of Finite Differences](@id svd-diff)
+# [SVD of finite differences](@id svd-diff)
 
 This example illustrates the SVD of a first-order finite-difference matrix
 using the Julia language.
 This demo was inspired
 by
 [Gilbert Strang's 2006 article](https://archive.siam.org/news/news.php?id=828).
-
-This entire page was generated using a single Julia file:
-[svd-diff.jl](@__REPO_ROOT_URL__/03/svd-diff.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`svd-diff.ipynb`](@__NBVIEWER_ROOT_URL__/03/svd-diff.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`svd-diff.ipynb`](@__BINDER_ROOT_URL__/03/svd-diff.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -30,11 +19,10 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
-        "Plots"
-        "LaTeXStrings"
-        "MIRTjim"
         "InteractiveUtils"
+        "LinearAlgebra"
+        "MIRTjim"
+        "Plots"
     ])
 end
 
@@ -42,11 +30,10 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: norm, I, diag, diagm, Diagonal
-using Plots; default(label="", markerstrokecolor=:auto, color=:blue)
-#using LaTeXStrings
-using MIRTjim: jim, prompt
 using InteractiveUtils: versioninfo
+using LinearAlgebra: norm, I, diag, diagm, Diagonal
+using MIRTjim: jim, prompt
+using Plots; default(label="", markerstrokecolor=:auto, color=:blue)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -118,13 +105,4 @@ jim(
 @assert Δ ≈ U * Σ * V' # SVD of Δ
 
 
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

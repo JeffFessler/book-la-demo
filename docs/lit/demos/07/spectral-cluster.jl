@@ -1,39 +1,52 @@
 #=
-# [spectral-cluster](@id spectral-cluster)
+# [Spectral clustering](@id spectral-cluster)
 
 ## Spectral clustering illustration
 
-This example illustrates spectral clustering
+This example illustrates
+[spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering)
+via normalized graph Laplacian
 applied to hand-written digits.
-
-This page was generated from a single Julia file:
-[spectral-cluster.jl](@__REPO_ROOT_URL__/spectral-cluster.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`spectral-cluster.ipynb`](@__NBVIEWER_ROOT_URL__/spectral-cluster.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`spectral-cluster.ipynb`](@__BINDER_ROOT_URL__/spectral-cluster.ipynb).
-
+#srcURL
 
 # ### Setup
 
-# Packages needed here.
+#=
+First we add the Julia packages that are need for this demo.
+Change `false` to `true` in the following code block
+if you are using any of the following packages for the first time.
+=#
 
-using LinearAlgebra: I, norm, Diagonal, eigen
-using StatsBase: mean
-using MLDatasets: MNIST
-using Random: seed!, randperm
-using LaTeXStrings # pretty plot labels
-using Plots: default, gui, plot, scatter, plot!, scatter!
-using MIRTjim: jim, prompt
-using InteractiveUtils: versioninfo
+if false
+    import Pkg
+    Pkg.add([
+        "Clustering"
+        "InteractiveUtils"
+        "LaTeXStrings"
+        "LinearAlgebra"
+        "MIRTjim"
+        "MLDatasets"
+        "Plots"
+        "Random"
+        "StatsBase"
+    ])
+end
+
+
+# Now tell this Julia session to use the following packages for this example.
+# Run `Pkg.add()` in the preceding code block first, if needed.
+
 using Clustering: kmeans
+using InteractiveUtils: versioninfo
+using LaTeXStrings # pretty plot labels
+using LinearAlgebra: I, norm, Diagonal, eigen
+using MIRTjim: jim, prompt
+using MLDatasets: MNIST
+using Plots: default, gui, plot, scatter, plot!, scatter!
+using Random: seed!, randperm
+using StatsBase: mean
 default(markersize=5, markerstrokecolor=:auto, label="")
 
 # The following line is helpful when running this file as a script;
@@ -85,7 +98,7 @@ pw = jim(W, "weight matrix W")
 # Degree matrix
 D = Diagonal(vec(sum(W; dims=2)))
 
-# Normalized graph Laplacian
+# ## Normalized graph Laplacian
 L = I - inv(D) * W
 jim(L, "Normalized graph Laplacian L")
 
@@ -96,7 +109,7 @@ pe = scatter(eig.values, xlabel = L"k", ylabel="Eigenvalues")
 #
 prompt()
 
-# Apply k-means++ to eigenvectors
+# ## Apply k-means++ to eigenvectors
 K = length(digitn) # cheat: using the known number of digits
 Y = eig.vectors[:,1:K]'
 rc = kmeans(Y, K)
@@ -130,10 +143,4 @@ within-manifold similarities.
 =#
 
 
-# ### Reproducibility
-
-# This page was generated with the following version of Julia:
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-# And with the following package versions
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

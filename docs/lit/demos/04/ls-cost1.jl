@@ -2,22 +2,11 @@
 # [LS cost functions](@id ls-cost1)
 
 This example illustrates linear least-squares (LS) cost functions
-and minimum-norm LS (MNLS) solutions  
+and minimum-norm LS (MNLS) solutions
 using the Julia language.
-
-This entire page was generated using a single Julia file:
-[ls-cost1.jl](@__REPO_ROOT_URL__/04/ls-cost1.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`ls-cost1.ipynb`](@__NBVIEWER_ROOT_URL__/04/ls-cost1.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`ls-cost1.ipynb`](@__BINDER_ROOT_URL__/04/ls-cost1.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -28,12 +17,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
-        "Plots"
-        "LaTeXStrings"
-        "MIRTjim"
-        "Random"
         "InteractiveUtils"
+        "LaTeXStrings"
+        "LinearAlgebra"
+        "MIRTjim"
+        "Plots"
+        "Random"
     ])
 end
 
@@ -41,12 +30,13 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: norm, pinv
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto, markersize=6, legendfontsize=12, guidefontsize=13, tickfontsize=10)
-using LaTeXStrings
-using MIRTjim: prompt
 using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: norm, pinv
+using MIRTjim: prompt
+using Plots; default(label="", markerstrokecolor=:auto, markersize=6,
+ legendfontsize=12, guidefontsize=13, tickfontsize=10)
+using Random: seed!
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -55,7 +45,7 @@ using InteractiveUtils: versioninfo
 isinteractive() && prompt(:prompt);
 
 
-# ### Under-determined case
+# ## Under-determined case
 
 A = [1 2] # 1st case: M < N
 y = [3] # obviously x=[1 1] is one possible solution (but not MNLS)
@@ -69,8 +59,8 @@ c1 = [f1([x1a, x2a]) for x1a=x1, x2a=x2];
 color = :viridis
 contour(x1, x2, c1', label="contours"; color)
 plot!(aspect_ratio=:equal, xlabel=L"x_1", ylabel=L"x_2", legend=:bottomleft)
-scatter!([0], [0], color=:black, markershape=:square, label="")
-plot!([0, xh1[1]], [0, xh1[2]], line=:magenta, label="")
+scatter!([0], [0], color=:black, markershape=:square)
+plot!([0, xh1[1]], [0, xh1[2]], line=:magenta)
 plot!(x1, (y[1] .- A[1,1]*x1)/A[1,2], line=(:blue,:dash), label="{x : y=Ax}")
 scatter!([1], [1], color=:blue, markershape=:star5, label="[1,1]")
 scatter!([xh1[1]], [xh1[2]], color=:red, markershape=:circle, label="MNLS",
@@ -82,18 +72,18 @@ prompt()
 #src savefig("demo_ls_cost1a.pdf")
 
 
-# ### Square but singular case
+# ## Square but singular case
 
 A = [1 2; 2 4] # 2nd case: M = N but singular A
-y = [3, 6] # again [1,1] is a solution (but not MNLS solution) 
+y = [3, 6] # again [1,1] is a solution (but not MNLS solution)
 f2(x) = norm(A*x - y)
 xh2 = pinv(A) * y
 
 c2 = [f2([x1a, x2a]) for x1a=x1, x2a=x2]
 contour(x1, x2, c2', label="contours"; color)
 plot!(aspect_ratio=:equal, xlabel=L"x_1", ylabel=L"x_2", legend=:bottomleft)
-scatter!([0], [0], color=:black, markershape=:square, label="")
-plot!([0, xh2[1]], [0, xh2[2]], line=:magenta, label="")
+scatter!([0], [0], color=:black, markershape=:square)
+plot!([0, xh2[1]], [0, xh2[2]], line=:magenta)
 plot!(x1, (y[1] .- A[1,1]*x1)/A[1,2], line=(:blue,:dash), label="{x : y[1]=A[1,:] x}")
 plot!(x1, (y[2] .- A[2,1]*x1)/A[2,2], line=(:green,:dash), label="{x : y[2]=A[2,:] x}")
 scatter!([1], [1], color=:blue, markershape=:star5, label="[1,1]")
@@ -106,7 +96,7 @@ prompt()
 #src savefig("demo_ls_cost1b.pdf")
 
 
-# ### Square non-singular case
+# ## Square non-singular case
 
 A = [1 2; 1 3] # 3rd case: M = N with non-singular A
 y = [3, 4] # now x=[1,1] is the unique solution (by design)
@@ -127,7 +117,7 @@ prompt()
 #src savefig("demo_ls_cost1c.pdf")
 
 
-# ### Typical over-determined case
+# ## Typical over-determined case
 
 A = [1 2; 1 -1; 2 1] # 4th case: M > N with (typical) inconsistent data
 y = [3, 2, 1] # no consistent solution
@@ -150,15 +140,4 @@ prompt()
 #src savefig("demo_ls_cost1d.pdf")
 
 
-
-
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

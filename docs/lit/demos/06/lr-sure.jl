@@ -6,20 +6,9 @@ Stein's unbiased risk estimation (SURE)
 for parameter selection
 in low-rank matrix approximation,
 using the Julia language.
-
-This entire page was generated using a single Julia file:
-[lr-sure.jl](@__REPO_ROOT_URL__/06/lr-sure.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`lr-sure.ipynb`](@__NBVIEWER_ROOT_URL__/06/lr-sure.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`lr-sure.ipynb`](@__BINDER_ROOT_URL__/06/lr-sure.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -30,11 +19,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
+        "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
         "Random"
-        "InteractiveUtils"
     ])
 end
 
@@ -42,13 +32,13 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: svd, svdvals, Diagonal, norm
-using Random: seed!
+using MIRTjim: prompt
 using Plots; default(label="", markerstrokecolor=:auto, markersize=7,
  guidefontsize=13, tickfontsize=12, legendfontsize=13, widen=true)
-using LaTeXStrings
-using MIRTjim: prompt
-using InteractiveUtils: versioninfo
+using Random: seed!
 
 
 
@@ -146,13 +136,20 @@ prompt()
 #src savefig("06_lr_sure1b.pdf")
 
 
-# ## Explore SURE for selecting $\beta$
-#
-# $SURE(\beta) = \Vert \hat{X} - Y \Vert^2 - MN \sigma_0^2 + 2 \sigma_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(\sigma_i;\beta)}{\sigma_i} + \sum_{i=1}^{\min(M,N)} \dot{h}_i(\sigma_i;\beta) + 2 \sum_{i \neq j}^{\min(M,N)} \frac{\sigma_i h_i(\sigma_i;\beta)}{\sigma_i^2 - \sigma_j^2} \right) $
+#=
+## Explore SURE for selecting ``β``
 
-# sy: singular values of Y
-# reg: regularization parameter
-# v0 = sigma_0^2 noise variance
+```math
+\mathrm{SURE}(β) = ‖ \hat{X} - Y ‖^2 - MN \sigma_0^2
+ + 2 σ_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(σ_iσ)}{σ_i}
+ + \sum_{i=1}^{\min(M,N)} \dot{h}_i(σ_i;β)
+ + 2 \sum_{i \neq j}^{\min(M,N)} \frac{σ_i h_i(σ_i;β)}{σ_i^2 - σ_j^2} \right)
+```
+
+- `sy` singular values of Y
+- `reg` regularization parameter
+- `v0 = sigma_0^2` noise variance
+=#
 function sure(sy, reg, v0, M, N)
     sh = soft.(sy, reg) # estimated singular values
     big = sy.^2 .- (sy.^2)'
@@ -197,13 +194,4 @@ prompt()
 #src savefig("06_lr_sure1t.pdf")
 
 
-# ## Reproducibility
-
-# This page was generated with the following version of Julia:
-
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-
-# And with the following package versions
-
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")
