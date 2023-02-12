@@ -1,5 +1,5 @@
 #=
-# [Matrix-vector multiply](@id dot)
+# [Matrix-vector product](@id mul-mat-vec)
 
 This example illustrates different ways of computing
 matrix-vector products
@@ -52,7 +52,7 @@ is to use functions.
 =#
 
 
-## Built-in
+# ## Built-in `*`
 # Conventional high-level matrix-vector multiply function:
 function mul0(A::Matrix, x::Vector)
     @boundscheck size(A,2) == length(x) || error("DimensionMismatch(A,x)")
@@ -60,7 +60,7 @@ function mul0(A::Matrix, x::Vector)
 end;
 
 
-# ## Double loop over m,n
+# ## Double loop over `m,n`
 # This is the textbook version.
 
 function mul_mn(A::Matrix, x::Vector)
@@ -79,6 +79,7 @@ end;
 # Using `@inbounds`
 function mul_mn_inbounds(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = similar(x, M)
     for m in 1:M
         inprod = zero(x[1]) # accumulator
@@ -107,6 +108,7 @@ end;
 # With @inbounds
 function mul_nm_inbounds(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = zeros(eltype(x), M)
     for n in 1:N
         for m in 1:M
@@ -119,6 +121,7 @@ end;
 # With `@inbounds` and `@simd`
 function mul_nm_inbounds_simd(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = zeros(eltype(x), M)
     for n in 1:N
         @simd for m in 1:M
@@ -131,6 +134,7 @@ end;
 # And with `@views`
 function mul_nm_inbounds_simd_views(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = zeros(eltype(x), M)
     for n in 1:N
         @simd for m in 1:M
@@ -156,6 +160,7 @@ end;
 # with `@inbounds`
 function mul_row_inbounds(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = similar(x, M)
     for m in 1:M
         @inbounds y[m] = transpose(A[m,:]) * x
@@ -176,6 +181,7 @@ end;
 # with both
 function mul_row_inbounds_views(A::Matrix, x::Vector)
     (M,N) = size(A)
+    @assert N == length(x)
     y = similar(x, M)
     for m in 1:M
         @inbounds @views y[m] = transpose(A[m,:]) * x
@@ -185,7 +191,7 @@ end;
 
 
 # ## Col versions
-# Loop over `n`.
+# Loop over `n`:
 
 function mul_col(A::Matrix, x::Vector)
     (M,N) = size(A)
@@ -196,7 +202,7 @@ function mul_col(A::Matrix, x::Vector)
     return y
 end;
 
-# with "dots" (broadcast) to coalesce
+# with broadcast via `@.` to coalesce operations:
 function mul_col_dot(A::Matrix, x::Vector)
     (M,N) = size(A)
     y = zeros(eltype(x), M)
@@ -206,7 +212,7 @@ function mul_col_dot(A::Matrix, x::Vector)
     return y
 end;
 
-# and `@views`
+# and with `@views`
 function mul_col_dot_views(A::Matrix, x::Vector)
     (M,N) = size(A)
     y = zeros(eltype(x), M)
@@ -262,20 +268,20 @@ but one can come quite close to that using proper double loop order
 with `@inbounds` or using "dots" and `@views` to coalesce.
 Without `@views` the vector versions have huge memory overhead! 
 
-- mul0                       :  0.9 ms     1 alloc 16.1 KiB
-- mul_mn                     : 22.5 ms     1 alloc 16.1 KiB
-- mul_mn_inbounds            : 22.0 ms     1 alloc 16.1 KiB
-- mul_nm                     :  3.1 ms     1 alloc 16.1 KiB
-- mul_nm_inbounds            :  1.5 ms     1 alloc 16.1 KiB
-- mul_nm_inbounds_simd       :  1.5 ms     1 alloc 16.1 KiB
-- mul_nm_inbounds_simd_views :  1.5 ms     1 alloc 16.1 KiB
-- mul_row                    : 32.8 ms  2049 alloc 33040.1 KiB
-- mul_row_inbounds           : 32.7 ms  2049 alloc 33040.1 KiB
-- mul_row_views              : 22.4 ms     1 alloc 16.1 KiB
-- mul_row_inbounds_views     : 22.4 ms     1 alloc 16.1 KiB
-- mul_col                    : 16.0 ms  6133 alloc 98894.6 KiB
-- mul_col_dot                :  7.0 ms  2045 alloc 32975.6 KiB
-- mul_col_dot_views          :  1.5 ms     1 alloc 16.1 KiB
+- `mul0                       :  0.9 ms     1 alloc 16.1 KiB`
+- `mul_mn                     : 22.5 ms     1 alloc 16.1 KiB`
+- `mul_mn_inbounds            : 22.0 ms     1 alloc 16.1 KiB`
+- `mul_nm                     :  3.1 ms     1 alloc 16.1 KiB`
+- `mul_nm_inbounds            :  1.5 ms     1 alloc 16.1 KiB`
+- `mul_nm_inbounds_simd       :  1.5 ms     1 alloc 16.1 KiB`
+- `mul_nm_inbounds_simd_views :  1.5 ms     1 alloc 16.1 KiB`
+- `mul_row                    : 32.8 ms  2049 alloc 33040.1 KiB`
+- `mul_row_inbounds           : 32.7 ms  2049 alloc 33040.1 KiB`
+- `mul_row_views              : 22.4 ms     1 alloc 16.1 KiB`
+- `mul_row_inbounds_views     : 22.4 ms     1 alloc 16.1 KiB`
+- `mul_col                    : 16.0 ms  6133 alloc 98894.6 KiB`
+- `mul_col_dot                :  7.0 ms  2045 alloc 32975.6 KiB`
+- `mul_col_dot_views          :  1.5 ms     1 alloc 16.1 KiB`
 =#
 
 
