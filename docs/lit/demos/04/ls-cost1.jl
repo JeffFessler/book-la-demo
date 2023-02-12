@@ -2,22 +2,11 @@
 # [LS cost functions](@id ls-cost1)
 
 This example illustrates linear least-squares (LS) cost functions
-and minimum-norm LS (MNLS) solutions  
+and minimum-norm LS (MNLS) solutions
 using the Julia language.
-
-This entire page was generated using a single Julia file:
-[ls-cost1.jl](@__REPO_ROOT_URL__/04/ls-cost1.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`ls-cost1.ipynb`](@__NBVIEWER_ROOT_URL__/04/ls-cost1.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`ls-cost1.ipynb`](@__BINDER_ROOT_URL__/04/ls-cost1.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.
@@ -85,7 +74,7 @@ prompt()
 # ## Square but singular case
 
 A = [1 2; 2 4] # 2nd case: M = N but singular A
-y = [3, 6] # again [1,1] is a solution (but not MNLS solution) 
+y = [3, 6] # again [1,1] is a solution (but not MNLS solution)
 f2(x) = norm(A*x - y)
 xh2 = pinv(A) * y
 

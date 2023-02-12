@@ -4,21 +4,9 @@
 This example illustrates source localization via
 [multi-dimensional scaling](https://en.wikipedia.org/wiki/Multidimensional_scaling)
 using the Julia language.
-
-
-This entire page was generated using a single Julia file:
-[source-local.jl](@__REPO_ROOT_URL__/06/source-local.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`source-local.ipynb`](@__NBVIEWER_ROOT_URL__/06/source-local.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`source-local.ipynb`](@__BINDER_ROOT_URL__/06/source-local.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.

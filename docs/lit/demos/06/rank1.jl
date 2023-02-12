@@ -3,20 +3,9 @@
 
 This example illustrates rank-1 approximations
 using the Julia language.
-
-This entire page was generated using a single Julia file:
-[rank1.jl](@__REPO_ROOT_URL__/06/rank1.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`rank1.ipynb`](@__NBVIEWER_ROOT_URL__/06/rank1.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`rank1.ipynb`](@__BINDER_ROOT_URL__/06/rank1.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.

@@ -7,21 +7,9 @@ This example illustrates
 [spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering)
 via normalized graph Laplacian
 applied to hand-written digits.
-
-This page was generated from a single Julia file:
-[spectral-cluster.jl](@__REPO_ROOT_URL__/spectral-cluster.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`spectral-cluster.ipynb`](@__NBVIEWER_ROOT_URL__/spectral-cluster.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`spectral-cluster.ipynb`](@__BINDER_ROOT_URL__/spectral-cluster.ipynb).
-
+#srcURL
 
 # ### Setup
 

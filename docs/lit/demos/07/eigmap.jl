@@ -13,19 +13,7 @@ See
 [Belkin & Niyogi, 2003](https://doi.org/10.1162/089976603321780317).
 =#
 
-#=
-This entire page was generated using a single Julia file:
-[eigmap.jl](@__REPO_ROOT_URL__/other/eigmap.jl).
-=#
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`eigmap.ipynb`](@__NBVIEWER_ROOT_URL__/other/eigmap.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`eigmap.ipynb`](@__BINDER_ROOT_URL__/other/eigmap.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.

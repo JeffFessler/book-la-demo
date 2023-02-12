@@ -6,20 +6,9 @@ using the Julia language.
 This demo was inspired
 by
 [Gilbert Strang's 2006 article](https://archive.siam.org/news/news.php?id=828).
-
-This entire page was generated using a single Julia file:
-[svd-diff.jl](@__REPO_ROOT_URL__/03/svd-diff.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`svd-diff.ipynb`](@__NBVIEWER_ROOT_URL__/03/svd-diff.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`svd-diff.ipynb`](@__BINDER_ROOT_URL__/03/svd-diff.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.

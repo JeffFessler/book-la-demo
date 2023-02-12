@@ -6,20 +6,9 @@ Stein's unbiased risk estimation (SURE)
 for parameter selection
 in low-rank matrix approximation,
 using the Julia language.
-
-This entire page was generated using a single Julia file:
-[lr-sure.jl](@__REPO_ROOT_URL__/06/lr-sure.jl).
 =#
 
-#md # In any such Julia documentation,
-#md # you can access the source code
-#md # using the "Edit on GitHub" link in the top right.
-
-#md # The corresponding notebook can be viewed in
-#md # [nbviewer](https://nbviewer.org/) here:
-#md # [`lr-sure.ipynb`](@__NBVIEWER_ROOT_URL__/06/lr-sure.ipynb),
-#md # and opened in [binder](https://mybinder.org/) here:
-#md # [`lr-sure.ipynb`](@__BINDER_ROOT_URL__/06/lr-sure.ipynb),
+#srcURL
 
 #=
 First we add the Julia packages that are need for this demo.

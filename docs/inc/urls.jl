@@ -1,14 +1,14 @@
 
 #=
-This page was generated using a single Julia file:
-[`xxx.jl`](@__REPO_ROOT_URL__/xxx.jl).
+This page comes from a single Julia file:
+[`@__NAME__.jl`](xxxrepo/@__NAME__.jl).
 
 You can access the source code
 for such Julia documentation
-using the "Edit on GitHub" link in the top right.
+using the 'Edit on GitHub' link in the top right.
 You can view the corresponding notebook in
 [nbviewer](https://nbviewer.org/) here:
-[`xxx.ipynb`](@__NBVIEWER_ROOT_URL__/xxx.ipynb),
+[`@__NAME__.ipynb`](xxxnb/@__NAME__.ipynb),
 or open it in [binder](https://mybinder.org/) here:
-[`xxx.ipynb`](@__BINDER_ROOT_URL__/xxx.ipynb).
+[`@__NAME__.ipynb`](xxxbinder/@__NAME__.ipynb).
 =#
