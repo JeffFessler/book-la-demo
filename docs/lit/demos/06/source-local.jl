@@ -66,7 +66,7 @@ C = reshape(C4, 2, :);
 # ### Compute J × J distance array and display it
 
 J = size(C,2) # number of points
-D = [norm(C[:,j] - C[:,i]) for i=1:J, j=1:J] # "comprehension" in julia!
+D = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J] # "comprehension" in julia!
 jim(D, "D", color=:cividis)
 
 #src savefig("06_source_local1_d.pdf")

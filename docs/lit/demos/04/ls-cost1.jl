@@ -52,8 +52,8 @@ y = [3] # obviously x=[1 1] is one possible solution (but not MNLS)
 f1(x) = norm(A*x - y)
 xh1 = A \ y
 
-x1 = LinRange(-1,1,101) * 3
-x2 = LinRange(-1,1,103) * 3
+x1 = range(-1,1,101) * 3
+x2 = range(-1,1,103) * 3
 c1 = [f1([x1a, x2a]) for x1a=x1, x2a=x2];
 
 color = :viridis

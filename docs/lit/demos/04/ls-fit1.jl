@@ -51,7 +51,7 @@ M = 15 # how many data points
 tm = sort(rand(M)) # M random sample locations
 y = s.(tm) + 0.1 * randn(M) # noisy samples
 
-t0 = LinRange(0, 1, 101) # fine sampling for showing curve
+t0 = range(0, 1, 101) # fine sampling for showing curve
 p0 = scatter(tm, y, color=:blue,
     label="y (noisy data)", xlabel=L"t", ylabel=L"y", ylim=(-1.3, 1.3))
 plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
@@ -76,7 +76,7 @@ prompt()
 
 # ## Fit 4 unknowns with 4 equations
 
-m4 = Int64.(round.(LinRange(1, M-1, 4))) # pick 4 points well separated
+m4 = Int64.(round.(range(1, M-1, 4))) # pick 4 points well separated
 A4 = A[m4,:] # 4 × 4 matrix
 x4 = inv(A4) * y[m4] # inverse of 4×4 matrix to solve "y = A x"
 
