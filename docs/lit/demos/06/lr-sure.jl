@@ -83,7 +83,7 @@ nrmse_K = zeros(N)
 nrmsd_K = zeros(N)
 nrmsd = (D) -> norm(D) / norm(Y) * 100
 nrmse = (D) -> norm(D) / norm(X) * 100
-for K=1:N
+for K in 1:N
     Xh = U[:,1:K] * Diagonal(sy[1:K]) * V[:,1:K]'
     nrmsd_K[K] = nrmsd(Xh - Y)
     nrmse_K[K] = nrmse(Xh - X)
@@ -110,11 +110,11 @@ prompt()
 # ## Explore (nuclear norm) regularized version
 soft = (s,β) -> max.(s-β,0) # soft threshold function
 dsoft = (s,β) -> Float32.(s .> β) # "derivative" thereof
-reglist = [LinRange(0, 1, 20); 1:0.25:6]
+reglist = [range(0, 1, 20); 1:0.25:6]
 Nr = length(reglist)
 nrmse_reg = zeros(Nr)
 nrmsd_reg = zeros(Nr)
-for ir=1:Nr
+for ir in 1:Nr
     reg = reglist[ir]
     Xh = U * Diagonal(soft.(sy,reg)) * V'
     nrmsd_reg[ir] = nrmsd(Xh - Y)
@@ -154,13 +154,13 @@ function sure(sy, reg, v0, M, N)
     sh = soft.(sy, reg) # estimated singular values
     big = sy.^2 .- (sy.^2)'
     big[big .== 0] .= Inf # trick to avoid divide by 0
-    big = (sy .* sh) ./ big # [sy[i] * sh[i] / big[i,j] for i=1:N, j=1:N]
+    big = (sy .* sh) ./ big # [sy[i] * sh[i] / big[i,j] for i in 1:N, j in 1:N]
     big = sum(big)
     norm(sh - sy)^2 - M*N*v0 + 2*v0*(abs(M-N)*sum(sh ./ sy) + sum(dsoft.(sy,reg)) + 2*big)
 end
 
 # ### Evaluate SURE for each candidate regularization parameter
-sure_reg = [sure(sy, reglist[ir], sig0^2, M, N) for ir=1:Nr]
+sure_reg = [sure(sy, reglist[ir], sig0^2, M, N) for ir in 1:Nr]
 reg_best = reglist[argmin(sure_reg)] # SURE pick for β
 
 
