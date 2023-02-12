@@ -17,12 +17,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
         "Random"
         "Statistics"
-        "InteractiveUtils"
     ])
 end
 
@@ -30,13 +30,12 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: svd, norm, Diagonal
-using Statistics: mean
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto)
-#src using LaTeXStrings
-using MIRTjim: jim, prompt
 using InteractiveUtils: versioninfo
+using LinearAlgebra: svd, norm, Diagonal
+using MIRTjim: jim, prompt
+using Plots; default(label="", markerstrokecolor=:auto)
+using Random: seed!
+using Statistics: mean
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -97,7 +96,7 @@ prompt()
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]' # here is the key step
 
 # ### Plot estimated source locations
-scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, label="", aspect_ratio=1,
+scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates")
 
 #
@@ -123,7 +122,7 @@ prompt()
 
 # ### Plot estimated source locations from noisy distance measurements
 Cn = Diagonal(sqrt.(sn[1:2])) * Vn[:,1:2]' # here is the key step
-scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, label="", aspect_ratio=1,
+scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates")
 
 #
@@ -134,8 +133,7 @@ prompt()
 G = [-2 1 1; 1 -2 1; 1 1 -2] / (-6.)
 (~, σ, V) = svd(G)
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]'
-scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, label="",
- title="Location estimates")
+scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, title="Location estimates")
 
 #
 prompt()

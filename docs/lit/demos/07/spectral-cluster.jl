@@ -13,17 +13,40 @@ applied to hand-written digits.
 
 # ### Setup
 
-# Packages needed here.
+#=
+First we add the Julia packages that are need for this demo.
+Change `false` to `true` in the following code block
+if you are using any of the following packages for the first time.
+=#
 
-using LinearAlgebra: I, norm, Diagonal, eigen
-using StatsBase: mean
-using MLDatasets: MNIST
-using Random: seed!, randperm
-using LaTeXStrings # pretty plot labels
-using Plots: default, gui, plot, scatter, plot!, scatter!
-using MIRTjim: jim, prompt
-using InteractiveUtils: versioninfo
+if false
+    import Pkg
+    Pkg.add([
+        "Clustering"
+        "InteractiveUtils"
+        "LaTeXStrings"
+        "LinearAlgebra"
+        "MIRTjim"
+        "MLDatasets"
+        "Plots"
+        "Random"
+        "StatsBase"
+    ])
+end
+
+
+# Now tell this Julia session to use the following packages for this example.
+# Run `Pkg.add()` in the preceding code block first, if needed.
+
 using Clustering: kmeans
+using InteractiveUtils: versioninfo
+using LaTeXStrings # pretty plot labels
+using LinearAlgebra: I, norm, Diagonal, eigen
+using MIRTjim: jim, prompt
+using MLDatasets: MNIST
+using Plots: default, gui, plot, scatter, plot!, scatter!
+using Random: seed!, randperm
+using StatsBase: mean
 default(markersize=5, markerstrokecolor=:auto, label="")
 
 # The following line is helpful when running this file as a script;

@@ -19,11 +19,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
+        "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
         "Random"
-        "InteractiveUtils"
     ])
 end
 
@@ -31,13 +32,13 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: svd, svdvals, Diagonal, norm
-using Random: seed!
+using MIRTjim: prompt
 using Plots; default(label="", markerstrokecolor=:auto, markersize=7,
  guidefontsize=13, tickfontsize=12, legendfontsize=13, widen=true)
-using LaTeXStrings
-using MIRTjim: prompt
-using InteractiveUtils: versioninfo
+using Random: seed!
 
 
 

@@ -17,12 +17,12 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
-        "Plots"
-        "LaTeXStrings"
-        "MIRTjim"
-        "Random"
         "InteractiveUtils"
+        "LaTeXStrings"
+        "LinearAlgebra"
+        "MIRTjim"
+        "Plots"
+        "Random"
     ])
 end
 
@@ -30,12 +30,13 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: norm, pinv
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto, markersize=6, legendfontsize=12, guidefontsize=13, tickfontsize=10)
-using LaTeXStrings
-using MIRTjim: prompt
 using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: norm, pinv
+using MIRTjim: prompt
+using Plots; default(label="", markerstrokecolor=:auto, markersize=6,
+ legendfontsize=12, guidefontsize=13, tickfontsize=10)
+using Random: seed!
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -58,8 +59,8 @@ c1 = [f1([x1a, x2a]) for x1a=x1, x2a=x2];
 color = :viridis
 contour(x1, x2, c1', label="contours"; color)
 plot!(aspect_ratio=:equal, xlabel=L"x_1", ylabel=L"x_2", legend=:bottomleft)
-scatter!([0], [0], color=:black, markershape=:square, label="")
-plot!([0, xh1[1]], [0, xh1[2]], line=:magenta, label="")
+scatter!([0], [0], color=:black, markershape=:square)
+plot!([0, xh1[1]], [0, xh1[2]], line=:magenta)
 plot!(x1, (y[1] .- A[1,1]*x1)/A[1,2], line=(:blue,:dash), label="{x : y=Ax}")
 scatter!([1], [1], color=:blue, markershape=:star5, label="[1,1]")
 scatter!([xh1[1]], [xh1[2]], color=:red, markershape=:circle, label="MNLS",
@@ -81,8 +82,8 @@ xh2 = pinv(A) * y
 c2 = [f2([x1a, x2a]) for x1a=x1, x2a=x2]
 contour(x1, x2, c2', label="contours"; color)
 plot!(aspect_ratio=:equal, xlabel=L"x_1", ylabel=L"x_2", legend=:bottomleft)
-scatter!([0], [0], color=:black, markershape=:square, label="")
-plot!([0, xh2[1]], [0, xh2[2]], line=:magenta, label="")
+scatter!([0], [0], color=:black, markershape=:square)
+plot!([0, xh2[1]], [0, xh2[2]], line=:magenta)
 plot!(x1, (y[1] .- A[1,1]*x1)/A[1,2], line=(:blue,:dash), label="{x : y[1]=A[1,:] x}")
 plot!(x1, (y[2] .- A[2,1]*x1)/A[2,2], line=(:green,:dash), label="{x : y[2]=A[2,:] x}")
 scatter!([1], [1], color=:blue, markershape=:star5, label="[1,1]")

@@ -16,10 +16,11 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
         "LinearAlgebra"
+        "MIRTjim"
         "Plots"
         "Random"
-        "InteractiveUtils"
     ])
 end
 
@@ -27,12 +28,11 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: svd, rank
-using Random: seed!
-using Plots; default(label="", markerstrokecolor=:auto)
-#src using LaTeXStrings
-using MIRTjim: prompt
 using InteractiveUtils: versioninfo
+using LinearAlgebra: svd, rank
+using MIRTjim: prompt
+using Plots; default(label="", markerstrokecolor=:auto)
+using Random: seed!
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -111,7 +111,7 @@ prompt()
 # ## Illustrate the Frobenius norm approximation error graphically
 pl = plotdata()
 for i in 1:length(xb)
-    plot!(pl, [x[i], xb[i]], [y[i], yb[i]], color=:black, label="", width=2)
+    plot!(pl, [x[i], xb[i]], [y[i], yb[i]], color=:black, width=2)
 end
 lineplot(pl, (xb\yb)[1], :black, "")
 scatter!(pl, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
@@ -126,7 +126,7 @@ prompt()
 xl = x; yl = slope*xl # LS points
 pl = plotdata()
 for i in 1:length(x)
-    plot!(pl, [x[i], xl[i]], [y[i], yl[i]], color=:green, label="", width=2)
+    plot!(pl, [x[i], xl[i]], [y[i], yl[i]], color=:green, width=2)
 end
 lineplot(pl, slope, :green, "")
 scatter!(pl, xl, yl, color=:green, markersize=5, marker=:square, label="LS")

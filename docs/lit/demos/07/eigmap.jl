@@ -25,12 +25,12 @@ if false
     import Pkg
     Pkg.add([
         "ImagePhantoms"
+        "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
         "Random"
-        "InteractiveUtils"
     ])
 end
 
@@ -39,12 +39,12 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using ImagePhantoms: rect, phantom
+using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: norm, Diagonal, eigen, svdvals
-using Random: seed!
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, savefig, default
-using LaTeXStrings
-using InteractiveUtils: versioninfo
+using Random: seed!
 default(label = "", markerstrokecolor = :auto)
 seed!(0)
 

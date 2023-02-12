@@ -17,9 +17,9 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
-        "InteractiveUtils"
     ])
 end
 
@@ -27,9 +27,9 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using InteractiveUtils: versioninfo
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: prompt
-using InteractiveUtils: versioninfo
 
 
 # The following line is helpful when running this jl-file as a script;

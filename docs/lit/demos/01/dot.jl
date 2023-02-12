@@ -17,10 +17,10 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "LinearAlgebra"
         "BenchmarkTools"
-        "LazyGrids"
         "InteractiveUtils"
+        "LazyGrids"
+        "LinearAlgebra"
     ])
 end
 
@@ -28,10 +28,10 @@ end
 # Now tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using LinearAlgebra: dot
 using BenchmarkTools: @benchmark
 using InteractiveUtils: versioninfo
 using LazyGrids: btime
+using LinearAlgebra: dot
 
 
 #=
