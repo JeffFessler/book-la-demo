@@ -14,7 +14,7 @@ src = joinpath(@__DIR__, "src")
 gen = joinpath(@__DIR__, "src/generated")
 
 base = "$org/$reps"
-repo_root_url = "https://github.com/$base/blob/main/docs"
+repo_root_url = "https://github.com/$base/blob/main"
 nbviewer_root_url =
     "https://nbviewer.org/github/$base/tree/gh-pages/generated/demos"
 binder_root_url =
@@ -24,13 +24,12 @@ binder_root_url =
 inc1 = "include(\"../../../inc/reproduce.jl\")"
 
 function prep_markdown(str, root, file)
-    inc_root = isinteractive() ? "inc" : "docs/inc"
-    inc_read(file) = read(joinpath(inc_root, file), String)
+    inc_read(file) = read(joinpath("docs/inc", file), String)
     repro = inc_read("reproduce.jl")
     str = replace(str, inc1 => repro)
     urls = inc_read("urls.jl")
     file = joinpath(splitpath(root)[end], splitext(file)[1])
-    tmp = splitpath(root)[end-2:end] # lit demos 00
+    tmp = splitpath(root)[end-3:end] # docs lit demos 00
     urls = replace(urls,
         "xxxrepo" => joinpath(repo_root_url, tmp...),
         "xxxnb" => joinpath(nbviewer_root_url, tmp[end]),
