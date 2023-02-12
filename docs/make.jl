@@ -14,21 +14,43 @@ src = joinpath(@__DIR__, "src")
 gen = joinpath(@__DIR__, "src/generated")
 
 base = "$org/$reps"
-repo_root_url =
-    "https://github.com/$base/blob/main/docs/lit/demos"
-nbviewer_root_url =
-    "https://nbviewer.org/github/$base/tree/gh-pages/generated/demos"
-binder_root_url =
-    "https://mybinder.org/v2/gh/$base/gh-pages?filepath=generated/demos"
+#=
+=#
+config = Dict(
+"repo_root_url" =>
+    "https://github.com/$base/blob/main/docs/lit/demos",
+"nbviewer_root_url" =>
+    "https://nbviewer.org/github/$base/tree/gh-pages/generated/demos",
+"binder_root_url" =>
+    "https://mybinder.org/v2/gh/$base/gh-pages?filepath=generated/demos",
+)
+# config = Dict() # todo
+
+
+# preprocessing
+inc1 = "include(\"../../../inc/reproduce.jl\")"
+
+function prep_markdown(str)
+    repro = read("inc/reproduce.jl", String)
+    str = replace(str, inc1 => repro)
+end
+
+function prep_notebook(str)
+    str = replace(str, inc1 => "")
+end
 
 for (root, _, files) in walkdir(lit), file in files
     splitext(file)[2] == ".jl" || continue # process .jl files only
     ipath = joinpath(root, file)
     opath = splitdir(replace(ipath, lit => gen))[1]
-    Literate.markdown(ipath, opath, documenter = execute; # run examples
-        repo_root_url, nbviewer_root_url, binder_root_url)
-    Literate.notebook(ipath, opath; execute = false, # no-run notebooks
-        repo_root_url, nbviewer_root_url, binder_root_url)
+    Literate.markdown(ipath, opath; config,
+         preprocess = prep_markdown,
+         documenter = execute) # run examples
+#       #= repo_root_url, =# nbviewer_root_url, binder_root_url)
+    Literate.notebook(ipath, opath; config,
+         preprocess = prep_notebook,
+         execute = false) # no-run notebooks
+#       #= repo_root_url, =# nbviewer_root_url, binder_root_url)
 end
 
 

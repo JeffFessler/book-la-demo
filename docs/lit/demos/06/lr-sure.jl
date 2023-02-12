@@ -150,7 +150,7 @@ prompt()
 ## Explore SURE for selecting ``β``
 
 ```math
-SURE(β) = ‖ \hat{X} - Y ‖^2 - MN \sigma_0^2
+\mathrm{SURE}(β) = ‖ \hat{X} - Y ‖^2 - MN \sigma_0^2
  + 2 σ_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(σ_iσ)}{σ_i}
  + \sum_{i=1}^{\min(M,N)} \dot{h}_i(σ_i;β)
  + 2 \sum_{i \neq j}^{\min(M,N)} \frac{σ_i h_i(σ_i;β)}{σ_i^2 - σ_j^2} \right)
@@ -204,10 +204,4 @@ prompt()
 #src savefig("06_lr_sure1t.pdf")
 
 
-# ### Reproducibility
-
-# This page was generated with the following version of Julia:
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-# And with the following package versions
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

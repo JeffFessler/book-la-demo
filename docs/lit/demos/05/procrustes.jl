@@ -133,11 +133,4 @@ acos(Q[1]) * 180/π
 #src prompt()
 
 
-
-# ### Reproducibility
-
-# This page was generated with the following version of Julia:
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-# And with the following package versions
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

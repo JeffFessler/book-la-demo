@@ -298,10 +298,4 @@ pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
 #src scatter(features[:,2], Y * (Y \ features[:,2]))
 
 
-# ### Reproducibility
-
-# This page was generated with the following version of Julia:
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-# And with the following package versions
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")

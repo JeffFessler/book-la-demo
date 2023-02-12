@@ -150,12 +150,4 @@ prompt()
 #src savefig("demo_ls_cost1d.pdf")
 
 
-
-
-# ### Reproducibility
-
-# This page was generated with the following version of Julia:
-io = IOBuffer(); versioninfo(io); split(String(take!(io)), '\n')
-
-# And with the following package versions
-import Pkg; Pkg.status()
+include("../../../inc/reproduce.jl")
