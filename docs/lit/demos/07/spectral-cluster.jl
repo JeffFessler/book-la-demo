@@ -110,17 +110,17 @@ pe = scatter(eig.values, xlabel = L"k", ylabel="Eigenvalues")
 prompt()
 
 # ## Apply k-means++ to eigenvectors
-K = length(digitn) # cheat: using the known number of digits
+K = length(digitn) # try using the known number of digits
 Y = eig.vectors[:,1:K]'
-rc = kmeans(Y, K)
+r3 = kmeans(Y, K)
 
 # Confusion matrix using class assignments from kmeans++
 label_list = unique(labels)
-#src assign_list = unique(rc.assignments) # 1:K
+#src assign_list = unique(r3.assignments) # 1:K
 
 result = zeros(Int, K, length(label_list))
 for k in 1:K # each cluster
-    rck = rc.assignments .== k
+    rck = r3.assignments .== k
     for (j,l) in enumerate(label_list)
         result[k,j] = count(rck .& (l .== labels))
     end
@@ -128,8 +128,8 @@ end
 result
 
 # Visualize the clustered digits
-pc = jim(
- [jim(data[:,:,rc.assignments .== k], "Class $k"; prompt=false) for k in 1:K]...
+p3 = jim(
+ [jim(data[:,:,r3.assignments .== k], "Class $k"; prompt=false) for k in 1:K]...
 )
 
 #=
@@ -140,7 +140,25 @@ to a manifold,
 and apparently the simply Gaussian similarity function
 used here does not adequately capture
 within-manifold similarities.
+
+However,
+there is no reason to think that it is optimal
+to use the same number of classes
+as digits.
+Let's try again using more classes (larger ``K``).
 =#
 
+K = 9
+Y = eig.vectors[:,1:K]'
+r9 = kmeans(Y, K)
+p9 = jim(
+ [jim(data[:,:,r9.assignments .== k], "Class $k"; prompt=false) for k in 1:K]...
+)
+
+
+#=
+Now there is somewhat more consistency
+between images in the same class,
+=#
 
 include("../../../inc/reproduce.jl")
