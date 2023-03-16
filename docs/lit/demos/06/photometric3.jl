@@ -15,18 +15,22 @@ taken under different lighting conditions.
 #srcURL
 
 #=
-First we add the Julia packages that are need for this demo.
+Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
 
-if false # todo
+if false
     import Pkg
     Pkg.add([
+        "Downloads"
         "InteractiveUtils"
         "LinearAlgebra"
+        "LaTeXStrings"
         "MIRTjim"
+        "NPZ"
         "Plots"
+        "Printf"
         "Random"
     ])
 end
@@ -64,62 +68,63 @@ if !@isdefined(gt_normal_bunny)
     i2 = 28:217
     tmp = permutedims(tmp, [2, 1, 3]) # "transpose"
     gt_normal_bunny = tmp[i1, i2, :] # crop
-end
-# todo cut:
-#   tmp = tmp[:, :, [2, 1, 3]] # transpose?
-#   tmp[:,:,3] .*= -1 # sign flip
-if !@isdefined(gt_normal)
-end
-    gt_normal = gt_normal_bunny
-    nx, ny = size(gt_normal)[1:2]
-    shape2 = x -> reshape(x, prod(size(x)[1:2]), :)
-    shape3 = x -> reshape(x, nx, ny, :)
+end;
 
+#=
+Create hemisphere to augment the bunny data.
+=#
 function hemi_normal(x, y ; # surface normal of a hemi-ellipsoid
-    xh = 70f0,
-    yh = 60f0,
-    zh = 50f0,
+    xh = 20f0, yh = xh, zh = xh,
 )
     tmp = (x/xh)^2 + (y/yh)^2
     if tmp < 1
         z = zh * sqrt(1 - tmp)
         tmp = [x/xh^2, y/yh^2, z/zh^2]
         return tmp / norm(tmp)
-
-#=
-    tmp = (x^2 + y^2) / rhemi^2
-    if tmp < 1
-        tmp = sqrt(1 - tmp)
-        xn = hhemi / tmp / rhemi^2 * (-x)
-        yn = hhemi / tmp / rhemi^2 * (-y)
-        rn2 = xn^2 + yn^2
-#@show rn2
-        zn = rn2 < 1 ? sqrt(1 - rn2) : 0
-#       zn = sqrt(1 - rn2)
-        return [xn, yn, zn]
-=#
     end
     return [0, 0, 0]
 end
-
-if false
+if true
+    xh = 20
     x = (1:nx) .- (nx+1)/2
     y = (1:ny) .- (ny+1)/2
-    tmp = hemi_normal.(x, y')
+    x = -xh:xh
+    y = x
+    tmp = hemi_normal.(x, y'; xh)
     tmp = reduce(hcat, tmp)
-    gt_normal = shape3(tmp')
+    tmp = reshape(tmp', 2xh+1, 2xh+1, 3)
+end;
+
+if !@isdefined(gt_normal)
+    gt_normal = copy(gt_normal_bunny)
+    gt_normal[180 .+ x, 30 .+ y, :] = tmp
+    nx, ny = size(gt_normal)[1:2]
+    shape2 = x -> reshape(x, prod(size(x)[1:2]), :)
+    shape3 = x -> reshape(x, nx, ny, :)
 end
+
 pn_gt = jim(gt_normal; title="Ground-truth normals", nrow=1,
  xaxis=L"x", yaxis=L"y", size=(600,300))
 
-#src extrema(sum(abs2, gt_normal, dims=3)[mask])
+
+#=
+Surface normals are meaningful
+only where the object is present,
+so first we determine an object "mask".
+=#
+mask = dropdims(sum(abs, gt_normal, dims=3), dims=3) .> eps(Float32)
+pm = jim(mask, "Mask")
+
+# Verify that the surface normals are unit norm.
+@assert maximum(abs, sum(abs2, gt_normal, dims=3)[vec(mask)] .- 1) < 1e-12
 
 if false # view angle of surface normal w.r.t. z-axis
+end
     tmp = sqrt.(gt_normal[:,:,1].^2 + gt_normal[:,:,2].^2)
     tmp = rad2deg.(atan.(tmp, gt_normal[:,:,3]))
-    jim(tmp)
-end
+    jim(tmp; title="Angle of surface normal w.r.t. z axis", ctitle="degrees")
 
+prompt(); throw()
 
 function random_light(;
     rmax = 1/sqrt(2),
@@ -350,12 +355,7 @@ prompt()
 
 #=
 Next we examine the estimated surface normals.
-Those estimates are meaningful
-only where the object is present,
-so first we determine an object "mask".
 =#
-mask = sum(images, dims = 3) .> eps(Float32)
-pm = jim(mask, "Mask")
 
 #=
 Now that we have estimated the lighting directions,
