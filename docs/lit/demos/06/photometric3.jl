@@ -38,7 +38,7 @@ end
 using Downloads: download
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: Diagonal, svd, svdvals, rank, norm
+using LinearAlgebra: Diagonal, svd, svdvals, rank, norm, pinv
 using MIRTjim: jim, prompt
 using NPZ: npzread
 using Plots; default(label="", markerstrokecolor=:auto)
@@ -72,6 +72,8 @@ if !@isdefined(gt_normal)
 end
     gt_normal = gt_normal_bunny
     nx, ny = size(gt_normal)[1:2]
+    shape2 = x -> reshape(x, prod(size(x)[1:2]), :)
+    shape3 = x -> reshape(x, nx, ny, :)
 
 function hemi_normal(x, y ; # surface normal of a hemi-ellipsoid
     xh = 70f0,
@@ -105,7 +107,7 @@ if false
     y = (1:ny) .- (ny+1)/2
     tmp = hemi_normal.(x, y')
     tmp = reduce(hcat, tmp)
-    gt_normal = reshape(tmp', nx, ny, 3)
+    gt_normal = shape3(tmp')
 end
 pn_gt = jim(gt_normal; title="Ground-truth normals", nrow=1,
  xaxis=L"x", yaxis=L"y", size=(600,300))
@@ -129,7 +131,7 @@ function random_light(;
     y = r * sin(θ) + 0.2
     z = sqrt(1 - x^2 - y^2)
     return [x, y, abs(z)]
-end 
+end
 
 if !@isdefined(Ltrue)
 end
@@ -166,12 +168,12 @@ describe the `max(⋅,0)` as "attached shadows."
 
 if !@isdefined(images)
 end
-    images_ideal = reshape(gt_normal, :, 3) * Ltrue' # hypothetical Lambertian
+    images_ideal = shape2(gt_normal) * Ltrue' # hypothetical Lambertian
     images_ideal ./= maximum(images_ideal) # normalize
     svdval_ideal = svdvals(images_ideal)
     images = max.(images_ideal, 0) # "shadows" if lighting is ≥ 90° from normal
     svdval_images = svdvals(images)
-    images = reshape(images, nx, ny, nlight)
+    images = shape3(images)
 
 pd = jim(images; title="Images for different lighting directions")
 
@@ -184,7 +186,7 @@ end
     scatter!(ps, svdval_images, label="Realistic", color=:red)
 
     good = all(>(0), images, dims=3)
-    images_good = reshape(images, :, nlight)[vec(good),:]
+    images_good = shape2(images)[vec(good),:]
     svdval_good = svdvals(images_good)
     scatter!(ps, svdval_good, label="Good pixels", color=:green)
 # todo: tail svdvals
@@ -274,6 +276,8 @@ using _only_ the pixels with no
 
 tmp = svd(images_good)
 light0 = tmp.V[:,1:3] # * Diagonal(sqrt.(tmp.S[1:3]))
+normal0 = tmp.U[:,1:3] * Diagonal(tmp.S[1:3])
+@assert norm(images_good - normal0 * light0') / norm(images_good) < 1e-12
 
 plot(Ltrue)
 scatter!(light0)
@@ -299,18 +303,37 @@ tmp = svd(B)
 #A = Diagonal(sqrt.(tmp.S)) * tmp.V'
 A = sqrt(B)
 @assert A'A ≈ B
-light1 = (A * light0')'
+light1 = (A * light0')' # light0 * A'
 @assert collect(extrema(sum(abs2, light1, dims=2))) ≈ [1,1]
 
-# use Procrustes to align with true lighting
-tmp = Ltrue' * light1
-tmp = svd(tmp)
-tmp = tmp.U * tmp.Vt
-light1 = light1 * tmp'
+normal1 = normal0 * inv(A)
+@assert norm(images_good - normal1 * light1') / norm(images_good) < 1e-12
+@assert maximum(abs, norm.(eachrow(normal1)) .- 1) < 1e-6 # already unit norm!
 
-color = [:red :green :blue]
-plot(Ltrue; color)
-scatter!(light1; color)
+#=
+As described in
+[Hayakawa, JOSA, 1994](https://doi.org/10.1364/JOSAA.11.003079),
+the estimated lighting and surface normals
+are in an arbitrary 3D coordinate system.
+To display them in a useful way,
+we use the Procrustes method
+to align the coordinate system
+with that of the original lighting.
+=#
+if true
+    tmp = Ltrue[1:3,:]' * light1[1:3,:]
+    tmp = svd(tmp)
+    tmp = tmp.U * tmp.Vt
+    light2 = light1 * tmp'
+    normal2 = normal1 * tmp'
+    @assert norm(images_good - normal2 * light2') / norm(images_good) < 1e-12
+end
+
+if false
+    color = [:red :green :blue]
+    plot(Ltrue; color, label="true")
+    scatter!(light2; color, label="Estimated")
+end
 
 
 # Examine estimated lighting directions
@@ -320,10 +343,35 @@ scatter!(light1; color)
 #L ./= sqrt.(sum(abs2, L, dims = 2)) # normalize to unit norm
 
 tmp = deepcopy(pl_gt)
-pl = scatter!(tmp, light1[:,1], light1[:,2], marker = :x, label = "Estimated")
+pl = scatter!(tmp, light2[:,1], light2[:,2], marker = :x, label = "Estimated")
 
 #
 prompt()
+
+#=
+Next we examine the estimated surface normals.
+Those estimates are meaningful
+only where the object is present,
+so first we determine an object "mask".
+=#
+mask = sum(images, dims = 3) .> eps(Float32)
+pm = jim(mask, "Mask")
+
+#=
+Now that we have estimated the lighting directions,
+return to estimate the surface normals
+for _all_ pixels,
+not just the "good" pixels.
+=#
+normal3 = shape3(shape2(images) * pinv(light2)')
+pn_hat = jim(normal3; nrow=1, title="Estimated normals")
+jim(
+ pn_gt,
+ pn_hat,
+ jim(normal3 - gt_normal; nrow=1, title="Difference");
+ layout=(3,1),
+)
+
 
 #= todo
 
@@ -337,15 +385,6 @@ pl = scatter(L[:,1], L[:,2], L[:,3],
    zaxis = (L"z", (0.2, 1.0), 0.2:0.1:1.0),
    title = "Estimated lighting directions",
 )
-
-#=
-Next we examine the estimated surface normals.
-Those estimates are meaningful
-only where the object is present,
-so first we determine an object "mask".
-=#
-mask = sum(images, dims = 3) .> eps(Float32)
-pm = jim(mask, "Mask")
 
 
 if !@isdefined(gt_lights)
@@ -366,7 +405,7 @@ plot(pl, pl_gt)
 # Estimated surface normals
 normals = U[:,1:3] * P' # P is a unitary matrix
 normals ./= sqrt.(sum(abs2, normals, dims=2)) # normalize
-normals = reshape(normals, dim[1:2]..., 3)
+normals = shape3(normals)
 normals .*= mask # apply mask
 pn = jim(normals; nrow=1, title="Estimated surface normals")
 
