@@ -266,7 +266,7 @@ with macOS Mojave 10.14.6 and Julia 1.6.2.
 As expected, simple `A*x` is the fastest,
 but one can come quite close to that using proper double loop order
 with `@inbounds` or using "dots" and `@views` to coalesce.
-Without `@views` the vector versions have huge memory overhead! 
+Without `@views` the vector versions have huge memory overhead!
 =#
 
 [

@@ -1,5 +1,5 @@
 #=
-# [Photometric Stereo](@id photometric3)
+# [Photometric stereo](@id photometric3)
 
 This example illustrates
 [photometric stereo](https://en.wikipedia.org/wiki/Photometric_stereo)
@@ -22,6 +22,8 @@ the original least-squares approach of
 #srcURL
 
 #=
+## Setup
+
 Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
@@ -208,7 +210,7 @@ if !@isdefined(images)
     images = max.(images_ideal, 0) # "shadows" if lighting is ≥ 90° from normal
     svdval_images = svdvals(images)
     images = shape3(images)
-end
+end;
 
 # Note the different shadings in the different images.
 # Obviously the bunny cannot "jump around" during the imaging...
@@ -228,9 +230,9 @@ there would be (at most) 3 nonzero singular values,
 because `images_ideal`
 is the product of (`npixel` × 3) object normal matrix
 with a (3 × `nlight`) lighting direction matrix,
-so its rank should be a most 3.
+so its rank is at most 3.
 
-With self-shadow effects
+With self-shadow effects, e.g.,
 [Barsky & Petrou, 2003, T-PAMI](https://doi.org/10.1109/TPAMI.2003.1233898),
 there are 3 dominant singular values
 and additional small but non-negligible values.
@@ -349,7 +351,7 @@ return to estimate the surface normals
 for _all_ pixels,
 not just the "good" pixels.
 =#
-normal3 = shape3(shape2(images) * pinv(light3))
+normal3 = shape3(shape2(images) * pinv(light3));
 
 #=
 Examine the estimated surface normals.
