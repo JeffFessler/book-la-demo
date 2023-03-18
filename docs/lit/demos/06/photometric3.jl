@@ -370,7 +370,7 @@ pn = jim(
  layout=(3,1),
 )
 
-#src savefig("photometric3_pn1.pdf")
+#src savefig(pn, "photometric3_pn1.pdf")
 
 
 #=
