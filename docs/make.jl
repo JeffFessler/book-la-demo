@@ -102,5 +102,6 @@ if isci
         versions = nothing,
         forcepush = true,
         push_preview = true,
+        strict = true, # fail on "warnings"
     )
 end
