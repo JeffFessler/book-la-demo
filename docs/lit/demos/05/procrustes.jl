@@ -29,7 +29,7 @@ end
 # Tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using NonDepsPackageJustAsAnExample
+using IOCapture: capture # non-deps package
 using InteractiveUtils: versioninfo
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: prompt
