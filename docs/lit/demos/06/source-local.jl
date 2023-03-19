@@ -9,7 +9,7 @@ using the Julia language.
 #srcURL
 
 #=
-First we add the Julia packages that are need for this demo.
+Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -27,7 +27,7 @@ if false
 end
 
 
-# Now tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
