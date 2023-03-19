@@ -9,7 +9,9 @@ using the Julia language.
 #srcURL
 
 #=
-First we add the Julia packages that are need for this demo.
+## Setup
+
+Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -20,16 +22,18 @@ if false
         "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
+        "Random"
     ])
 end
 
 
-# Now tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages for this example.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: prompt
+using Random: seed!
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -40,7 +44,7 @@ isinteractive() && prompt(:prompt);
 
 # ## Coordinate data
 
-# coordinates from rotated image example in n-05-norm/fig/
+# Coordinates from rotated image example in Ch. 5 (`n-05-norm/fig/`)
 A = [-59 -25 49;
     6 -33 20]
 B = [-54.1 -5.15 32.44;
@@ -84,7 +88,7 @@ end
 
 # ## Explore additional special cases
 
-# Three points along a line, symmetrical:
+# ### Three points along a line, symmetrical:
 
 A = [-1 0 1; 0 0 0]
 B = [0 0 0; -2 0 2]
@@ -94,7 +98,7 @@ Q, scale = procrustes(A, B)
 @assert B ≈ scale * Q * A
 
 
-# Three points along a line, not symmetrical:
+# ### Three points along a line, not symmetrical:
 
 A = [-1 0 2; 0 0 0]
 B = [0 0 0; -2 0 4]
@@ -104,24 +108,45 @@ Q, scale = procrustes(A, B)
 @assert B ≈ scale * Q * A
 
 
-# A single point - works fine!
+# ### A single point - works fine!
 
 A = [1; 0]
-B = [1; 1]
+B = [2; 2] # different length!
 Q, scale = procrustes(A, B)
 
 # Check:
 @assert B ≈ scale * Q * A
 
 # Angle:
-acos(Q[1]) * 180/π
+rad2deg(acos(Q[1]))
 
 
-#src Q = U * Diagonal([1, 0]) * V'
+# Examine some other options for `Q`
+(U,s,V) = svd(B*A')
+Q1 = U*V'
+@assert B ≈ scale * Q1 * A # same as above
 
-#src todo: examine effect of noise too
+Q2 = U * Diagonal([1, 0]) * V' # (not unitary)
 
-#src prompt()
+#
+@assert B ≈ scale * Q2 * A # also works for this case!
 
+Q3 = U * Diagonal([1, -1]) * V' # is unitary
+
+#
+@assert B ≈ scale * Q3 * A # also works for this case!
+
+
+#=
+## Examine effect of noise
+=#
+seed!(0)
+σ = 0.1
+An = A + σ * randn(size(A))
+Bn = B + σ * randn(size(B))
+Q_n, scale_n = procrustes(An, Bn)
+
+# Angle:
+rad2deg(acos(Q_n[1]))
 
 include("../../../inc/reproduce.jl")

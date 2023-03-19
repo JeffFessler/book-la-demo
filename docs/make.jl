@@ -1,8 +1,8 @@
 execute = isempty(ARGS) || ARGS[1] == "run"
 
 org, reps = :JeffFessler, "book-mmaj-demo"
-using Documenter
-using Literate
+import Documenter
+import Literate
 
 # https://juliadocs.github.io/Documenter.jl/stable/man/syntax/#@example-block
 ENV["GKSwstype"] = "100"
@@ -73,11 +73,12 @@ format = Documenter.HTML(;
     assets = ["assets/custom.css"],
 )
 
-makedocs(;
+Documenter.makedocs(;
     modules = Module[],
     authors = "Jeff Fessler and contributors",
     sitename = "Demos",
     format,
+    strict = true, # fail on "warnings"
     pages = [
         "Home" => "index.md",
 #       "00 Intro" => demos("00"),
@@ -95,7 +96,7 @@ makedocs(;
 )
 
 if isci
-    deploydocs(;
+    Documenter.deploydocs(;
         repo = "github.com/$base",
         devbranch = "main",
         devurl = "dev",

@@ -346,7 +346,7 @@ prompt()
 #=
 ## Estimate surface normals.
 
-Now that we have estimated the lighting directions,
+Having estimated the lighting directions,
 return to estimate the surface normals
 for _all_ pixels,
 not just the "good" pixels.
