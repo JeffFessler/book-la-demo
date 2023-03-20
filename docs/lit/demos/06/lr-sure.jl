@@ -74,7 +74,7 @@ scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
 #
 prompt()
 
-#src savefig("06_lr_sure1s.pdf")
+#src savefig(ps, "06_lr_sure1s.pdf")
 
 
 # ## Low-rank approximation with various ranks
