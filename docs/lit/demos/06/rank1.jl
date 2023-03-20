@@ -17,6 +17,7 @@ if false
     import Pkg
     Pkg.add([
         "InteractiveUtils"
+        "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
@@ -29,10 +30,13 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: svd, rank
 using MIRTjim: prompt
-using Plots; default(label="", markerstrokecolor=:auto)
+using Plots: default, plot!, scatter, scatter!, savefig
 using Random: seed!
+default(label="", markerstrokecolor=:auto,
+    guidefontsize=14, legendfontsize=14, tickfontsize=12)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -54,9 +58,10 @@ lineplot = (p, s, c, l; w=3, t=:dash) ->
     plot!(p, 0:10, (0:10)*s, line=(c,t), label=l, width=w)
 function plotdata()
     p = scatter(x, y, label="data", legend=:bottomright,
-        color=:blue, markersize=7,
-        aspect_ratio=:equal, xtick=0:4:8, ytick=0:4:8,
-        xlabel="x", ylabel="y", xlim=(0,10), ylim=(0,10))
+        color=:blue, markersize=7, aspect_ratio=:equal,
+        xaxis = (L"x", (0, 10), 0:4:8),
+        yaxis = (L"y", (0, 10), 0:4:8),
+    )
     lineplot(p, 1, :red, "true", t=:solid, w=2)
 end
 pl = plotdata()
@@ -100,41 +105,41 @@ slope = (x \ y)[1] # cf A \ b
 
 
 # ### Plot the LS fit and the low-rank approximation on same graph
-lineplot(pl, slope, :green, "LS")
+pa = lineplot(pl, slope, :green, "LS")
 
 #
 prompt()
 
-#src savefig("06_low_rank1_all.pdf")
+#src savefig(pa, "06_low_rank1_all.pdf")
 
 
 # ## Illustrate the Frobenius norm approximation error graphically
-pl = plotdata()
+pf = plotdata()
 for i in 1:length(xb)
-    plot!(pl, [x[i], xb[i]], [y[i], yb[i]], color=:black, width=2)
+    plot!(pf, [x[i], xb[i]], [y[i], yb[i]], color=:black, width=2)
 end
-lineplot(pl, (xb\yb)[1], :black, "")
-scatter!(pl, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
+lineplot(pf, (xb\yb)[1], :black, "")
+scatter!(pf, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
 
 #
 prompt()
 
-#src savefig("06_low_rank1_r1.pdf")
+#src savefig(pf, "06_low_rank1_r1.pdf")
 
 
 # ## Illustrate the LS residual graphically
 xl = x; yl = slope*xl # LS points
-pl = plotdata()
+ps = plotdata()
 for i in 1:length(x)
-    plot!(pl, [x[i], xl[i]], [y[i], yl[i]], color=:green, width=2)
+    plot!(ps, [x[i], xl[i]], [y[i], yl[i]], color=:green, width=2)
 end
-lineplot(pl, slope, :green, "")
-scatter!(pl, xl, yl, color=:green, markersize=5, marker=:square, label="LS")
+lineplot(ps, slope, :green, "")
+scatter!(ps, xl, yl, color=:green, markersize=5, marker=:square, label="LS")
 
 #
 prompt()
 
-#src savefig("06_low_rank1_ls.pdf")
+#src savefig(ps, "06_low_rank1_ls.pdf")
 
 
 include("../../../inc/reproduce.jl")
