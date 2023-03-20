@@ -36,9 +36,10 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: svd, svdvals, Diagonal, norm
 using MIRTjim: prompt
-using Plots; default(label="", markerstrokecolor=:auto, markersize=7,
- guidefontsize=13, tickfontsize=12, legendfontsize=13, widen=true)
+using Plots: default, plot, plot!, scatter!, savefig
 using Random: seed!
+default(label="", markerstrokecolor=:auto, markersize=7,
+    guidefontsize=14, tickfontsize=12, legendfontsize=14, widen=true)
 
 
 
@@ -66,15 +67,14 @@ sx[1:Ktrue]
 sy[1:Ktrue]
 
 # ### Plot singular values
-plot(xlabel=L"k", ylabel=L"\sigma")
+ps = plot(xaxis = (L"k", (1,N), [1, Ktrue, N]), yaxis = (L"σ", (0,5.5), 0:5))
 scatter!(1:N, sy, color=:blue, label=L"\sigma_k(Y) \ \mathrm{noisy}")
 scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
-plot!(xtick=[1, Ktrue, N], ytick=0:5, xlim=(1,N), ylim=(0, 5.5))
 
 #
 prompt()
 
-#src savefig("06_lr_sure1s.pdf")
+#src savefig(ps, "06_lr_sure1s.pdf")
 
 
 # ## Low-rank approximation with various ranks
@@ -94,23 +94,23 @@ klist = 0:N;
 
 
 # ### Plot normalized root mean-squared error/difference versus rank K
-plot(xtick=[0, 2, Ktrue, N], ytick=0:20:100,
-    xlabel=L"K", ylabel="'Error' [%]", xlim=(1,N), ylim=(0, 100))
+pk = plot(xaxis = (L"K", (1,N), [0, 2, Ktrue, N]),
+    yaxis = ("'Error' [%]", (0, 100), 0:20:100))
 scatter!(klist, nrmse_K, color=:blue,
-    label=L"\mathrm{NRMSE\ } \|\hat{X}_K - X\|_F / \|X\|_F \cdot 100\%")
+    label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_K - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
 scatter!(klist, nrmsd_K, color=:red,
-    label=L"\mathrm{NRMSD\ } \|\hat{X}_K - Y\|_F / \|Y\|_F \cdot 100\%")
+    label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_K - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
 prompt()
 
-#src savefig("06_lr_sure1a.pdf")
+#src savefig(pk, "06_lr_sure1a.pdf")
 
 
 # ## Explore (nuclear norm) regularized version
 soft = (s,β) -> max.(s-β,0) # soft threshold function
 dsoft = (s,β) -> Float32.(s .> β) # "derivative" thereof
-reglist = [range(0, 1, 20); 1:0.25:6]
+reglist = [range(0, 0.5, 11); 0.75:0.25:6]
 Nr = length(reglist)
 nrmse_reg = zeros(Nr)
 nrmsd_reg = zeros(Nr)
@@ -123,17 +123,17 @@ end;
 
 
 # ### Plot NRMSE and NRMSD versus regularization parameter
-plot(xtick=0:6, ytick=0:20:100, legend=:bottomright,
-    xlabel=L"\beta", ylabel="'Error' [%]", xlim=(0,6), ylim=(0, 100))
+pb = plot(legend=:bottomright, xaxis = (L"β", (0,6), 0:6),
+    yaxis = ("'Error' [%]", (0, 100), 0:20:100))
 scatter!(reglist, nrmse_reg, color=:blue,
-    label=L"\mathrm{NRMSE\ } \|\hat{X}_{\beta} - X\|_F / \|X\|_F \cdot 100\%")
+    label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_{\beta} - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
 scatter!(reglist, nrmsd_reg, color=:red,
-    label=L"\mathrm{NRMSD\ } \|\hat{X}_{\beta} - Y\|_F / \|Y\|_F \cdot 100\%")
+    label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_{\beta} - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
 prompt()
 
-#src savefig("06_lr_sure1b.pdf")
+#src savefig(pb, "06_lr_sure1b.pdf")
 
 
 #=
@@ -165,25 +165,29 @@ reg_best = reglist[argmin(sure_reg)] # SURE pick for β
 
 
 # ### Plot NRMSE and NRMSD versus regularization parameter
-plot(xtick=[round(reg_best,digits=3), 6], ytick=0:20:100, legend=:bottomright,
-    xlabel=L"\beta", ylabel="'Error' [%]", xlim=(0,6), ylim=(0, 100))
+psb = plot(legend=:bottomright, widen=true,
+    xaxis = (L"β", (0,6), [reg_best, 5, 6]),
+    yaxis = ("'Error' [%]", (0,100), 0:20:100),
+)
 scatter!(reglist, nrmse_reg, color=:blue,
-    label=L"\mathrm{NRMSE\ } \|\hat{X}_\beta - X\|_F / \|X\|_F \cdot 100\%",)
+    label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_\beta - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
 scatter!(reglist, nrmsd_reg, color=:red,
-    label=L"\mathrm{NRMSD\ } \|\hat{X}_\beta - Y\|_F / \|Y\|_F \cdot 100\%")
+    label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_\beta - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 scatter!(reglist, sqrt.(sure_reg)/norm(Y)*100, color=:green,
-    label=L"(\mathrm{SURE}(\beta))^{1/2} / \|Y\|_F \cdot 100\%")
+    label=L"(\mathrm{SURE}(\beta))^{1/2} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
 prompt()
 
-#src savefig("06_lr_sure1c.pdf")
+#src savefig(psb, "06_lr_sure1c.pdf")
 
 
 # ### Examine shrunk singular values for best regularization parameter
 sh = soft.(sy,reg_best)
-plot(xtick=[1, Ktrue, sum(sh .!= 0), N], ytick=0:6,
-    xlabel=L"k", ylabel=L"\sigma", xlim=(1,N), ylim=(0,5.5))
+psk = plot(
+    xaxis = (L"k", (1, N), [1, Ktrue, sum(sh .!= 0), N]),
+    yaxis = (L"σ", (0, 5.5), 0:6),
+)
 scatter!(1:N, sy, color=:blue, label=L"\sigma_k(Y) \ \mathrm{noisy}")
 scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
 scatter!(1:N, sh, color=:green, label=L"\hat{\sigma}_k \ \mathrm{SURE} \ \hat{\beta}")
@@ -191,7 +195,7 @@ scatter!(1:N, sh, color=:green, label=L"\hat{\sigma}_k \ \mathrm{SURE} \ \hat{\b
 #
 prompt()
 
-#src savefig("06_lr_sure1t.pdf")
+#src savefig(psk, "06_lr_sure1t.pdf")
 
 
 include("../../../inc/reproduce.jl")

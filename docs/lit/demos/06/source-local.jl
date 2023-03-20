@@ -31,11 +31,14 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: jim, prompt
-using Plots; default(label="", markerstrokecolor=:auto)
+using Plots: default, scatter, savefig
 using Random: seed!
 using Statistics: mean
+default(label="", markerstrokecolor=:auto,
+    guidefontsize=14, tickfontsize=12, legendfontsize=14)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -67,9 +70,9 @@ C = reshape(C4, 2, :);
 
 J = size(C,2) # number of points
 D = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J] # "comprehension" in julia!
-jim(D, "D", color=:cividis)
+pd = jim(D, L"D", color=:cividis, xlabel=L"j", ylabel=L"i")
 
-#src savefig("06_source_local1_d.pdf")
+#src savefig(pd, "06_source_local1_d.pdf")
 
 
 # ### MDS algorithm
@@ -79,25 +82,28 @@ S = D.^2 # squared distances
 G = S .- mean(S,dims=1) # trick: use "broadcasting" feature of julia
 G = G .- mean(G,dims=2) # now we have de-meaned the columns and rows of S
 G = -1/2 * G
-jim(G, "G", color=:cividis) # still cannot determine visually the point locations
+# still cannot determine visually the point locations:
+pg = jim(G, L"G", color=:cividis, xlabel=L"j", ylabel=L"i")
 
-#src savefig("06_source_local1_g.pdf")
+#src savefig(pg, "06_source_local1_g.pdf")
 
 # Examine singular values
 (_, σ, V) = svd(G) # svd returns singular values in descending order
-scatter(σ, label="singular values") # two nonzero (d=2)
+ps = scatter(σ, label="singular values", widen=true,
+    xlabel=L"k", ylabel=L"σ_k") # two nonzero (d=2)
 
 #
 prompt()
-#src savefig("06_source_local1_eig.pdf")
+
+#src savefig(ps, "06_source_local1_eig.pdf")
 
 
 # ### Estimate the source locations using rank=2
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]' # here is the key step
 
 # ### Plot estimated source locations
-scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
- title="Location estimates")
+pc = scatter(Ch[1,:], -Ch[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
+ title="Location estimates", widen=true)
 
 #
 prompt()
@@ -110,20 +116,20 @@ Sn = Dn.^2
 Gn = Sn .- mean(Sn,dims=1)
 Gn = Gn .- mean(Gn,dims=2) # de-meaned
 Gn = -1/2 * Gn
-jim(Gn, "G noisy", color=:cividis) # still cannot determine visually the point locations
+pgn = jim(Gn, "G noisy", color=:cividis) # still cannot determine visually the point locations
 
 
 # Singular values
 (_, sn, Vn) = svd(Gn)
-scatter(abs.(sn), label="singular values") # two >> 0
+psn = scatter(abs.(sn), label="singular values") # two >> 0
 
 #
 prompt()
 
 # ### Plot estimated source locations from noisy distance measurements
 Cn = Diagonal(sqrt.(sn[1:2])) * Vn[:,1:2]' # here is the key step
-scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
- title="Location estimates")
+pcn = scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
+ title="Location estimates", widen=true)
 
 #
 prompt()
@@ -133,7 +139,7 @@ prompt()
 G = [-2 1 1; 1 -2 1; 1 1 -2] / (-6.)
 (~, σ, V) = svd(G)
 Ch = Diagonal(sqrt.(σ[1:2])) * V[:,1:2]'
-scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, title="Location estimates")
+scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, title="Location estimates", widen=true)
 
 #
 prompt()
