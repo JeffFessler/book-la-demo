@@ -315,8 +315,9 @@ pp = plot(
  ),
  plot_title = "First two PCA coefficients",
 )
-
-prompt()
 #src savefig(pp, "eigmap-pca-f.pdf")
+
+#
+prompt()
 
 include("../../../inc/reproduce.jl")
