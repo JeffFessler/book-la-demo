@@ -41,7 +41,7 @@ end
 using ImagePhantoms: rect, phantom
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: norm, Diagonal, eigen, svdvals
+using LinearAlgebra: norm, Diagonal, eigen, svd, svdvals
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, savefig, default
 using Random: seed!
@@ -127,8 +127,10 @@ there are many singular values
 that are are far from zero.
 =#
 tmp = svdvals(reshape(data, nx*ny, nrep))
-ps = scatter(tmp; xlabel=L"k", ylabel="Lσ_k", title = "Data singular values",
- xlims=(1, 40), xticks=[1,40, nx*ny], yticks=[0,20,40, 130], widen=true)
+ps = scatter(tmp; title = "Data singular values", widen=true,
+ xaxis = (L"k", (1, 40), [1, 40, nx*ny]),
+ yaxis = (L"σ_k", (0, 216), [0, 32, 48, 72, 215]),
+)
 #src savefig(ps, "eigmap-svd.pdf")
 
 #
@@ -285,5 +287,36 @@ pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
 #src scatter(features[:,1], Y * (Y \ features[:,1]))
 #src scatter(features[:,2], Y * (Y \ features[:,2]))
 
+
+# Examine PCA for comparison
+
+tmp = reshape(data, nx*ny, nrep)
+U2 = svd(tmp).U[:,1:2]
+pup = jim(reshape(U2, nx, ny, 2); title="First 2 PCA components")
+#src savefig(pup, "eigmap-pca-u.pdf")
+
+# Projection onto a 2-dimensional subspace works poorly:
+lr2 = reshape(U2 * (U2' * tmp), nx, ny, :)
+plr = jim(lr2[:,:,1:88], "Projection onto 2-dimensional subspace")
+#src savefig(plr, "eigmap-pca-lr2.pdf")
+
+# Nevertheless, the corresponding features
+# are reasonably correlated with width and angle.
+feat_pca = (U2' * tmp)' # leading coefficients
+
+pp = plot(
+ scatter(feat_pca[:,1], feat_pca[:,2], marker_z = widths, color=:cividis,
+  xlabel="feature 1", ylabel="feature 2",
+  colorbar_title="width",
+ ),
+ scatter(feat_pca[:,1], feat_pca[:,2], marker_z = angles, color=:cividis,
+  xlabel="feature 1", ylabel="feature 2",
+  colorbar_title="angle",
+ ),
+ plot_title = "First two PCA coefficients",
+)
+
+prompt()
+#src savefig(pp, "eigmap-pca-f.pdf")
 
 include("../../../inc/reproduce.jl")
