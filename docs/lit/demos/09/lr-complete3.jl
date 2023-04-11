@@ -193,7 +193,7 @@ scatter!(s_ista, color=:red, label="X (ISTA)")
 prompt()
 
 # Now let's check the cost function descent:
-scatter(cost_ista,
+scatter(cost_ista, color=:red,
     title = "cost vs. iteration",
     xlabel = "iteration",
     ylabel = "cost function value",
@@ -225,7 +225,7 @@ Reference:
   - ``\mathbf Z_{k+1} = \mathbf X_{k+1} + \frac{t_k-1}{t_{k+1}}(\mathbf X_{k+1}-\mathbf X_{k})`` (Momentum update)
 - `end`
 
-# Run FISTA algorithm
+Run FISTA algorithm:
 =#
 
 niter = 200
@@ -263,7 +263,7 @@ prompt()
 
 # See if the FISTA result is "low rank"
 s_fista = svdvals(Xfista)
-@show effective_rank = count(>(0.01*s_fista[1]), s_fista)
+effective_rank = count(>(0.01*s_fista[1]), s_fista)
 
 ps = plot(title="singular values",
     xtick = [1, effective_rank, count(>(20*eps()), s_fista), minimum(size(Y))])
@@ -283,7 +283,7 @@ ADMM is another approach that uses SVST as a sub-routine,
 closely related to proximal gradient descent.
 
 It is faster than FISTA,
-but the algorithm requires a tuning parameter μ.
+but the algorithm requires a tuning parameter ``μ``.
 (Here we use ``μ = β``).
 
 References:
@@ -294,7 +294,7 @@ References:
   [Distributed optimization and statistical learning via the alternating direction method of multipliers.](https://doi.org/10.1561/2200000016)
   Foundations and Trends in Machine Learning, 3(1), pp. 1-122.
 
-Run alternating directions method of multipliers (ADMM) algorithm
+Run alternating directions method of multipliers (ADMM) algorithm:
 =#
 
 niter = 50
@@ -324,22 +324,22 @@ pc = plot(title = "cost vs. iteration",
     xlabel="iteration", ylabel = "cost function value")
 scatter!(0:400, cost_ista, label="ISTA", color=:red)
 scatter!(0:200, cost_fista, label="FISTA", color=:blue)
-scatter!(0:niter, cost_admm, label="ADMM", color=:green)
+scatter!(0:niter, cost_admm, label="ADMM", color=:magenta)
 
 #
 prompt()
 
 # All singular values
 s_admm = svdvals(Xadmm)
-scatter!(ps, s_admm, label="X (ADMM)", color=:green)
+scatter!(ps, s_admm, label="X (ADMM)", color=:magenta, marker=:square)
 
 #
 prompt()
 
 #=
-For a suitable choice of μ, ADMM converges faster than FISTA.
+For a suitable choice of ``μ``, ADMM converges faster than FISTA.
 The proximal optimized gradient method (POGM)
-is also fast and does not require any algorithm tuning parameter μ.
+is also fast and does not require any algorithm tuning parameter ``μ``.
 =#
 
 #src plot(py, pj_ista, pj_fista, pj_admm)
