@@ -137,12 +137,13 @@ end;
 
 #=
 ## Iterative Soft-Thresholding Algorithm (ISTA)
-Extension of gradient descent to convex cost functions
+
+ISTA is an extension of gradient descent to convex cost functions
 that look like
 ``\min_x f(x) + g(x)``
 where ``f(x)`` is smooth and ``g(x)`` is non-smooth.
-Also known as
-[proximal gradient descent](http://www.stat.cmu.edu/~ryantibs/convexopt-S15/lectures/08-prox-grad.pdf).
+Also known as a
+[proximal gradient method](https://en.wikipedia.org/wiki/Proximal_gradient_methods_for_learning).
 
 **ISTA algorithm for solving (NN-min):**
 - initialize ``\mathbf X_0 = \mathbf Y`` (zero-fill missing entries)
@@ -154,7 +155,7 @@ Also known as
     (Singular value soft-thresholding)
 - `end`
 
-Apply ISTA (Iterative Soft-Thresholding Algorithm)
+Apply ISTA:
 =#
 niter = 400
 beta = 0.01 # chosen by trial-and-error here
@@ -206,11 +207,13 @@ prompt()
 #=
 ## Fast Iterative Soft-Thresholding Algorithm (FISTA)
 
-Modification of ISTA to include Nesterov acceleration for faster convergence.
+Modification of ISTA
+that includes Nesterov acceleration for faster convergence.
 
 Reference:
-- Beck, A. and Teboulle, M., 2009. [A fast iterative shrinkage-thresholding algorithm for linear inverse problems.](https://doi.org/10.1137/080716542)
-  SIAM journal on imaging sciences, 2(1), pp.183-202.
+- Beck, A. and Teboulle, M., 2009.
+  [A fast iterative shrinkage-thresholding algorithm for linear inverse problems.](https://doi.org/10.1137/080716542)
+  SIAM J. on Imaging Sciences, 2(1), pp.183-202.
 
 **FISTA algorithm for solving (NN-min)**
 - initialize matrices ``\mathbf Z_0 = \mathbf X_0 = \mathbf Y``
@@ -225,7 +228,7 @@ Reference:
   - ``\mathbf Z_{k+1} = \mathbf X_{k+1} + \frac{t_k-1}{t_{k+1}}(\mathbf X_{k+1}-\mathbf X_{k})`` (Momentum update)
 - `end`
 
-Run FISTA algorithm:
+Run FISTA:
 =#
 
 niter = 200
@@ -305,7 +308,7 @@ function lrmc_admm(Y; mu::Real = beta)
 	L = zeros(size(X))
 	cost_admm = zeros(niter+1)
 	cost_admm[1] = costfun(X,beta)
-	for k=1:niter
+	for k in 1:niter
     	Z = SVST(X + L, beta / mu)
     	X = (Y + mu * (Z - L)) ./ (mu .+ Ω)
     	L = L + X - Z
@@ -321,7 +324,7 @@ end
 
 pc = plot(title = "cost vs. iteration",
 	xtick = [0, 50, 200, 400],
-    xlabel="iteration", ylabel = "cost function value")
+    xlabel = "iteration", ylabel = "cost function value")
 scatter!(0:400, cost_ista, label="ISTA", color=:red)
 scatter!(0:200, cost_fista, label="FISTA", color=:blue)
 scatter!(0:niter, cost_admm, label="ADMM", color=:magenta)
@@ -338,7 +341,10 @@ prompt()
 
 #=
 For a suitable choice of ``μ``, ADMM converges faster than FISTA.
-The proximal optimized gradient method (POGM)
+The
+[proximal optimized gradient method (POGM)](https://doi.org/10.1137/16m108104x)
+with
+[adaptive restart](https://doi.org/10.1007/s10957-018-1287-4)
 is also fast and does not require any algorithm tuning parameter ``μ``.
 =#
 
