@@ -29,6 +29,7 @@ if false
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
+        "MIRT"
         "MIRTjim"
         "Plots"
     ])
@@ -43,6 +44,7 @@ using Downloads: download
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: svd, svdvals, Diagonal, norm
+using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, scatter!, savefig, default
 default(markerstrokecolor=:auto, label = "")
@@ -79,7 +81,7 @@ if !@isdefined(Y)
         url = "https://web.eecs.umich.edu/~fessler/course/551/julia/demo/professorxray.txt"
         tmp = download(url)
     end
-    Y = readdlm(tmp)'
+    Y = collect(readdlm(tmp)')
     py = jim(Y, "Y: Corrupted image matrix of Professor X-Ray\n (missing pixels set to 0)")
 end
 
@@ -125,12 +127,12 @@ Define cost function for optimization problem:
 =#
 
 nucnorm = (X) -> sum(svdvals(X))
-costfun = (X, beta) -> 0.5 * norm(X[Ω]-Y[Ω])^2 + beta * nucnorm(X);
+costfun = (X, beta) -> 0.5 * norm(X[Ω] - Y[Ω])^2 + beta * nucnorm(X);
 
 # Define singular value soft thresholding (SVST) function
-function SVST(X,beta)
+function SVST(X, beta)
     U,s,V = svd(X)
-    sthresh = max.(s .- beta,0)
+    sthresh = @. max(s - beta, 0)
     return U * Diagonal(sthresh) * V'
 end;
 
@@ -160,21 +162,21 @@ Apply ISTA:
 niter = 400
 beta = 0.01 # chosen by trial-and-error here
 function lrmc_ista(Y)
-	X = copy(Y)
-	Xold = copy(X)
-	cost_ista = zeros(niter+1)
-	cost_ista[1] = costfun(X,beta)
-	for k in 1:niter
-    	X[Ω] = Y[Ω]
-    	X = SVST(X,beta)
-    	cost_ista[k+1] = costfun(X,beta)
-	end
-	return X, cost_ista
+    X = copy(Y)
+    Xold = copy(X)
+    cost_ista = zeros(niter+1)
+    cost_ista[1] = costfun(X,beta)
+    for k in 1:niter
+        X[Ω] = Y[Ω]
+        X = SVST(X,beta)
+        cost_ista[k+1] = costfun(X,beta)
+    end
+    return X, cost_ista
 end;
 
 if !@isdefined(Xista)
-	Xista, cost_ista = lrmc_ista(Y)
-	pj_ista = jim(Xista, "ISTA result at $niter iterations")
+    Xista, cost_ista = lrmc_ista(Y)
+    pj_ista = jim(Xista, "ISTA result at $niter iterations")
 end
 
 
@@ -233,27 +235,27 @@ Run FISTA:
 
 niter = 200
 function lrmc_fista(Y)
-	X = copy(Y)
-	Z = copy(X)
-	Xold = copy(X)
-	told = 1
-	cost_fista = zeros(niter+1)
-	cost_fista[1] = costfun(X,beta)
-	for k in 1:niter
-    	Z[Ω] = Y[Ω]
-    	X = SVST(Z,beta)
-    	t = (1 + sqrt(1+4*told^2))/2
-    	Z = X + ((told-1)/t)*(X-Xold)
-    	Xold = X
-    	told = t
-    	cost_fista[k+1] = costfun(X,beta) # comment out to speed-up
-	end
-	return X, cost_fista
+    X = copy(Y)
+    Z = copy(X)
+    Xold = copy(X)
+    told = 1
+    cost_fista = zeros(niter+1)
+    cost_fista[1] = costfun(X,beta)
+    for k in 1:niter
+        Z[Ω] = Y[Ω]
+        X = SVST(Z,beta)
+        t = (1 + sqrt(1+4*told^2))/2
+        Z = X + ((told-1)/t)*(X-Xold)
+        Xold = X
+        told = t
+        cost_fista[k+1] = costfun(X,beta) # comment out to speed-up
+    end
+    return X, cost_fista
 end;
 
 if !@isdefined(Xfista)
-	Xfista, cost_fista = lrmc_fista(Y)
-	pj_fista = jim(Xfista, "FISTA result at $niter iterations")
+    Xfista, cost_fista = lrmc_fista(Y)
+    pj_fista = jim(Xfista, "FISTA result at $niter iterations")
 end
 
 plot(title = "cost vs. iteration",
@@ -303,27 +305,27 @@ Run alternating directions method of multipliers (ADMM) algorithm:
 niter = 50
 # Choice of parameter ``μ`` can greatly affect convergence rate
 function lrmc_admm(Y; mu::Real = beta)
-	X = copy(Y)
-	Z = zeros(size(X))
-	L = zeros(size(X))
-	cost_admm = zeros(niter+1)
-	cost_admm[1] = costfun(X,beta)
-	for k in 1:niter
-    	Z = SVST(X + L, beta / mu)
-    	X = (Y + mu * (Z - L)) ./ (mu .+ Ω)
-    	L = L + X - Z
-    	cost_admm[k+1] = costfun(X,beta) # comment out to speed-up
-	end
-	return X, cost_admm
+    X = copy(Y)
+    Z = zeros(size(X))
+    L = zeros(size(X))
+    cost_admm = zeros(niter+1)
+    cost_admm[1] = costfun(X,beta)
+    for k in 1:niter
+        Z = SVST(X + L, beta / mu)
+        X = (Y + mu * (Z - L)) ./ (mu .+ Ω)
+        L = L + X - Z
+        cost_admm[k+1] = costfun(X,beta) # comment out to speed-up
+    end
+    return X, cost_admm
 end;
 
 if !@isdefined(Xadmm)
-	Xadmm, cost_admm = lrmc_admm(Y)
-	pj_admm = jim(Xadmm, "ADMM result at $niter iterations")
+    Xadmm, cost_admm = lrmc_admm(Y)
+    pj_admm = jim(Xadmm, "ADMM result at $niter iterations")
 end
 
 pc = plot(title = "cost vs. iteration",
-	xtick = [0, 50, 200, 400],
+    xtick = [0, 50, 200, 400],
     xlabel = "iteration", ylabel = "cost function value")
 scatter!(0:400, cost_ista, label="ISTA", color=:red)
 scatter!(0:200, cost_fista, label="FISTA", color=:blue)
@@ -341,13 +343,40 @@ prompt()
 
 #=
 For a suitable choice of ``μ``, ADMM converges faster than FISTA.
+=#
+
+
+#=
+## Proximal optimized gradient method (POGM)
+
 The
 [proximal optimized gradient method (POGM)](https://doi.org/10.1137/16m108104x)
 with
 [adaptive restart](https://doi.org/10.1007/s10957-018-1287-4)
-is also fast and does not require any algorithm tuning parameter ``μ``.
+is faster than FISTA
+with very similar computation per iteration.
+Unlike ADMM,
+POGM does not require any algorithm tuning parameter ``μ``,
+making it easier to use in many practical composite optimization problems.
 =#
 
-#src plot(py, pj_ista, pj_fista, pj_admm)
+if !@isdefined(Xpogm)
+    Fcost = X -> costfun(X, beta)
+    f_grad = X -> Ω .* (X - Y) # gradient of smooth term
+    f_L = 1 # Lipschitz constant of f_grad
+    g_prox = (X, c) -> SVST(X, c * beta)
+    fun = (iter, xk, yk, is_restart) -> (xk, Fcost(xk), is_restart)
+    niter = 150
+    Xpogm, out = pogm_restart(Y, Fcost, f_grad, f_L; g_prox, fun, niter)
+    cost_pogm = [o[2] for o in out]
+end
+pj_pogm = jim(Xpogm, "POGM result at $niter iterations")
+
+scatter!(pc, 0:niter, cost_pogm, label="POGM", color=:green)
+
+#
+prompt()
+
+#src plot(py, pm, pj_ista, pj_fista, pj_admm, pj_pogm)
 
 include("../../../inc/reproduce.jl")
