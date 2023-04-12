@@ -258,6 +258,7 @@ if !@isdefined(Xfista)
     pj_fista = jim(Xfista, "FISTA result at $niter iterations")
 end
 
+#
 plot(title = "cost vs. iteration",
     xlabel="iteration", ylabel = "cost function value")
 scatter!(cost_ista, label="ISTA", color=:red)
@@ -270,6 +271,7 @@ prompt()
 s_fista = svdvals(Xfista)
 effective_rank = count(>(0.01*s_fista[1]), s_fista)
 
+#
 ps = plot(title="singular values",
     xtick = [1, effective_rank, count(>(20*eps()), s_fista), minimum(size(Y))])
 scatter!(s0, label="Y (initial)", color=:black)
@@ -324,6 +326,7 @@ if !@isdefined(Xadmm)
     pj_admm = jim(Xadmm, "ADMM result at $niter iterations")
 end
 
+#
 pc = plot(title = "cost vs. iteration",
     xtick = [0, 50, 200, 400],
     xlabel = "iteration", ylabel = "cost function value")
@@ -369,9 +372,10 @@ if !@isdefined(Xpogm)
     niter = 150
     Xpogm, out = pogm_restart(Y, Fcost, f_grad, f_L; g_prox, fun, niter)
     cost_pogm = [o[2] for o in out]
+    pj_pogm = jim(Xpogm, "POGM result at $niter iterations")
 end
-pj_pogm = jim(Xpogm, "POGM result at $niter iterations")
 
+#
 scatter!(pc, 0:niter, cost_pogm, label="POGM", color=:green)
 
 #
