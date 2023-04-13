@@ -52,6 +52,10 @@ at the University of Michigan.
 * View the excellent documentation at
   [JuliaImages](https://juliaimages.org)
 
+* Use the package
+  [AbbreviatedStackTraces.jl](https://github.com/BioTurboNick/AbbreviatedStackTraces.jl)
+  to get more interpretable error messages.
+
 * Check out some [Julia tutorials](https://julialang.org/learning/tutorials),
   especially the one titled
   "Just the Julia you need to get started in Data Science and ML" by Raj Rao.
