@@ -48,7 +48,7 @@ isinteractive() && prompt(:prompt);
 
 
 #=
-## Finite-precision effects
+## Finite-precision effects on singular values
 
 Examine the singular values of a matrix
 that ideally should have rank=1.
@@ -75,6 +75,25 @@ plot(p1, p2, layout=(2,1))
 
 #
 prompt()
+
+
+#=
+## Finite-precision effects on rank
+
+For a matrix that is sufficiently large
+relative to the precision of the matrix elements,
+the threshold in the `rank` function
+can be high enough
+that the returned rank is `0`.
+=#
+
+using LinearAlgebra: rank, svdvals
+n = 1100 # > 1 / eps(Float16)
+T = Float16
+u = ones(T, n) / T(sqrt(n))
+v = ones(T, n) / T(sqrt(n))
+X = u * v' # theoretically rank-1 matrix
+rank(X) # 0 !
 
 #src plot(py, )
 
