@@ -114,11 +114,11 @@ p2 = scatter(A2[:,1], A2[:,2], y, color=:blue,
 t1 = range(0, 1, 101)
 t2 = range(0, 1, 102)
 surface!(t1, t2, (t1,t2) -> x2[1]*t1 + x2[2]*t2, alpha=0.3)
-gr()
 
 #
 prompt()
 
+gr(); # restore
 #src savefig("04-ls-lift-2.pdf") # with gr()
 
 
