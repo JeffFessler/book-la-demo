@@ -57,7 +57,6 @@ tm = sort(rand(M)) # M random sample locations
 y = sfun.(tm) + σ * randn(M); # noisy samples
 
 t0 = range(0, 1, 101) # fine sampling for showing curve
-gr()
 p1 = scatter(tm, y, color=:blue, label=L"\mathrm{data\ } y_m",
 	xaxis = (L"t", (0, 1), 0:0.5:1),
 	yaxis = (L"y_m", (-0.1, 1.1), 0:0.5:1),
@@ -102,9 +101,11 @@ regression with a linear model
 fits much better,
 as seen because the data points
 nearly lie on the 2D plane.
+
+Use `plotly()` backend here to view surface interactively.
 =#
 
-plotly()
+#src plotly()
 p2 = scatter(A2[:,1], A2[:,2], y, color=:blue,
     xaxis=(L"t", (0,1), [0,1]),
     yaxis=(L"t^2", (0,1), [0,1]),
@@ -118,7 +119,7 @@ surface!(t1, t2, (t1,t2) -> x2[1]*t1 + x2[2]*t2, alpha=0.3)
 #
 prompt()
 
-gr(); # restore
+#src gr(); # restore
 #src savefig("04-ls-lift-2.pdf") # with gr()
 
 
