@@ -33,8 +33,10 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: Diagonal, svd
 using MIRTjim: prompt
-using Plots; default(label="", markerstrokecolor=:auto)
+using Plots: default, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
+default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
+    markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=14)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -46,14 +48,15 @@ isinteractive() && prompt(:prompt);
 # ## Simulated data from latent nonlinear function
 s = (t) -> atan(4*(t-0.5)) # nonlinear function
 
-seed!(1) # seed rng
+seed!(0) # seed rng
 M = 15 # how many data points
 tm = sort(rand(M)) # M random sample locations
 y = s.(tm) + 0.1 * randn(M) # noisy samples
 
 t0 = range(0, 1, 101) # fine sampling for showing curve
-p0 = scatter(tm, y, color=:blue,
-    label="y (noisy data)", xlabel=L"t", ylabel=L"y", ylim=(-1.3, 1.3))
+xaxis=(L"t", (0,1), 0:0.5:1)
+yaxis=(L"y", (-1.3, 1.3), -1:1)
+p0 = scatter(tm, y, color=:black, label="y (noisy data)"; xaxis, yaxis)
 plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
 
 #
@@ -69,6 +72,7 @@ p1 = plot(title="Columns of matrix A", xlabel=L"t", legend=:left)
 for i in 0:deg
     plot!(p1, tm, A[:,i+1], marker=:circle, label = "A[:,$(i+1)]")
 end
+p1
 
 #
 prompt()
@@ -80,8 +84,10 @@ m4 = Int64.(round.(range(1, M-1, 4))) # pick 4 points well separated
 A4 = A[m4,:] # 4 × 4 matrix
 x4 = inv(A4) * y[m4] # inverse of 4×4 matrix to solve "y = A x"
 
-scatter!(p0, tm[m4], y[m4], marker=:circle, color=:red)
-plot!(p0, t0, Afun(t0)*x4, color=:red, label="Fit using 4 of $M points")
+p1 = scatter(tm[m4], y[m4], marker=:square, color=:red)
+scatter!(tm, y, color=:black, label="y (noisy data)"; xaxis, yaxis)
+plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
+plot!(t0, Afun(t0)*x4, color=:red, label="Fit 4 of $M points")
 
 #
 prompt()
@@ -91,12 +97,12 @@ prompt()
 
 xh = A \ y # backslash for LS solution using all M samples
 
-plot!(p0, t0, Afun(t0)*xh, color=:green, label="Fit cubic using all M=$(M) points")
+plot!(p1, t0, Afun(t0)*xh, color=:magenta, label="Fit cubic to M=$(M) points")
 
 #
 prompt()
 
-#src savefig("tmp.pdf")
+#src savefig(p1, "ls-fit-4-15.pdf")
 
 
 
