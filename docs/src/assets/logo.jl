@@ -12,7 +12,7 @@ colors = [ julia_purple, julia_green, julia_red, ] # from Luxor.jl
 colors = [RGB{Float32}(c...) for c in colors]
 black = RGB{Float32}(0, 0, 0)
 
-M,N = 20,30
+M,N = 20,16
 pcolor = 0.8 # probability of a color
 
 logo = fill(black, M, N)
