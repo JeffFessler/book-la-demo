@@ -37,7 +37,7 @@ using MIRTjim: jim, prompt
 using Plots: default, scatter, savefig
 using Random: seed!
 using Statistics: mean
-default(label="", markerstrokecolor=:auto, widen=true,
+default(); default(label="", markerstrokecolor=:auto, widen=true,
     guidefontsize=14, tickfontsize=12, legendfontsize=14)
 
 

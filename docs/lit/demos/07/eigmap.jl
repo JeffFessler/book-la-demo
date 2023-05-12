@@ -45,7 +45,7 @@ using LinearAlgebra: norm, Diagonal, eigen, svd, svdvals
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, savefig, default
 using Random: seed!
-default(label = "", markerstrokecolor = :auto)
+default(); default(label = "", markerstrokecolor = :auto)
 seed!(0)
 
 

@@ -36,7 +36,7 @@ using LinearAlgebra: norm, pinv
 using MIRTjim: prompt
 using Plots: default, contour, plot!, scatter!, savefig
 using Random: seed!
-default(label="", markerstrokecolor=:auto, markersize=6, linewidth=2,
+default(); default(label="", markerstrokecolor=:auto, markersize=6, linewidth=2,
     xlims = (-3,3), ylims = (-3,3), aspect_ratio=:equal,
     legendfontsize=12, guidefontsize=13, tickfontsize=10)
 

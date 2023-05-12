@@ -47,7 +47,7 @@ using LinearAlgebra: svd, svdvals, Diagonal, norm
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, scatter!, savefig, default
-default(markerstrokecolor=:auto, label = "")
+default(); default(markerstrokecolor=:auto, label = "")
 
 
 # The following line is helpful when running this jl-file as a script;
