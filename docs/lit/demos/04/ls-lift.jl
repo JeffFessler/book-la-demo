@@ -35,8 +35,8 @@ using LinearAlgebra: Diagonal, svd
 using MIRTjim: prompt
 using Plots: default, gr, plotly, plot!, scatter, surface!, savefig
 using Random: seed!
-default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
-markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=16)
+default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
+ markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=16)
 
 
 # The following line is helpful when running this jl-file as a script;

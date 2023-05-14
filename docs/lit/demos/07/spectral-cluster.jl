@@ -47,7 +47,7 @@ using MLDatasets: MNIST
 using Plots: default, gui, plot, scatter, plot!, scatter!
 using Random: seed!, randperm
 using StatsBase: mean
-default(markersize=5, markerstrokecolor=:auto, label="")
+default(); default(markersize=5, markerstrokecolor=:auto, label="")
 
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each figure is displayed.

@@ -55,9 +55,9 @@ using LinearAlgebra: Diagonal, svd, svdvals, rank, norm, pinv
 using MIRTjim: jim, prompt
 using NPZ: npzread
 using Plots: plot, scatter, scatter!, ylims!, cgrad, default, RGB, savefig
-    default(label="", markerstrokecolor=:auto),
 using Printf: @sprintf
 using Random: seed!
+default(); default(label="", markerstrokecolor=:auto)
 
 
 # The following line is helpful when running this jl-file as a script;

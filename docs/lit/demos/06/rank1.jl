@@ -35,7 +35,7 @@ using LinearAlgebra: svd, rank
 using MIRTjim: prompt
 using Plots: default, plot!, scatter, scatter!, savefig
 using Random: seed!
-default(label="", markerstrokecolor=:auto,
+default(); default(label="", markerstrokecolor=:auto,
     guidefontsize=14, legendfontsize=14, tickfontsize=12)
 
 
