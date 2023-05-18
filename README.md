@@ -19,6 +19,8 @@ click this button:
 [![demos][demos-img]][demos-url]
 
 
+<img src="docs/src/assets/logo.png" alt="logo" width="150">
+
 <!-- URLs -->
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-mmaj-demo
