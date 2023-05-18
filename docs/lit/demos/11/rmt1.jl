@@ -25,6 +25,7 @@ if false
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
+        "StatsBase"
     ])
 end
 
@@ -36,14 +37,15 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: rank, svd, svdvals, Diagonal, norm
 using MIRTjim: prompt
-using Plots: plot, scatter, scatter!, savefig, default
+using Plots: plot, plot!, scatter, scatter!, savefig, default, histogram
+using StatsBase: mean, var
 default(markerstrokecolor=:auto, label="", widen=true)
 
 
 # The following line is helpful when running this jl-file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
 
-isinteractive() && prompt(:prompt);
+#todo isinteractive() && prompt(:prompt);
 
 
 
@@ -58,10 +60,10 @@ n = 100
 T = Float32
 u = ones(T, n) / T(sqrt(n))
 v = ones(T, n) / T(sqrt(n))
-X = 1 * u * v' # theoretically rank-1 matrix
-@assert rank(X) == 1 # julia is aware of precision limits
-sigma = svdvals(X)
-sigma[1]
+Y = 1 * u * v' # theoretically rank-1 matrix
+@assert rank(Y) == 1 # julia is aware of precision limits
+sigma = svdvals(Y)
+sigma[1], abs(sigma[1] - 1)
 
 #
 xaxis = (L"k", (1,n), [1, n÷2, n])
@@ -92,8 +94,49 @@ n = 1100 # > 1 / eps(Float16)
 T = Float16
 u = ones(T, n) / T(sqrt(n))
 v = ones(T, n) / T(sqrt(n))
-X = u * v' # theoretically rank-1 matrix
-rank(X) # 0 !
+Y = u * v' # theoretically rank-1 matrix
+rank(Y) # 0 !
+
+
+N = 100
+X = (2rand(BigFloat, N, N).-1)*sqrt(3) # very high-precision reference, var=1
+for T in (Float16, Float32, Float64)
+    local Y = T.(X) # quantize
+    local Z = T.(Y - X) # quantization error
+    @show T, mean(Z) # approximately 0
+    vr = var(Float64.(Z)) # sample variance
+    @show (vr, eps(T)^2) # empirical, predicted
+end
+
+T = Float32
+Y = T.(X) # quantize
+Z = T.(Y - X) # quantization error
+
+# Examine histogram of floating point quantization errors
+ph = histogram(vec(Z), bins = (-40:40)/40 * eps(T))
+
+
+# Examine floating point quantization errors
+x = range(BigFloat(-1), BigFloat(1), 1001) * 2
+z = T.(x) - x # quantization error
+ylabel = latexstring("error: \$\\ (q(x) - x)/ϵ\$")
+scatter(x, z / eps(T), yaxis=(ylabel, (-1,1).*0.51, (-2:2)*0.25))
+plot!(x, (@. eps(T(x)) / eps(T) / 2), label=L"ϵ/2", color=:blue)
+pq = plot!(x, x/2, xaxis=(L"x",), label=L"x/2", legend=:top, color=:red)
+
+#=
+Based on the quantization error plot above,
+the quantization error for a floating point number near ``x``
+is bounded above by ``ϵ x / 2``.
+Thus if ``x ∼ U(-a,a)`` then
+``
+E[z^2] = E[|q(x) - x|^2]
+= \frac{1}{2a} ∫_{-a}^a |q(x) - x|^2 \mathrm{d}x
+\leq
+\frac{1}{a} ∫_0^a |ϵ x / 2|^2 \mathrm{d}x
+= ϵ^2 a^2 / 12.
+``
+=#
 
 #src plot(py, )
 
