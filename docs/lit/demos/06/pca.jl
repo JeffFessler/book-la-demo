@@ -89,7 +89,10 @@ pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
 pm = jim(μ, "Mean")
 #src savefig(pm, "pca-mean.pdf")
 
-# Scree plot of singular values
+#=
+# ## Scree plot
+Show singular values.
+=#
 data2 = reshape(data .- μ, :, nrep*ndigit) # (nx*ny, nrep*ndigit)
 f = svd(data2)
 ps = scatter(f.S; title="Scree plot", widen=true,
@@ -102,6 +105,7 @@ ps = scatter(f.S; title="Scree plot", widen=true,
 prompt()
 
 #=
+## Principal components
 The first 6 or so singular values are notably larger than the rest,
 but for simplicity of visualization here
 we just use the first two components.
@@ -124,7 +128,7 @@ and
 z = Q' * data2 # (K, nrep*ndigit)
 
 #=
-Examine the PCA scores.
+## PCA scores
 The three digits are remarkably well separated
 even in just two dimensions.
 =#
@@ -135,6 +139,7 @@ pz = plot(title = "Score plot for $ndigit digits",
 for d in digitn
     scatter!(z[1,labels .== d], z[2,labels .== d], label="Digit $d")
 end
+pz
 #src savefig(pz, "pca-score.pdf")
 
 #
