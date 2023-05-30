@@ -109,7 +109,7 @@ where ``α`` is the step size.
 We use the optimal step size
 ``α = \frac{2}{σ_1^2(A) + σ_N^2(A)}.``
 
-Pick step size (preconditioner P = αI)
+Pick step size (preconditioner ``P = αI``)
 =#
 α = 2 / (sum(svdvals(A' * A)[[1, end]])) # Optimal step size
 eigvals(G(sqrt(α))) # Eigenvalues of G govern rate of convergence
@@ -123,10 +123,10 @@ pu = contour(x1, x2, scale * f.(xidx)', annotate = (1, 6, "Unpreconditioned"),
  xaxis = (L"x_1", (-1,1).*10),
  yaxis = (L"x_2", (-1,1).*10),
  size = (500,400),
-)
+);
 
 x0 = [5.0, -8.0] # initial guess
-scatter!(pu, [x0[1]], [x0[2]], color=:green, label = L"x_0")
+scatter!(pu, [x0[1]], [x0[2]], color=:green, label = L"x_0");
 
 # Run GD
 niter = 100
@@ -138,7 +138,8 @@ end
 
 # Display iterates
 plot!(pu, [x[k][1] for k in 1:niter], [x[k][2] for k in 1:niter],
-    marker=:star, color=:blue, label = L"x_k")
+    marker=:star, color=:blue, label = L"x_k");
+
 # Mark the minimum of the cost function
 scatter!(pu, [0], [0], label = L"\hat{x}", color=:red,
     aspect_ratio = :equal, marker = :x)
@@ -217,17 +218,17 @@ ph = contour(z1, z2, scale * f̃ideal.(zidx)',
  xaxis = (L"z_1", (-1,1).*40),
  yaxis = (L"z_2", (-1,1).*40),
  size = (500,400),
-)
+);
 
 # Transform initial x guess into z coordinates and plot
 z0 = sqrtPideal \ x0
-scatter!(ph, [z0[1]], [z0[2]], color=:green, label = L"z_0")
+scatter!(ph, [z0[1]], [z0[2]], color=:green, label = L"z_0");
 
 # Run GD
 zk = z0 - ∇f̃ideal(z0)
 
 # Display iterates
-plot!(ph, [z0[1],zk[1]], [z0[2],zk[2]], marker=:star, color=:blue, label = L"z_k")
+plot!(ph, [z0[1],zk[1]], [z0[2],zk[2]], marker=:star, color=:blue, label = L"z_k");
 
 # Mark the minimum of the preconditioned cost function
 scatter!(ph, [0], [0], label = L"\hat{z}", color=:red,
@@ -277,7 +278,7 @@ pd = contour(z1, z2, scale * f̃diag.(zidx)',
  xaxis = (L"z_1", (-1,1).*50),
  yaxis = (L"z_2", (-1,1).*50),
  size = (500,400),
-)
+);
 
 # Transform initial x guess into z coordinates and plot
 z0 = sqrtPdiag \ x0
@@ -293,7 +294,8 @@ end;
 
 # Display iterates
 plot!(pd, [z[k][1] for k in 1:niter], [z[k][2] for k in 1:niter],
-    marker=:star, color=:blue, label = L"z_k")
+    marker=:star, color=:blue, label = L"z_k");
+
 # Mark the minimum of the preconditioned cost function
 scatter!(pd, [0], [0], label = L"\hat{z}", color=:red,
     aspect_ratio = :equal, marker = :x)
