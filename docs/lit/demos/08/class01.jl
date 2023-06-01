@@ -1,11 +1,8 @@
 #=
-# [PCA](@id pca)
+# [Binary classification](@id class01)
 
-## Principal component analysis (PCA) illustration
-
-This example illustrates
-[PCA](https://en.wikipedia.org/wiki/Principal_component_analysis)
-of hand-written digit data.
+Binary classification of hand-written digits
+in Julia.
 =#
 
 #srcURL
@@ -39,10 +36,13 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings # nice plot labels
-using LinearAlgebra: svd
+using LinearAlgebra: dot
 using MIRTjim: jim, prompt
 using MLDatasets: MNIST
-using Plots: default, gui, plot, savefig, scatter, scatter!
+using Plots: default, gui, savefig
+using Plots: histogram, histogram!, plot
+using Plots: RGB, cgrad
+using Plots.PlotMeasures: px
 using Random: seed!, randperm
 using StatsBase: mean
 default(); default(markersize=5, markerstrokecolor=:auto, label="",
@@ -61,10 +61,10 @@ This code will automatically download the data from web if needed
 and put it in a folder like: `~/.julia/datadeps/MNIST/`.
 =#
 if !@isdefined(data)
-    digitn = (0, 1, 4) # which digits to use
+    digitn = (0, 1) # which digits to use
     isinteractive() || (ENV["DATADEPS_ALWAYS_ACCEPT"] = true) # avoid prompt
     dataset = MNIST(Float32, :train)
-    nrep = 60 # how many of each digit
+    nrep = 100 # how many of each digit
     ## function to extract the 1st `nrep` examples of digit n:
     data = n -> dataset.features[:,:,findall(==(n), dataset.targets)[1:nrep]]
     data = cat(dims=4, data.(digitn)...)
@@ -81,67 +81,57 @@ if !@isdefined(data)
 end
 
 
-# Look at "unlabeled" image data prior to unsupervised dimensionality reduction
+# Look at "unlabeled" image data
 pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
-#src savefig(pd, "pca-data.pdf")
 
-# Compute sample average of data
-μ = mean(data, dims=3)
-pm = jim(μ, "Mean")
-#src savefig(pm, "pca-mean.pdf")
+# Extract training data
+data0 = data[:,:,labels .== 0]
+data1 = data[:,:,labels .== 1];
+
+# red-black-blue colorbar:
+RGB255(args...) = RGB((args ./ 255)...)
+color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)]);
 
 #=
-## Scree plot
-Show singular values.
+## Weights
+Compute sample average of each training class
+and define classifier weights as differences of the means.
 =#
-data2 = reshape(data .- μ, :, nrep*ndigit) # (nx*ny, nrep*ndigit)
-f = svd(data2)
-ps = scatter(f.S; title="Scree plot", widen=true,
- xaxis = (L"k", (1,ndigit*nrep), [1, 6, ndigit*nrep]),
- yaxis = (L"σ_k", (0,48), [0, 0, 47]),
+μ0 = mean(data0, dims=3)
+μ1 = mean(data1, dims=3)
+w = μ1 - μ0; # hand-crafted weights
+
+# images of means and weights
+siz = (540,400)
+p0 = jim(μ0; clim=(0,1), size=siz)
+p1 = jim(μ1; clim=(0,1), size=siz)
+pw = jim(w; color, clim=(-1,1).*0.8, size=siz)
+#src jim(w; color=:cividis)
+pm = plot( p0, p1, pw;
+  size = (1400, 350),
+  layout = (1,3),
+  rightmargin = 20px,
 )
-#src savefig(ps, "pca-scree.pdf")
-
-#
-prompt()
+#src savefig(pm, "class01-mean.pdf")
 
 #=
-## Principal components
-The first 6 or so singular values are notably larger than the rest,
-but for simplicity of visualization here
-we just use the first two components.
+## Inner products
+Examine performance of simple linear classifier.
+(Should be done with test data, not training data...)
 =#
-K = 2
-Q = f.U[:,1:K]
-pq = jim(reshape(Q, nx,ny,:), "First $K singular components"; size=(600,300))
-#src savefig(pq, "pca-q.pdf")
+i0 = [dot(w, x) for x in eachslice(data0, dims=3)]
+i1 = [dot(w, x) for x in eachslice(data1, dims=3)];
 
-#=
-Now use the learned subspace basis `Q`
-to perform dimensionality reduction.
-The resulting coefficients are called
-"factors" in
-[factor analysis](https://en.wikipedia.org/wiki/Factor_analysis)
-and
-"scores" in
-[PCA](https://en.wikipedia.org/wiki/Principal_component_analysis).
-=#
-z = Q' * data2 # (K, nrep*ndigit)
+bins = -80:20
+ph = plot(
+ xaxis = (L"⟨\mathbf{\mathit{v}},\mathbf{\mathit{x}}⟩", (-80, 20), -80:20:20),
+ yaxis = ("", (0, 25), 0:10:20),
+ size = (600, 250), bottommargin = 20px,
+)
+histogram!(i0; bins, color=:red , label="0")
+histogram!(i1; bins, color=:blue, label="1")
 
-#=
-## PCA scores
-The three digits are remarkably well separated
-even in just two dimensions.
-=#
-pz = plot(title = "Score plot for $ndigit digits",
- xaxis=("Score 1", (-5,8), -3:3:6),
- yaxis=("Score 2", (-6,4), -4:4:4),
-) 
-for d in digitn
-    scatter!(z[1,labels .== d], z[2,labels .== d], label="Digit $d")
-end
-pz
-#src savefig(pz, "pca-score.pdf")
+#src savefig(ph, "class01-hist.pdf")
 
 #
 prompt()

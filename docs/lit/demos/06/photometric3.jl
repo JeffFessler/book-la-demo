@@ -45,7 +45,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Downloads: download

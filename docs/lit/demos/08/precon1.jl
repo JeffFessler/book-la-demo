@@ -12,6 +12,7 @@ using the Julia language.
 #srcURL
 
 #=
+## Setup
 Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
@@ -30,7 +31,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
@@ -46,7 +47,7 @@ default(); default(markerstrokecolor=:auto, label = "", markersize=6,
 # The following line is helpful when running this jl-file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
 
-#todo isinteractive() && prompt(:prompt);
+isinteractive() && prompt(:prompt);
 
 
 
