@@ -84,6 +84,7 @@ end
 # Look at "unlabeled" image data
 pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
 
+# Extract training data
 data0 = data[:,:,labels .== 0]
 data1 = data[:,:,labels .== 1];
 
@@ -116,6 +117,7 @@ pm = plot( p0, p1, pw;
 #=
 ## Inner products
 Examine performance of simple linear classifier.
+(Should be done with test data, not training data...)
 =#
 i0 = [dot(w, x) for x in eachslice(data0, dims=3)]
 i1 = [dot(w, x) for x in eachslice(data1, dims=3)];
@@ -123,7 +125,7 @@ i1 = [dot(w, x) for x in eachslice(data1, dims=3)];
 bins = -80:20
 ph = plot(
  xaxis = (L"⟨\mathbf{\mathit{v}},\mathbf{\mathit{x}}⟩", (-80, 20), -80:20:20),
- yaxis = (L" ", (0, 25), 0:10:20),
+ yaxis = ("", (0, 25), 0:10:20),
  size = (600, 250), bottommargin = 20px,
 )
 histogram!(i0; bins, color=:red , label="0")
