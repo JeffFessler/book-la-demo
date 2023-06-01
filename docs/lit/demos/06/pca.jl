@@ -10,9 +10,10 @@ of hand-written digit data.
 
 #srcURL
 
-# ### Setup
 
 #=
+## Setup
+
 Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
@@ -33,7 +34,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
@@ -90,7 +91,7 @@ pm = jim(μ, "Mean")
 #src savefig(pm, "pca-mean.pdf")
 
 #=
-# ## Scree plot
+## Scree plot
 Show singular values.
 =#
 data2 = reshape(data .- μ, :, nrep*ndigit) # (nx*ny, nrep*ndigit)

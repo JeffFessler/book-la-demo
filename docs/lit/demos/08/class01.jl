@@ -1,14 +1,16 @@
 #=
 # [Binary classification](@id class01)
 
-## Binary classification illustration in Julia.
+Binary classification of hand-written digits
+in Julia.
 =#
 
 #srcURL
 
-# ### Setup
 
 #=
+## Setup
+
 Add the Julia packages that are need for this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
@@ -29,7 +31,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell this Julia session to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
@@ -89,7 +91,11 @@ data1 = data[:,:,labels .== 1];
 RGB255(args...) = RGB((args ./ 255)...)
 color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)]);
 
-# Compute sample average of each training class
+#=
+## Weights
+Compute sample average of each training class
+and define classifier weights as differences of the means.
+=#
 μ0 = mean(data0, dims=3)
 μ1 = mean(data1, dims=3)
 w = μ1 - μ0; # hand-crafted weights
@@ -107,7 +113,10 @@ pm = plot( p0, p1, pw;
 )
 #src savefig(pm, "class01-mean.pdf")
 
-# inner products
+#=
+## Inner products
+Examine performance of simple linear classifier.
+=#
 i0 = [dot(w, x) for x in eachslice(data0, dims=3)]
 i1 = [dot(w, x) for x in eachslice(data1, dims=3)];
 
