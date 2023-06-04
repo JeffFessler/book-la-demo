@@ -50,7 +50,8 @@ using Plots.PlotMeasures: px
 using Random: seed!
 using Statistics: mean
 default(markersize=7, markerstrokecolor=:auto, label = "",
- tickfontsize = 10, legendfontsize = 18,
+ tickfontsize = 10, legendfontsize = 18, labelfontsize = 16,
+ titlefontsize = 18,
 )
 
 # The following line is helpful when running this jl-file as a script;
@@ -81,7 +82,8 @@ jim1 = (X ; kwargs...) -> jim(X; size = (600,300),
  leftmargin = 10px, rightmargin = 10px, kwargs...)
 # consistent display range
 jimc = (X ; kwargs...) -> jim1(X; clim=(0,100), kwargs...)
-pt = jimc(Xtrue)
+title = latexstring("\$\\mathbf{\\mathit{X}}\$ : Latent image")
+pt = jimc(Xtrue; title)
 ## savefig(pt, "mc_ap_x.pdf")
 
 #=
@@ -91,7 +93,8 @@ seed!(0)
 M = rand(Float32, size(Xtrue)) .>= 0.75 # 75% missing
 Y = M .* (Xtrue + randn(size(Xtrue)));
 
-py = jimc(Y ; title="Y: Corrupted image matrix\n(missing pixels set to 0)")
+title = latexstring("\$\\mathbf{\\mathit{Y}}\$ : Corrupted image matrix\n(missing pixels set to 0)")
+py = jimc(Y ; title)
 nrmse = (Xh) -> round(norm(Xh - Xtrue) / norm(Xtrue) * 100, digits=1)
 xnrmse! = (Xh) -> xlabel!("NRMSE = $(nrmse(Xh)) %")
 @show nrmse(Y)
@@ -112,7 +115,8 @@ xnrmse!(Y)
 
 # Show mask, count proportion of missing entries
 frac_nonzero = count(M) / length(M)
-pm = jim1(M; title="M : Locations of observed entries",
+title = latexstring("\$\\mathbf{\\mathit{M}}\$ : Locations of observed entries")
+pm = jim1(M; title,
     xlabel = "sampled fraction = $(round(frac_nonzero * 100, digits=1))%")
 ## savefig(pm, "mc_ap_m.pdf")
 
@@ -123,7 +127,8 @@ A simple low-rank approximation works poorly for missing data.
 r = 5
 U,s,V = svd(Y)
 Xr = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]'
-pr = jimc(Xr ; title="low-rank approximation of data Y, r=$r")
+title = latexstring("Rank $r approximation of data \$\\mathbf{\\mathit{Y}}\$")
+pr = jimc(Xr ; title)
 xnrmse!(Xr)
 ## savefig(pr, "mc_ap_lr.pdf")
 
@@ -153,7 +158,8 @@ function lrmc_alt(Y)
     return Xr
 end
 Xr = lrmc_alt(Y)
-pa = jimc(Xr ; title="'Alternating Projection' result at $niter iterations")
+title = "Alternating Projection at $niter iterations"
+pa = jimc(Xr ; title)
 xnrmse!(Xr)
 ## savefig(pa, "mc_ap_400.pdf")
 
@@ -174,7 +180,7 @@ xnrmse!(Xr)
 U,s,V = svd(Xr)
 Xfinal = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]';
 
-pf = jimc(Xfinal ; title="'Alternating Projection' result at $niter iterations")
+pf = jimc(Xfinal ; title="Alternating Projection at $niter iterations")
 xnrmse!(Xfinal)
 ## savefig(pf, "mc_ap_xh.pdf")
 
@@ -197,7 +203,7 @@ effective_rank = sum(sp .> (0.01*sp[1]))
 ps = plot(title="singular values",
  xaxis=(L"k", (1, minimum(size(Y))), [1, effective_rank, minimum(size(Y))]),
  yaxis=(L"σ",), labelfontsize = 18,
- leftmargin = 25px, bottommargin = 20px, size = (600,350), widen = true,
+ leftmargin = 15px, bottommargin = 20px, size = (600,350), widen = true,
 )
 scatter!(svdvals(Y), color=:red, label="Y (data)")
 scatter!(svdvals(Xtrue), color=:blue, label="Xtrue")
