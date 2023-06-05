@@ -1,5 +1,5 @@
 #=
-# [Low-rank matrix completion](@id lrmc-m)
+# [Low-rank matrix completion: AltMin, ISTA, FISTA](@id lrmc-m)
 
 This example illustrates
 low-rank matrix completion
@@ -81,15 +81,17 @@ rtrue = rank(Xtrue)
 
 # plots with consistent size
 jim1 = (X ; kwargs...) -> jim(X; size = (600,300),
- leftmargin = 10px, rightmargin = 10px, kwargs...)
+ leftmargin = 10px, rightmargin = 10px, kwargs...);
 # and consistent display range
-jimc = (X ; kwargs...) -> jim1(X; clim=(0,100), kwargs...)
+jimc = (X ; kwargs...) -> jim1(X; clim=(0,100), kwargs...);
 # and with NRMSE label
 nrmse = (Xh) -> round(norm(Xh - Xtrue) / norm(Xtrue) * 100, digits=1)
 jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %", kwargs...)
 title = latexstring("\$\\mathbf{\\mathit{X}}\$ : Latent image")
 pt = jimc(Xtrue; title)
+
 ## savefig(pt, "mc_ap_x.pdf")
+
 
 #=
 ## Noisy / incomplete data
@@ -223,8 +225,8 @@ using low-rank matrix completion
 with a nuclear-norm regularizer.
 
 The optimization problem we will solve is:
-``\arg\min_{\mathbf X} \frac{1}{2}
-‖ \mathbf{\mathit{M}} \odot
+``\arg\min_{\mathbf{\mathit{X}}} \frac{1}{2}
+‖ \mathbf{\mathit{M}} ⊙
  (\mathbf{\mathit{X}} - \mathbf{\mathit{Y}}) ‖_{\mathrm{F}}^2
 + \beta \,‖ \mathbf{\mathit{X}} ‖_*
 \quad\quad (\text{NN-min})
@@ -239,7 +241,7 @@ is the binary sampling mask.
 Define cost function for optimization problem
 =#
 nucnorm = (X) -> sum(svdvals(X)) # nuclear norm
-costfun1 = (X,beta) -> 0.5 * norm(M .* (X - Y))^2 + beta * nucnorm(X) # regularized cost
+costfun1 = (X,beta) -> 0.5 * norm(M .* (X - Y))^2 + beta * nucnorm(X); # regularized cost
 
 
 #=
@@ -281,12 +283,16 @@ where ``f(x)`` is smooth and ``g(x)`` is non-smooth.
 ISTA is also known as the
 [proximal gradient method (PGM)](http://www.stat.cmu.edu/~ryantibs/convexopt-S15/lectures/08-prox-grad.pdf).
 
-**ISTA algorithm for solving (NN-min):**
-* Initialize ``\mathbf X_0 = \mathbf Y`` (zero-fill missing entries)
+ISTA algorithm for solving (NN-min):
+* Initialize ``\mathbf{\mathit{X}}_0 = \mathbf{\mathit{Y}}`` (zero-fill missing entries)
 * `for k=0,1,2,...`
-  ``[\hat{\mathbf X}_k]_{i,j} = \begin{cases}[\mathbf X_k]_{i,j}& \text{if}~(i,j)\not\in\Omega\\ [\mathbf Y]_{i,j}& \text{if}~(i,j)\in\Omega\end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; (Put back in known entries)
+* ``[\mathbf{\mathit{X}}_k]_{i,j} =
+  \begin{cases}[\mathbf{\mathit{X}}_k]_{i,j} & \text{if } (i,j) ∉ Ω
+  \\ [\mathbf{\mathit{Y}}]_{i,j} & \text{if } (i,j) ∈ Ω \end{cases}``
+  (Put back in known entries)
 
-* ``\mathbf X_{k+1} = \text{SVST}(\hat{\mathbf X}_k,\beta)`` (Singular value soft-thresholding)
+* ``\mathbf{\mathit{X}}_{k+1} = \text{SVST}(\mathbf{\mathit{X}}_k, \beta)``
+  (Singular value soft-thresholding)
 * `end`
 =#
 
@@ -302,20 +308,21 @@ function lrmc_ista(Y, M, beta::Real, niter::Int)
         cost[k+1] = costfun1(X, beta)
     end
     return X, cost
-end
+end;
 
-# Apply ISTA (Iterative Soft-Thresholding Algorithm)
+# Apply ISTA
 niter = 1000
 beta = 0.8 # chosen by trial-and-error here
 xh_ista, cost_ista = lrmc_ista(Y, M, beta, niter)
 pp = jime(xh_ista ; title="ISTA result at $niter iterations")
-# savefig(pp, "mc-nuc-ista.pdf")
+
+## savefig(pp, "mc-nuc-ista.pdf")
 
 
 #=
 That result is not good.
 What went wrong? Let's investigate.
-First, let's see if the above solution is actually low-rank.
+First, check if the ISTA solution is actually low-rank.
 =#
 
 sp = svdvals(xh_ista)
@@ -356,11 +363,15 @@ Reference:
 * initialize matrices
   ``\mathbf Z_0 = \mathbf X_0 = \mathbf Y``
 * `for k=0,1,2,...`
-  ``[\hat{\mathbf Z}_k]_{i,j} = \begin{cases}[\mathbf Z_k]_{i,j}& \text{if}~(i,j)\not\in\Omega\\ [\mathbf Y]_{i,j}& \text{if}~(i,j)\in\Omega\end{cases}`` (Put back in known entries)
+* ``[\mathbf{Z}_k]_{i,j} =
+  \begin{cases}[\mathbf Z_k]_{i,j} & \text{if}~(i,j) ∉ Ω
+  \\ [\mathbf{Y}]_{i,j} & \text{if}~(i,j) ∈ Ω \end{cases}``
+  (Put back in known entries)
 
-* ``\mathbf X_{k+1} = \text{SVST}(\hat{\mathbf Z}_k,\beta)``
-* ``t_{k+1} = \frac{1+\sqrt{1+4t_k^2}}{2}`` (Nesterov step-size)
-* ``\mathbf Z_{k+1} = \mathbf X_{k+1} + \frac{t_k-1}{t_{k+1}}(\mathbf X_{k+1}-\mathbf X_{k})``
+* ``\mathbf{X}_{k+1} = \text{SVST}(\mathbf{Z}_k, \beta)``
+* ``t_{k+1} = \frac{1 + \sqrt{1+4t_k^2}}{2}`` (Nesterov step-size)
+* ``\mathbf{Z}_{k+1} = \mathbf{X}_{k+1}
+  + \frac{t_k-1}{t_{k+1}}(\mathbf{X}_{k+1} - \mathbf{X}_k)``
   (Momentum update)
 * `end`
 =#
@@ -383,13 +394,14 @@ function lrmc_fista(Y, M, beta::Real, niter::Int)
         cost[k+1] = costfun1(X, beta) # comment out to speed-up
     end
     return X, cost
-end
+end;
 
-# Run FISTA algorithm
+# Run FISTA
 niter = 300
 xh_nn_fista, cost_fista = lrmc_fista(Y, M, beta, niter)
 p1 = jime(xh_nn_fista ; title="FISTA with nuclear norm at $niter iterations")
-# savefig(p1, "lrmc-nn-fs300.pdf")
+
+## savefig(p1, "lrmc-nn-fs300.pdf")
 
 
 #=
@@ -424,9 +436,12 @@ prompt()
 =#
 
 
-# ## Your work goes below here
+#=
+### Your work goes below here
+The results below are place-holders that will be much improved
+when implemented properly.
+=#
 
-# +
 if true # replace these place-holder functions with your work
     shrink_p_1_2(v, reg::Real) = v
     lr_schatten(Y, reg::Real) = Y
@@ -436,9 +451,9 @@ else # instructor version
     include(mydir * "shrink_p_1_2.jl") # 1D shrinker for |x|^(1/2), previous HW
     include(mydir * "lr_schatten.jl")
     include(mydir * "fista_schatten.jl")
-end
+end;
 
-# apply FISTA for Schatten p=1/2
+# Apply FISTA for Schatten p=1/2
 niter = 150
 reg_fs = 120
 xh_fs = fista_schatten(Y, M, reg_fs, niter)
