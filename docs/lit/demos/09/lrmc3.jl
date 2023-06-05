@@ -1,5 +1,5 @@
 #=
-# [Low-rank matrix completion](@id lrmc3)
+# [Low-rank matrix completion: ADMM](@id lrmc3)
 
 This example illustrates
 low-rank matrix completion

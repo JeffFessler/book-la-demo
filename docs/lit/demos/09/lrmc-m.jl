@@ -225,17 +225,16 @@ using low-rank matrix completion
 with a nuclear-norm regularizer.
 
 The optimization problem we will solve is:
-``\arg\min_{\mathbf{\mathit{X}}} \frac{1}{2}
+```math
+\arg\min_{\mathbf{\mathit{X}}} \frac{1}{2}
 ‖ \mathbf{\mathit{M}} ⊙
  (\mathbf{\mathit{X}} - \mathbf{\mathit{Y}}) ‖_{\mathrm{F}}^2
-+ \beta \,‖ \mathbf{\mathit{X}} ‖_*
++ \beta ‖ \mathbf{\mathit{X}} ‖_*
 \quad\quad (\text{NN-min})
-``
-where
-``\mathbf{\mathit{Y}}``
+```
+* ``\mathbf{\mathit{Y}}``
 is the zero-filled input data matrix
-and
-``\mathbf{\mathit{M}}``
+* ``\mathbf{\mathit{M}}``
 is the binary sampling mask.
 
 Define cost function for optimization problem
@@ -371,7 +370,7 @@ Reference:
 * ``\mathbf{X}_{k+1} = \text{SVST}(\mathbf{Z}_k, \beta)``
 * ``t_{k+1} = \frac{1 + \sqrt{1+4t_k^2}}{2}`` (Nesterov step-size)
 * ``\mathbf{Z}_{k+1} = \mathbf{X}_{k+1}
-  + \frac{t_k-1}{t_{k+1}}(\mathbf{X}_{k+1} - \mathbf{X}_k)``
+  + \frac{t_k-1}{t_{k+1}} (\mathbf{X}_{k+1} - \mathbf{X}_k)``
   (Momentum update)
 * `end`
 =#
