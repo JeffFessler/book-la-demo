@@ -111,7 +111,7 @@ pa = lineplot(pl, slope, :green, "LS")
 #
 prompt()
 
-#src savefig(pa, "06_low_rank1_all.pdf")
+## savefig(pa, "06_low_rank1_all.pdf")
 
 
 # ## Illustrate the Frobenius norm approximation error graphically
@@ -125,7 +125,7 @@ scatter!(pf, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
 #
 prompt()
 
-#src savefig(pf, "06_low_rank1_r1.pdf")
+## savefig(pf, "06_low_rank1_r1.pdf")
 
 
 # ## Illustrate the LS residual graphically
@@ -140,7 +140,7 @@ scatter!(ps, xl, yl, color=:green, markersize=5, marker=:square, label="LS")
 #
 prompt()
 
-#src savefig(ps, "06_low_rank1_ls.pdf")
+## savefig(ps, "06_low_rank1_ls.pdf")
 
 
 include("../../../inc/reproduce.jl")

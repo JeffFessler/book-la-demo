@@ -5,7 +5,7 @@ This example illustrates
 the effects of preconditioning matrices
 for gradient descent (GD) for least squares (LS) problems,
 using the Julia language.
-* 2019-11-19 Created by Steven Whitaker  
+* 2019-11-19 Created by Steven Whitaker
 * 2023-05-30 Julia 1.9 by Jeff Fessler
 =#
 
@@ -105,7 +105,7 @@ G(sqrtP) = I - sqrtP' * (A' * A) * sqrtP;
 First consider regular GD,
 i.e., preconditioned GD with
 ``P = \alpha I,``
-where ``α`` is the step size.  
+where ``α`` is the step size.
 
 We use the optimal step size
 ``α = \frac{2}{σ_1^2(A) + σ_N^2(A)}.``
@@ -145,7 +145,7 @@ plot!(pu, [x[k][1] for k in 1:niter], [x[k][2] for k in 1:niter],
 scatter!(pu, [0], [0], label = L"\hat{x}", color=:red,
     aspect_ratio = :equal, marker = :x)
 
-#src savefig(pu, "precon1-pu.pdf")
+## savefig(pu, "precon1-pu.pdf")
 
 #
 prompt()
@@ -235,7 +235,7 @@ plot!(ph, [z0[1],zk[1]], [z0[2],zk[2]], marker=:star, color=:blue, label = L"z_k
 scatter!(ph, [0], [0], label = L"\hat{z}", color=:red,
     aspect_ratio = :equal, marker = :x)
 
-#src savefig(ph, "precon1-ph.pdf")
+## savefig(ph, "precon1-ph.pdf")
 
 #
 prompt()
@@ -254,7 +254,7 @@ Unfortunately, computing the ideal preconditioner is expensive.
 ## Diagonal Preconditioner
 
 A less expensive preconditioner is the diagonal preconditioner
-``P = \alpha \; \mathrm{diag}\{|A' A| 1_N\}^{-1}``.  
+``P = \alpha \; \mathrm{diag}\{|A' A| 1_N\}^{-1}``.
 For convergence, we must have ``0 < \alpha < 2``.
 We use an empirically chosen value for ``α``
 in that range.
@@ -301,7 +301,7 @@ plot!(pd, [z[k][1] for k in 1:niter], [z[k][2] for k in 1:niter],
 scatter!(pd, [0], [0], label = L"\hat{z}", color=:red,
     aspect_ratio = :equal, marker = :x)
 
-#src savefig(pd, "precon1-pd.pdf")
+## savefig(pd, "precon1-pd.pdf")
 
 #
 prompt()
@@ -341,6 +341,6 @@ pp = plot(
     layout=(1,3),
 )
 
-#src savefig(pp, "precon1-pp.pdf")
+## savefig(pp, "precon1-pp.pdf")
 
 include("../../../inc/reproduce.jl")

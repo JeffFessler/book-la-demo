@@ -38,8 +38,8 @@ using MIRTjim: prompt
 using Plots: default, contour, plot!, scatter!, savefig
 using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, markersize=6, linewidth=2,
-    xlims = (-3,3), ylims = (-3,3), aspect_ratio=:equal,
-    legendfontsize=12, guidefontsize=13, tickfontsize=10)
+    xlims = (-3,3), ylims = (-3,3), aspect_ratio=:equal, size=(450,400),
+    legendfontsize=12, guidefontsize=13, tickfontsize=10, labelfontsize=18)
 
 # The following line is helpful when running this jl-file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
@@ -76,7 +76,7 @@ scatter!([xh1[1]], [xh1[2]], color=:red, markershape=:circle, label="MNLS",
 #
 prompt()
 
-#src savefig(p1, "demo_ls_cost1a.pdf")
+## savefig(p1, "demo_ls_cost1a.pdf")
 
 
 # ## Square but singular case
@@ -92,7 +92,7 @@ plot!(xlabel=L"x_1", ylabel=L"x_2", legend=:bottomleft)
 scatter!([0], [0], color=:black, markershape=:square)
 plot!([0, xh2[1]], [0, xh2[2]], line=:magenta)
 plot!(x1, (y[1] .- A[1,1]*x1)/A[1,2], line=(:blue,:dash), label=flabel(1))
-plot!(x1, (y[2] .- A[2,1]*x1)/A[2,2], line=(:green,:dash), label=flabel(2))
+plot!(x1, (y[2] .- A[2,1]*x1)/A[2,2], line=(:green,:dashdot), label=flabel(2))
 scatter!([1], [1], color=:blue, markershape=:star5, label=L"(1,1)")
 scatter!([xh2[1]], [xh2[2]], color=:red, markershape=:circle, label="MNLS",
  title = "Singular case")
@@ -100,7 +100,7 @@ scatter!([xh2[1]], [xh2[2]], color=:red, markershape=:circle, label="MNLS",
 #
 prompt()
 
-#src savefig(p2, "demo_ls_cost1b.pdf")
+## savefig(p2, "demo_ls_cost1b.pdf")
 
 
 # ## Square non-singular case
@@ -121,7 +121,7 @@ scatter!([xh3[1]], [xh3[2]], color=:red, markershape=:circle, label="LLS",
 #
 prompt()
 
-#src savefig(p3, "demo_ls_cost1c.pdf")
+## savefig(p3, "demo_ls_cost1c.pdf")
 
 
 # ## Typical over-determined case
@@ -143,7 +143,7 @@ scatter!([xh4[1]], [xh4[2]], color=:red, markershape=:circle, label="LLS",
 #
 prompt()
 
-#src savefig(p4, "demo_ls_cost1d.pdf")
+## savefig(p4, "demo_ls_cost1d.pdf")
 
 
 include("../../../inc/reproduce.jl")

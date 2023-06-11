@@ -88,7 +88,7 @@ plot!(p1, t0, Afun(t0,2)*x2, color=:magenta, label="quadratic model fit")
 #
 prompt()
 
-#src savefig("04-ls-lift-1.pdf")
+## savefig("04-ls-lift-1.pdf")
 
 
 #=
@@ -106,7 +106,7 @@ nearly lie on the 2D plane.
 Use `plotly()` backend here to view surface interactively.
 =#
 
-#src plotly()
+## plotly()
 p2 = scatter(A2[:,1], A2[:,2], y, color=:blue,
     xaxis=(L"t", (0,1), [0,1]),
     yaxis=(L"t^2", (0,1), [0,1]),
@@ -120,8 +120,8 @@ surface!(t1, t2, (t1,t2) -> x2[1]*t1 + x2[2]*t2, alpha=0.3)
 #
 prompt()
 
-#src gr(); # restore
-#src savefig("04-ls-lift-2.pdf") # with gr()
+## gr(); # restore
+## savefig("04-ls-lift-2.pdf") # with gr()
 
 
 include("../../../inc/reproduce.jl")

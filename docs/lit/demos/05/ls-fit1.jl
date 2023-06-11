@@ -103,7 +103,7 @@ plot!(p1, t0, Afun(t0)*xh, color=:magenta, label="Fit cubic to M=$(M) points")
 #
 prompt()
 
-#src savefig(p1, "ls-fit-4-15.pdf")
+## savefig(p1, "ls-fit-4-15.pdf")
 
 
 

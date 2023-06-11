@@ -217,7 +217,7 @@ end;
 pd = jim(images; title="Images for $nlight different lighting directions",
     caxis=("Intensity", (0,1), 0:1))
 
-#src savefig(pd, "photometric3_data.pdf")
+## savefig(pd, "photometric3_data.pdf")
 
 
 #=
@@ -259,7 +259,7 @@ end
 #
 prompt()
 
-#src savefig(ps, "photometric3_svdvals.pdf")
+## savefig(ps, "photometric3_svdvals.pdf")
 
 
 
@@ -370,7 +370,7 @@ pn = jim(
  layout=(3,1),
 )
 
-#src savefig(pn, "photometric3_pn1.pdf")
+## savefig(pn, "photometric3_pn1.pdf")
 
 
 #=

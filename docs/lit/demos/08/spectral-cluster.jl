@@ -82,7 +82,7 @@ end
 
 # Look at "unlabeled" image data for unsupervised clustering
 jim(data)
-#src savefig("spectral-cluster-data.pdf")
+## savefig("spectral-cluster-data.pdf")
 
 # Choose similarity function
 σ = 2^-2 # tuning parameter

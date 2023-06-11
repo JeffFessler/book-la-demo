@@ -112,7 +112,7 @@ pm = plot( p0, p1, pw;
   layout = (1,3),
   rightmargin = 20px,
 )
-#src savefig(pm, "class01-mean.pdf")
+## savefig(pm, "class01-mean.pdf")
 
 #=
 ## Inner products
@@ -131,7 +131,7 @@ ph = plot(
 histogram!(i0; bins, color=:red , label="0")
 histogram!(i1; bins, color=:blue, label="1")
 
-#src savefig(ph, "class01-hist.pdf")
+## savefig(ph, "class01-hist.pdf")
 
 #
 prompt()
