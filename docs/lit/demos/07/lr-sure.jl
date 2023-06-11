@@ -75,7 +75,7 @@ scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
 #
 prompt()
 
-#src savefig(ps, "06_lr_sure1s.pdf")
+## savefig(ps, "06_lr_sure1s.pdf")
 
 
 # ## Low-rank approximation with various ranks
@@ -105,7 +105,7 @@ scatter!(klist, nrmsd_K, color=:red,
 #
 prompt()
 
-#src savefig(pk, "06_lr_sure1a.pdf")
+## savefig(pk, "06_lr_sure1a.pdf")
 
 
 # ## Explore (nuclear norm) regularized version
@@ -134,7 +134,7 @@ scatter!(reglist, nrmsd_reg, color=:red,
 #
 prompt()
 
-#src savefig(pb, "06_lr_sure1b.pdf")
+## savefig(pb, "06_lr_sure1b.pdf")
 
 
 #=
@@ -180,7 +180,7 @@ scatter!(reglist, sqrt.(sure_reg)/norm(Y)*100, color=:green,
 #
 prompt()
 
-#src savefig(psb, "06_lr_sure1c.pdf")
+## savefig(psb, "06_lr_sure1c.pdf")
 
 
 # ### Examine shrunk singular values for best regularization parameter
@@ -196,7 +196,7 @@ scatter!(1:N, sh, color=:green, label=L"\hat{\sigma}_k \ \mathrm{SURE} \ \hat{\b
 #
 prompt()
 
-#src savefig(psk, "06_lr_sure1t.pdf")
+## savefig(psk, "06_lr_sure1t.pdf")
 
 
 include("../../../inc/reproduce.jl")

@@ -73,7 +73,7 @@ J = size(C,2) # number of points
 D = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J] # "comprehension" in julia!
 pd = jim(D, L"D", color=:cividis, xlabel=L"j", ylabel=L"i")
 
-#src savefig(pd, "06_source_local1_d.pdf")
+## savefig(pd, "06_source_local1_d.pdf")
 
 
 # ### MDS algorithm
@@ -87,7 +87,7 @@ G = -1/2 * G;
 # We still cannot determine visually the point locations:
 pg = jim(G, L"G", color=:cividis, xlabel=L"j", ylabel=L"i")
 
-#src savefig(pg, "06_source_local1_g.pdf")
+## savefig(pg, "06_source_local1_g.pdf")
 
 # Examine singular values
 (_, σ, V) = svd(G) # svd returns singular values in descending order
@@ -97,7 +97,7 @@ ps = scatter(σ, label="singular values (noiseless case)",
 #
 prompt()
 
-#src savefig(ps, "06_source_local1_eig.pdf")
+## savefig(ps, "06_source_local1_eig.pdf")
 
 
 # ### Estimate the source locations using rank=2

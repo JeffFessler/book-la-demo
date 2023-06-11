@@ -83,12 +83,12 @@ end
 
 # Look at "unlabeled" image data prior to unsupervised dimensionality reduction
 pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
-#src savefig(pd, "pca-data.pdf")
+## savefig(pd, "pca-data.pdf")
 
 # Compute sample average of data
 μ = mean(data, dims=3)
 pm = jim(μ, "Mean")
-#src savefig(pm, "pca-mean.pdf")
+## savefig(pm, "pca-mean.pdf")
 
 #=
 ## Scree plot
@@ -100,7 +100,7 @@ ps = scatter(f.S; title="Scree plot", widen=true,
  xaxis = (L"k", (1,ndigit*nrep), [1, 6, ndigit*nrep]),
  yaxis = (L"σ_k", (0,48), [0, 0, 47]),
 )
-#src savefig(ps, "pca-scree.pdf")
+## savefig(ps, "pca-scree.pdf")
 
 #
 prompt()
@@ -114,7 +114,7 @@ we just use the first two components.
 K = 2
 Q = f.U[:,1:K]
 pq = jim(reshape(Q, nx,ny,:), "First $K singular components"; size=(600,300))
-#src savefig(pq, "pca-q.pdf")
+## savefig(pq, "pca-q.pdf")
 
 #=
 Now use the learned subspace basis `Q`
@@ -136,12 +136,12 @@ even in just two dimensions.
 pz = plot(title = "Score plot for $ndigit digits",
  xaxis=("Score 1", (-5,8), -3:3:6),
  yaxis=("Score 2", (-6,4), -4:4:4),
-) 
+)
 for d in digitn
     scatter!(z[1,labels .== d], z[2,labels .== d], label="Digit $d")
 end
 pz
-#src savefig(pz, "pca-score.pdf")
+## savefig(pz, "pca-score.pdf")
 
 #
 prompt()

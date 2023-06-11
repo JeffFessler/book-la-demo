@@ -116,7 +116,7 @@ if !@isdefined(data)
     @time data, angles, widths = make_phantoms(nx, ny, nrep)
     pj = jim(data[:,:,1:88]; title = "88 of $nrep images")
 end
-#src savefig(pj, "eigmap-data.pdf")
+## savefig(pj, "eigmap-data.pdf")
 
 
 #=
@@ -132,7 +132,7 @@ ps = scatter(tmp; title = "Data singular values", widen=true,
  xaxis = (L"k", (1, 40), [1, 40, nx*ny]),
  yaxis = (L"σ_k", (0, 216), [0, 32, 48, 72, 215]),
 )
-#src savefig(ps, "eigmap-svd.pdf")
+## savefig(ps, "eigmap-svd.pdf")
 
 #
 prompt()
@@ -153,7 +153,7 @@ distance = [norm(d1 - d2) for
     d2 in eachslice(data; dims=3)
 ]
 pd = jim(distance; title = L"‖ X_j - X_i \; ‖", xlabel = L"i", ylabel = L"j")
-#src savefig(pd, "eigmap-dis.pdf")
+## savefig(pd, "eigmap-dis.pdf")
 
 
 #=
@@ -168,7 +168,7 @@ here we follow the approach given in
 α = Float64(sum(abs2, distance) / nrep^2) # per Sanders eqn. (4)
 W = @. exp(-distance^2 / α)
 pw = jim(W; title = L"W_{ij}", xlabel = L"i", ylabel = L"j")
-#src savefig(pw, "eigmap-w.pdf")
+## savefig(pw, "eigmap-w.pdf")
 
 
 #=
@@ -183,7 +183,7 @@ d = vec(sum(W; dims=2))
 D = Diagonal(d)
 L = D - W # Laplacian
 pl = jim(L; title = L"L_{ij}", xlabel = L"i", ylabel = L"j", color=:cividis)
-#src savefig(pl, "eigmap-l.pdf")
+## savefig(pl, "eigmap-l.pdf")
 
 #=
 Compute the
@@ -203,7 +203,7 @@ pe = scatter(F.values;
  xticks = [1,nrep],
  yticks = [0, 0.7, 0.9, 1],
 )
-#src savefig(pe, "eigmap-eigval.pdf")
+## savefig(pe, "eigmap-eigval.pdf")
 
 #
 prompt()
@@ -219,7 +219,7 @@ features = 1000 * F.vectors[:,2:3]
 pf = scatter(features[:,1], features[:,2];
   title = "Eigenmap features",
   xlabel="feature 1", ylabel="feature 2")
-#src savefig(pf, "eigmap-f.pdf")
+## savefig(pf, "eigmap-f.pdf")
 
 #
 prompt()
@@ -250,7 +250,7 @@ pc = plot(
   colorbar_title="angle",
  ),
 )
-#src savefig(pc, "eigmap-c.pdf")
+## savefig(pc, "eigmap-c.pdf")
 
 #
 prompt()
@@ -265,7 +265,7 @@ of similar orientation, but various widths.
 
 tmp = data[:,:, -1.5 .< features[:,1] .< -1]
 pf1 = jim(tmp; title = "Feature 1 set")
-#src savefig(pf1, "eigmap-pf1.pdf")
+## savefig(pf1, "eigmap-pf1.pdf")
 
 
 #=
@@ -278,7 +278,7 @@ of similar widths, but various rotations.
 
 tmp = data[:,:, 0.2 .< features[:,2] .< 0.5]
 pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
-#src savefig(pf2, "eigmap-pf2.pdf")
+## savefig(pf2, "eigmap-pf2.pdf")
 
 
 #src X = [features ones(nrep)]
@@ -294,12 +294,12 @@ pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
 tmp = reshape(data, nx*ny, nrep)
 U2 = svd(tmp).U[:,1:2]
 pup = jim(reshape(U2, nx, ny, 2); title="First 2 PCA components")
-#src savefig(pup, "eigmap-pca-u.pdf")
+## savefig(pup, "eigmap-pca-u.pdf")
 
 # Projection onto a 2-dimensional subspace works poorly:
 lr2 = reshape(U2 * (U2' * tmp), nx, ny, :)
 plr = jim(lr2[:,:,1:88], "Projection onto 2-dimensional subspace")
-#src savefig(plr, "eigmap-pca-lr2.pdf")
+## savefig(plr, "eigmap-pca-lr2.pdf")
 
 # Nevertheless, the corresponding features
 # are reasonably correlated with width and angle.
@@ -316,7 +316,7 @@ pp = plot(
  ),
  plot_title = "First two PCA coefficients",
 )
-#src savefig(pp, "eigmap-pca-f.pdf")
+## savefig(pp, "eigmap-pca-f.pdf")
 
 #
 prompt()

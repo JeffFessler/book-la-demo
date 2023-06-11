@@ -2,12 +2,12 @@
 # [2d heatmap](@id gauss2d)
 
 This example illustrates
-matrix operations by making a 2D Gaussian plot  
+matrix operations by making a 2D Gaussian plot
 and computing area under a curve
 and volume under a surface
 using the Julia language.
 
-- 2017-09-07, Jeff Fessler, University of Michigan  
+- 2017-09-07, Jeff Fessler, University of Michigan
 - 2023-06-06 Julia 1.9.0
 =#
 
