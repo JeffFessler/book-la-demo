@@ -87,7 +87,7 @@ Documenter.makedocs(;
         "04 Subspaces" => demos("04"),
         "05 LS" => demos("05"),
         "06 Norm" => demos("06"),
-        "07 Low-Rank" => demos("08"),
+        "07 Low-Rank" => demos("07"),
         "08 Special" => demos("08"),
         "09 Optimize" => demos("09"),
         "10 Complete" => demos("10"),
