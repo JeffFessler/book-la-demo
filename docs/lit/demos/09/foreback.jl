@@ -45,6 +45,7 @@ using LinearMapsAA: LinearMapAA, redim
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: default, gui, savefig
+using Plots: gif, @animate, Plots
 using Plots: plot
 #, scatter, scatter!,
 using VideoIO
@@ -155,36 +156,47 @@ function robust_pca(Y;
     return Xhat, out
 end
 
-# todo rgb
+#  jim(Ytmp[:,:,1:10:end])
+## tmp = SVST(Yc, 30)
+## tmp = Yc .- Yc[:,:,1] # remove background
+
+#=
+Apply robust PCA to each RGB color channel separately
+for simplicity, then reassemble.
+=#
 if !@isdefined(Xpogm)
     α = 30
     β = 0.1
-    Xpogm = Array{Any}(undef, 3)
+    niter = 20
+    Xc = Array{Any}(undef, 3)
     out = Array{Any}(undef, 3)
-    for (i, c) in enumerate([:r :g :b])
-        Ytmp = map(y -> getfield(y, :r), Y3);
-#   jim(Ytmp[:,:,1:10:end])
-
-## tmp = SVST(Ytmp, 30)
-## tmp = Ytmp .- Ytmp[:,:,1] # remove background
- 
-        niter = 20
-        Xpogm[i], out[i] = robust_pca(Ytmp; α, β, mom = :pogm, niter)
+    for (i, c) in enumerate([:r :g :b]) # separate colors
+        Yc = map(y -> getfield(y, c), Y3);
+        Xc[i], out[i] = robust_pca(Yc; α, β, mom = :pogm, niter)
     end
+    Xpogm = map(RGB{Float32}, Xc...) # reassemble colors
 end
-
-tmp = map(RGB{Float32}, Xpogm...) # reassemble
-
-gui(); throw()
 
 Lpogm = Lpart(Xpogm)
 Spogm = Spart(Xpogm)
-cost_pogm = [o[2] for o in out]
  
-jim(
- jim(Lpogm[:,:,1:10:end]),
- jim(Spogm[:,:,1:10:end]),
+# Animate images
+anim1 = @animate for it in 1:nf
+    jj(Y3[:,:,it], title="Original frame $it")
+    gui()
+end
+# gif(anim1; fps = 6)
+
+plot(
+ jj(Lpogm[:,:,end]),
+ jj(Spogm[:,:,end]),
+#jj(Lpogm[:,:,1:10:end]),
+#jj(Spogm[:,:,1:10:end]),
 )
+
+gui(); throw()
+
+cost_pogm = [o[2] for o in out]
 
 pj_pogm = jim(Xpogm, "POGM result at $niter iterations")
 jim(pg_pogm)
