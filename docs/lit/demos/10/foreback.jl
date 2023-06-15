@@ -68,6 +68,7 @@ isinteractive() && prompt(:prompt);
 =#
 
 # Load raw data
+y1 = [rand(RGB{Float16}, 48, 64) for it in 1:1499] # random test
 if !@isdefined(y1)
     tmp = homedir() * "/111.mp4"
     if !isfile(tmp)
