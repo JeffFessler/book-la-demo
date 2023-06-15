@@ -72,14 +72,16 @@ if !@isdefined(y1)
     tmp = homedir() * "/111.mp4"
     if !isfile(tmp)
         url = "http://backgroundmodelschallenge.eu/data/synth1/111.mp4"
+        @info "downloading 16MB from $url"
         tmp = download(url)
+        @info "download complete"
     end
     y1 = VideoIO.load(tmp) # 1499 frames of size (480,640)
 end;
 
 # convert to arrays
 if !@isdefined(Y3)
-    tmp = y -> 1f0*permutedims((@view y[1:2:end,1:2:end]), (2,1))
+    tmp = y -> 1f0*permutedims((@view y[1:2:end,1:2:end]), (2,1)) # todo: downsample better
     yf = tmp.(@view y1[1:10:end]) # 150 frames of size (320,240)
     yf = yf[51:end] # 100 frames with moving cars
     Y3 = stack(yf) # (nx,ny,nf)
@@ -195,23 +197,31 @@ if !@isdefined(Xpogm)
     Xc = Array{Any}(undef, 3)
     out = Array{Any}(undef, 3)
     for (i, c) in enumerate(channels) # separate color channels
+        @info "channel $c"
         Yc = map(y -> getfield(y, c), Y3);
         Xc[i], out[i] = robust_pca(Yc; α, β, mom = :pogm, niter)
     end
     Xpogm = map(RGB{Float32}, Xc...) # reassemble colors
 end
 
-Lpogm = Lpart(Xpogm)
-Spogm = Spart(Xpogm)
-
 #=
 ## Results
 =#
 
+# Extract low-rank (background) and sparse (foreground) components
+Lpogm = Lpart(Xpogm)
+Spogm = Spart(Xpogm)
+iz = 81
+tmp = stack([Y3[:,:,iz], Lpogm[:,:,iz], Spogm[:,:,iz]])
+jim(:line3type, :white)
+pf = jim(tmp; nrow=1, size=(700, 250),
+  title="Original frame $iz | low-rank background | sparse foreground")
+## savefig(pf, "foreback-81.pdf")
+
+
 # Cost function plot
 # overall cost for all 3 color channels
 tmp = sum(out -> [o[2] for o in out], out)
-## tmp = tmp .- tmp[1]
 pc = plot(0:niter, tmp;
   xlabel="Iteration", ylabel="Cost function", marker = :circle, label="POGM")
 
