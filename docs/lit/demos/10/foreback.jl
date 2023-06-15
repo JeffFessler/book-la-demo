@@ -163,7 +163,7 @@ function robust_pca(Y;
     β = 1,
     mom = :pogm,
     Fcost::Function = X -> robust_pca_cost(Y, X, α, β),
-#   fun = (iter, xk, yk, is_restart) -> (),
+##  fun = (iter, xk, yk, is_restart) -> (),
     fun = mom === :fgm ?
         (iter, xk, yk, is_restart) -> (yk, Fcost(yk), is_restart) :
         (iter, xk, yk, is_restart) -> (xk, Fcost(xk), is_restart),
