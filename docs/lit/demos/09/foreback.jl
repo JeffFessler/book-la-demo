@@ -51,7 +51,7 @@ using LinearMapsAA: LinearMapAA, redim
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, savefig
-using Plots: gif, @animate #todo, Plots
+using Plots: gif, @animate, Plots
 using VideoIO
 default(); default(markerstrokecolor=:auto, label = "")
 
@@ -62,20 +62,8 @@ default(); default(markerstrokecolor=:auto, label = "")
 isinteractive() && prompt(:prompt);
 
 
-
 #=
 ## Load video data
-=#
-
-#= todo
-function jj(z; kwargs...)
-    plot(permutedims(z, (2,1));
-      xticks = [1,size(z,1)],
-      yticks = [1,size(z,2)],
-      aspect_ratio = 1,
-      kwargs...,
-    )
-end
 =#
 
 # Load raw data
@@ -89,32 +77,21 @@ if !@isdefined(y1)
 end;
 
 # convert to arrays
-if !@isdefined(Y2)
+if !@isdefined(Y3)
     tmp = y -> 1f0*permutedims((@view y[1:2:end,1:2:end]), (2,1))
     yf = tmp.(@view y1[1:10:end]) # 150 frames of size (320,240)
+    yf = yf[51:end] # 100 frames with moving cars
     Y3 = stack(yf) # (nx,ny,nf)
     (nx, ny, nf) = size(Y3)
-    Y2 = reshape(Y3, :, nf) # (nx*ny, nf)
-end
+end;
     py = jim([yf[1], yf[end], yf[end]-yf[1]];
         nrow = 1, size = (600, 200),
-        title="Frame 1 | $nf | Difference")
-gui(); throw()
+        title="Frame 001  |  Frame $nf  |  Difference")
+ 
 
-soft(z,t) = sign(z) * max(abs(z) - t, 0)
-
-# Define singular value soft thresholding (SVST) function
-function SVST(X, beta)
-    shape = size(X)
-    X = reshape(X, :, shape[end]) # unfold
-    U,s,V = svd(X)
-## Plots.scatter(s); prompt()
-    sthresh = @. soft(s, beta)
-    jj = findall(>(0), sthresh)
-@show length(jj)
-    out = U[:,jj] * Diagonal(sthresh[jj]) * V[:,jj]'
-    return reshape(out, shape)
-end;
+#=
+## Cost function
+=#
 
 # Encoding operator `A = [I I]` for L+S because we stack `X = [L;;;S]`
 tmp = LinearMapAA(I(nx*ny*nf);
@@ -128,12 +105,46 @@ Spart = X -> unstack(X, 2) # extract "S" from X
 nucnorm(L::AbstractMatrix) = sum(svdvals(L)) # nuclear norm
 nucnorm(L::AbstractArray) = nucnorm(reshape(L, :, nf)); # (nx*ny, nf) for L
 
-# minimize robust PCA cost function
-# f(L,S) = 0.5 * ‖ L + S - Y ‖_F^2 + α ‖L‖_* + β ‖vec(S)‖_1
-# f(X) = 0.5 * ‖ [I I] * X - Y ‖_F^2 + α ‖ X[1] ‖_* + β ‖ vec(X[2]) ‖_1
+#=
+The robust PCA optimization cost function is:
+```math
+Ψ(L,S) = \frac{1}{2} ‖ L + S - Y ‖_F^2 + α ‖L‖_* + β ‖vec(S)‖_1
+```
+or equivalently
+```math
+Ψ(\mathbf X) =
+\frac{1}{2} ‖ [I I] \mathbf{X} - \mathbf{Y} ‖_F^2
+ + α ‖ \mathbf{X}[1] ‖_* + β ‖ vec(\mathbf{X}[2]) ‖_1
+```
+
+where ``\mathbf Y`` is the original data matrix.
+=#
+
 robust_pca_cost(Y, X, α::Real, β::Real) =
     0.5 * norm( A * X - Y )^2 + α * nucnorm(Lpart(X)) + β * norm(Spart(X), 1);
- 
+
+
+# Proximal algorithm helpers
+
+soft(z,t) = sign(z) * max(abs(z) - t, 0)
+
+# Define singular value soft thresholding (SVST) function
+function SVST(X, beta)
+    shape = size(X)
+    X = reshape(X, :, shape[end]) # unfold
+    U,s,V = svd(X)
+    sthresh = @. soft(s, beta)
+    jj = findall(>(0), sthresh)
+    out = U[:,jj] * Diagonal(sthresh[jj]) * V[:,jj]'
+    return reshape(out, shape)
+end;
+
+
+#=
+## Algorithm
+Proximal gradient methods for minimizing
+robust PCA cost function
+=#
 function robust_pca(Y;
     L = Y,
     S = zeros(size(Y)),
@@ -148,11 +159,8 @@ function robust_pca(Y;
     kwargs..., # for pogm_restart
 )
     
-#   X0 = [L, S]
-#   X0 = [vec(L) vec(S)]
     X0 = stack([L, S])
 
-#   Fcost = X -> costfun(X, beta)
     f_grad = X -> A' * (A * X - Y) # gradient of smooth term
     f_L = 2 # Lipschitz constant of f_grad
     g_prox = (X, c) -> stack([SVST(Lpart(X), c * α), soft.(Spart(X), c * β)])
@@ -160,11 +168,11 @@ function robust_pca(Y;
     return Xhat, out
 end
 
-#  jim(Ytmp[:,:,1:10:end])
-## tmp = SVST(Yc, 30)
-## tmp = Yc .- Yc[:,:,1] # remove background
+#src # tmp = SVST(Yc, 30)
+#src # tmp = Yc .- Yc[:,:,1] # remove background
 
 #=
+## Run algorithm
 Apply robust PCA to each RGB color channel separately
 for simplicity, then reassemble.
 =#
@@ -183,104 +191,31 @@ end
 
 Lpogm = Lpart(Xpogm)
 Spogm = Spart(Xpogm)
- 
-# Animate images
+
+tmp = cat(dims=1, Y3, Lpogm, Spogm)
+
+#=
+## Results
+Animate videos
+=#
 anim1 = @animate for it in 1:nf
-    jj(Y3[:,:,it], title="Original frame $it")
-    gui()
+    tmp = stack([Y3[:,:,it], Lpogm[:,:,it], Spogm[:,:,it]])
+    jim(tmp; nrow=1, title="Original | Low-rank | Sparse",
+        xlabel = "Frame $it", size=(600, 250))
+#   gui()
 end
 # gif(anim1; fps = 6)
 
-plot(
- jj(Lpogm[:,:,end]),
- jj(Spogm[:,:,end]),
-#jj(Lpogm[:,:,1:10:end]),
-#jj(Spogm[:,:,1:10:end]),
-)
-
 gui(); throw()
+ 
 
-cost_pogm = [o[2] for o in out]
+#src todo: compare pgm=ista, fpgm=fista, pogm
+#src cost_pogm = [o[2] for o in out]
 
-pj_pogm = jim(Xpogm, "POGM result at $niter iterations")
-jim(pg_pogm)
-
-
-#=
-The optimization problem we will solve is:
-```math
-\min_{\mathbf X}
-\frac{1}{2} ‖ P_Ω(\mathbf X) - P_Ω(\mathbf Y) ‖_2^2
-+ β ‖ \mathbf X ‖_*
-\quad\quad\text{(NN-min)}
-```
-where ``\mathbf Y`` is the zero-filled input data matrix,
-and ``P_Ω`` is the operator
-that extracts a vector of entries belonging to the index set ``Ω``.
-
-Define cost function for optimization problem:
-=#
 
 ######### old below here
 
 #=
-## Iterative Soft-Thresholding Algorithm (ISTA)
-
-ISTA is an extension of gradient descent to convex cost functions
-that look like
-``\min_x f(x) + g(x)``
-where ``f(x)`` is smooth and ``g(x)`` is non-smooth.
-Also known as a
-[proximal gradient method](https://en.wikipedia.org/wiki/Proximal_gradient_methods_for_learning).
-
-**ISTA algorithm for solving (NN-min):**
-- initialize ``\mathbf X_0 = \mathbf Y`` (zero-fill missing entries)
-- `for` ``k=0,1,2,…``
-  - ``[\hat{\mathbf X}_k]_{i,j} = \begin{cases}[\mathbf X_k]_{i,j} & (i,j) ∉ Ω \\ [\mathbf Y]_{i,j} & (i,j) ∈ Ω \end{cases}``
-    (Put back in known entries)
-
-  - ``\mathbf X_{k+1} = \text{SVST}(\hat{\mathbf X}_k,β)``
-    (Singular value soft-thresholding)
-- `end`
-
-Apply ISTA:
-=#
-niter = 400
-beta = 0.01 # chosen by trial-and-error here
-function lrmc_ista(Y)
-    X = copy(Y)
-    Xold = copy(X)
-    cost_ista = zeros(niter+1)
-    cost_ista[1] = costfun(X,beta)
-    for k in 1:niter
-        X[Ω] = Y[Ω]
-        X = SVST(X,beta)
-        cost_ista[k+1] = costfun(X,beta)
-    end
-    return X, cost_ista
-end;
-
-if !@isdefined(Xista)
-    Xista, cost_ista = lrmc_ista(Y)
-    pj_ista = jim(Xista, "ISTA result at $niter iterations")
-end
-
-
-#=
-What went wrong? Let's investigate.
-First, let's see if the above solution is actually low-rank.
-=#
-
-s_ista = svdvals(Xista)
-s0 = svdvals(Y)
-plot(title = "singular values",
-    xtick = [1, sum(s .> 20*eps()), minimum(size(Y))])
-scatter!(s0, color=:black, label="Y (initialization)")
-scatter!(s_ista, color=:red, label="X (ISTA)")
-
-#
-prompt()
-
 # Now let's check the cost function descent:
 scatter(cost_ista, color=:red,
     title = "cost vs. iteration",
