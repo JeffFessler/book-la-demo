@@ -3,9 +3,12 @@
 
 This example illustrates
 video foreground/background separation
-for the case of a static camera
 via robust PCA
 using the Julia language.
+For simplicity,
+the method here assumes a static camera.
+For free-motion camera video, see
+[Moore et al., 2019](https://doi.org/10.1109/TCI.2019.2891389).
 =#
 
 #srcURL
@@ -20,14 +23,17 @@ if you are using any of the following packages for the first time.
 if false # todo
     import Pkg
     Pkg.add([
-        "DelimitedFiles"
+        "ColorTypes"
+        "ColorVectorSpace"
         "Downloads"
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
+        "LinearMapsAA"
         "MIRT"
         "MIRTjim"
         "Plots"
+        "VideoIO"
     ])
 end
 
@@ -44,15 +50,13 @@ using LinearAlgebra: Diagonal, I, norm, svd, svdvals
 using LinearMapsAA: LinearMapAA, redim
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
-using Plots: default, gui, savefig
-using Plots: gif, @animate, Plots
-using Plots: plot
-#, scatter, scatter!,
+using Plots: default, gui, plot, savefig
+using Plots: gif, @animate #todo, Plots
 using VideoIO
 default(); default(markerstrokecolor=:auto, label = "")
 
 
-# The following line is helpful when running this jl-file as a script;
+# The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
 
 isinteractive() && prompt(:prompt);
@@ -63,6 +67,7 @@ isinteractive() && prompt(:prompt);
 ## Load video data
 =#
 
+#= todo
 function jj(z; kwargs...)
     plot(permutedims(z, (2,1));
       xticks = [1,size(z,1)],
@@ -71,6 +76,7 @@ function jj(z; kwargs...)
       kwargs...,
     )
 end
+=#
 
 # Load raw data
 if !@isdefined(y1)
@@ -90,12 +96,10 @@ if !@isdefined(Y2)
     (nx, ny, nf) = size(Y3)
     Y2 = reshape(Y3, :, nf) # (nx*ny, nf)
 end
-#   py = jim(cat(dims=3, y1[1], y1[end]))
-    py = plot(
-     jj(yf[1]; title="Frame 1"),
-     jj(yf[end]; title="Frame $nf"),
-     jj(yf[end]-yf[1]; title="Difference"),
-    )
+    py = jim([yf[1], yf[end], yf[end]-yf[1]];
+        nrow = 1, size = (600, 200),
+        title="Frame 1 | $nf | Difference")
+gui(); throw()
 
 soft(z,t) = sign(z) * max(abs(z) - t, 0)
 
