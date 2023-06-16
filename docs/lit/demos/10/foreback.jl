@@ -74,7 +74,7 @@ if !@isdefined(y1)
     tmp = download(url)
     y1 = VideoIO.load(tmp) # 100 frames of size (240,320)
     if !isinteractive() # downsample for github cloud
-        y1 = map(y -> y[1:2:end,1:2:end], (@view y1[1:2:end]))
+        y1 = map(y -> y[1:2:end,1:2:end], (@view y1[2:2:end]))
     end
 end;
 
@@ -187,7 +187,7 @@ channels = [:r :g :b]
 if !@isdefined(Xpogm)
     α = 30
     β = 0.1
-    niter = isinteractive() ? 10 : 20 # fewer iterations for github cloud
+    niter = 10
     Xc = Array{Any}(undef, 3)
     out = Array{Any}(undef, 3)
     for (i, c) in enumerate(channels) # separate color channels
