@@ -68,29 +68,21 @@ isinteractive() && prompt(:prompt);
 =#
 
 # Load raw data
-y1 = [rand(RGB{Float16}, 48, 64) for it in 1:1499] # random test
 if !@isdefined(y1)
-    tmp = homedir() * "/111.mp4"
-    if !isfile(tmp)
-        url = "http://backgroundmodelschallenge.eu/data/synth1/111.mp4"
-        @info "downloading 16MB from $url"
-        tmp = download(url)
-        @info "download complete"
-    end
-    y1 = VideoIO.load(tmp) # 1499 frames of size (480,640)
+    url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
+    tmp = download(url)
+    y1 = VideoIO.load(tmp) # 100 frames of size (240,320)
 end;
 
 # convert to arrays
 if !@isdefined(Y3)
-    tmp = y -> 1f0*permutedims((@view y[1:2:end,1:2:end]), (2,1)) # todo: downsample better
-    yf = tmp.(@view y1[1:10:end]) # 150 frames of size (320,240)
-    yf = yf[51:end] # 100 frames with moving cars
+    yf = map(y -> 1f0*permutedims(y, (2,1)), y1) # 100 frames of size (320,240)
     Y3 = stack(yf) # (nx,ny,nf)
     (nx, ny, nf) = size(Y3)
 end;
-    py = jim([yf[1], yf[end], yf[end]-yf[1]];
-        nrow = 1, size = (600, 200),
-        title="Frame 001  |  Frame $nf  |  Difference")
+py = jim([yf[1], yf[end], yf[end]-yf[1]];
+    nrow = 1, size = (600, 200),
+    title="Frame 001  |  Frame $nf  |  Difference")
  
 
 #=
