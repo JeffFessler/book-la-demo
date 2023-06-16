@@ -68,7 +68,7 @@ isinteractive() && prompt(:prompt);
 =#
 
 # Load raw data
-y1 = [rand(RGB{N0f8}, 240, 320) for i in 1:100] # todo test
+y1 = [rand(RGB{N0f8}, 240÷2, 320÷2) for i in 1:50] # todo test
 if !@isdefined(y1)
     url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
     tmp = download(url)
@@ -187,7 +187,7 @@ channels = [:r :g :b]
 if !@isdefined(Xpogm)
     α = 30
     β = 0.1
-    niter = 20
+    niter = 10 # todo isinteractive() ? 0
     Xc = Array{Any}(undef, 3)
     out = Array{Any}(undef, 3)
     for (i, c) in enumerate(channels) # separate color channels
