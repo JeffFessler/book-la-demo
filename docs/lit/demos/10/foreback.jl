@@ -41,7 +41,7 @@ end
 # Tell this Julia session to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using ColorTypes: RGB
+using ColorTypes: RGB, N0f8
 using ColorVectorSpace
 using Downloads: download
 using InteractiveUtils: versioninfo
@@ -68,6 +68,7 @@ isinteractive() && prompt(:prompt);
 =#
 
 # Load raw data
+y1 = [rand(RGB{N0f8}, 240, 320) for i in 1:100] # todo test
 if !@isdefined(y1)
     url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
     tmp = download(url)
