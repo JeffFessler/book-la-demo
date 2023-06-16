@@ -205,7 +205,7 @@ end
 # Extract low-rank (background) and sparse (foreground) components
 Lpogm = Lpart(Xpogm)
 Spogm = Spart(Xpogm)
-iz = 81
+iz = nf * 81 ÷ 100
 tmp = stack([Y3[:,:,iz], Lpogm[:,:,iz], Spogm[:,:,iz]])
 jim(:line3type, :white)
 pf = jim(tmp; nrow=1, size=(700, 250),
