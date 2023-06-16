@@ -106,14 +106,14 @@ nucnorm(L::AbstractArray) = nucnorm(reshape(L, :, nf)); # (nx*ny, nf) for L
 #=
 The robust PCA optimization cost function is:
 ```math
-Ψ(\mathbf{L,\mathbf{S) =
- \frac{1}{2} ‖ \mathbf{L} + \mathbf{S} - \mathbf{Y} ‖_{\mathrm{F}}^2
- + α ‖\mathbf{L}‖_* + β ‖\mathrm{vec}(\mathbf{S})‖_1
+Ψ(\mathbf{L},\mathbf{S}) = \frac{1}{2}
+ ‖ \mathbf{L} + \mathbf{S} - \mathbf{Y} ‖_{\mathrm{F}}^2
+ + α ‖ \mathbf{L} ‖_* + β ‖ \mathrm{vec}(\mathbf{S}) ‖_1
 ```
 or equivalently
 ```math
-Ψ(\mathbf X) =
-\frac{1}{2} ‖ [\mathbf{I} \ \mathbf{I}] \mathbf{X} - \mathbf{Y} ‖_{\mathrm{F}}^2
+Ψ(\mathbf{X}) = \frac{1}{2}
+ \left\| [\mathbf{I} \ \mathbf{I}] \mathbf{X} - \mathbf{Y} \right\|_{\mathrm{F}}^2
  + α ‖ \mathbf{X}_1 ‖_* + β ‖ \mathrm{vec}(\mathbf{X}_2) ‖_1
 ```
 where ``\mathbf{Y}`` is the original data matrix.
