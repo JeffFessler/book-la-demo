@@ -3,7 +3,8 @@
 
 This example illustrates
 video foreground/background separation
-via robust PCA
+via
+[robust PCA](https://en.wikipedia.org/wiki/Robust_principal_component_analysis)
 using the Julia language.
 For simplicity,
 the method here assumes a static camera.
@@ -54,7 +55,7 @@ using Plots: default, gui, plot, savefig
 using Plots: gif, @animate, Plots
 using VideoIO
 default(); default(markerstrokecolor=:auto, label = "", markersize=6,
-legendfontsize = 8) # todo: increase
+legendfontsize = 8) # todo: https://github.com/JuliaPlots/Plots.jl/issues/4621
 
 
 # The following line is helpful when running this file as a script;
@@ -68,19 +69,19 @@ isinteractive() && prompt(:prompt);
 =#
 
 # Load raw data
-y1 = [rand(RGB{N0f8}, 240÷2, 320÷2) for i in 1:50] # todo test
 if !@isdefined(y1)
     url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
     tmp = download(url)
     y1 = VideoIO.load(tmp) # 100 frames of size (240,320)
+    if !isinteractive() # downsample for github cloud
+        y1 = map(y -> y[1:2:end,1:2:end], (@view y1[1:2:end]))
+    end
 end;
 
-# convert to arrays
-if !@isdefined(Y3)
-    yf = map(y -> 1f0*permutedims(y, (2,1)), y1) # 100 frames of size (320,240)
-    Y3 = stack(yf) # (nx,ny,nf)
-    (nx, ny, nf) = size(Y3)
-end;
+# Convert to array
+yf = map(y -> 1f0*permutedims(y, (2,1)), y1) # 100 frames of size (320,240)
+Y3 = stack(yf) # (nx,ny,nf)
+(nx, ny, nf) = size(Y3)
 py = jim([yf[1], yf[end], yf[end]-yf[1]];
     nrow = 1, size = (600, 200),
     title="Frame 001  |  Frame $nf  |  Difference")
@@ -105,27 +106,27 @@ nucnorm(L::AbstractArray) = nucnorm(reshape(L, :, nf)); # (nx*ny, nf) for L
 #=
 The robust PCA optimization cost function is:
 ```math
-Ψ(L,S) = \frac{1}{2} ‖ L + S - Y ‖_F^2 + α ‖L‖_* + β ‖vec(S)‖_1
+Ψ(\mathbf{L,\mathbf{S) =
+ \frac{1}{2} ‖ \mathbf{L} + \mathbf{S} - \mathbf{Y} ‖_{\mathrm{F}}^2
+ + α ‖\mathbf{L}‖_* + β ‖\mathrm{vec}(\mathbf{S})‖_1
 ```
 or equivalently
 ```math
 Ψ(\mathbf X) =
-\frac{1}{2} ‖ [I I] \mathbf{X} - \mathbf{Y} ‖_F^2
- + α ‖ \mathbf{X}[1] ‖_* + β ‖ vec(\mathbf{X}[2]) ‖_1
+\frac{1}{2} ‖ [\mathbf{I} \ \mathbf{I}] \mathbf{X} - \mathbf{Y} ‖_{\mathrm{F}}^2
+ + α ‖ \mathbf{X}_1 ‖_* + β ‖ \mathrm{vec}(\mathbf{X}_2) ‖_1
 ```
-
-where ``\mathbf Y`` is the original data matrix.
+where ``\mathbf{Y}`` is the original data matrix.
 =#
 
 robust_pca_cost(Y, X, α::Real, β::Real) =
     0.5 * norm( A * X - Y )^2 + α * nucnorm(Lpart(X)) + β * norm(Spart(X), 1);
 
 
-# Proximal algorithm helpers
+# Proximal algorithm helpers:
+soft(z,t) = sign(z) * max(abs(z) - t, 0);
 
-soft(z,t) = sign(z) * max(abs(z) - t, 0)
-
-# Define singular value soft thresholding (SVST) function
+# Singular value soft thresholding (SVST) function:
 function SVST(X, beta)
     shape = size(X)
     X = reshape(X, :, shape[end]) # unfold
@@ -140,7 +141,7 @@ end;
 #=
 ## Algorithm
 Proximal gradient methods for minimizing
-robust PCA cost function
+robust PCA cost function.
 
 The
 [proximal optimized gradient method (POGM)](https://doi.org/10.1137/16m108104x)
@@ -148,9 +149,9 @@ with
 [adaptive restart](https://doi.org/10.1007/s10957-018-1287-4)
 is faster than FISTA
 with very similar computation per iteration.
-Unlike ADMM,
-POGM does not require any algorithm tuning parameter ``μ``,
-making it easier to use in many practical composite optimization problems.
+POGM does not require any algorithm tuning parameter,
+making it easier to use than ADMM
+in many practical composite optimization problems.
 =#
 function robust_pca(Y;
     L = Y,
@@ -167,13 +168,12 @@ function robust_pca(Y;
 )
     
     X0 = stack([L, S])
-
     f_grad = X -> A' * (A * X - Y) # gradient of smooth term
     f_L = 2 # Lipschitz constant of f_grad
     g_prox = (X, c) -> stack([SVST(Lpart(X), c * α), soft.(Spart(X), c * β)])
     Xhat, out = pogm_restart(X0, Fcost, f_grad, f_L; g_prox, fun, mom, kwargs...)
     return Xhat, out
-end
+end;
 
 #src # tmp = SVST(Yc, 30)
 #src # tmp = Yc .- Yc[:,:,1] # remove background
@@ -187,7 +187,7 @@ channels = [:r :g :b]
 if !@isdefined(Xpogm)
     α = 30
     β = 0.1
-    niter = 10 # todo isinteractive() ? 0
+    niter = isinteractive() ? 10 : 20 # fewer iterations for github cloud
     Xc = Array{Any}(undef, 3)
     out = Array{Any}(undef, 3)
     for (i, c) in enumerate(channels) # separate color channels
@@ -196,13 +196,13 @@ if !@isdefined(Xpogm)
         Xc[i], out[i] = robust_pca(Yc; α, β, mom = :pogm, niter)
     end
     Xpogm = map(RGB{Float32}, Xc...) # reassemble colors
-end
+end;
 
 #=
 ## Results
 =#
 
-# Extract low-rank (background) and sparse (foreground) components
+# Extract low-rank (background) and sparse (foreground) components:
 Lpogm = Lpart(Xpogm)
 Spogm = Spart(Xpogm)
 iz = nf * 81 ÷ 100
