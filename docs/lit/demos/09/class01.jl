@@ -88,6 +88,11 @@ pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
 data0 = data[:,:,labels .== 0]
 data1 = data[:,:,labels .== 1];
 
+pd0 = jim(data0[:,:,1:36]; nrow=6, colorbar=nothing, size=(400,400))
+pd1 = jim(data1[:,:,1:36]; nrow=6, colorbar=nothing, size=(400,400))
+## savefig(pd0, "class01-0.pdf")
+## savefig(pd1, "class01-1.pdf")
+
 # red-black-blue colorbar:
 RGB255(args...) = RGB((args ./ 255)...)
 color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)]);
