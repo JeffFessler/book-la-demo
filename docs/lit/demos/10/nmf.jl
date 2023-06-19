@@ -1,8 +1,8 @@
 #=
 # [Non-negative matrix factorization](@id nmf1)
 
-Non-negative matrix factorization
-of hand-written digits
+[Non-negative matrix factorization](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization)
+of hand-written digit images
 in Julia.
 =#
 
@@ -70,24 +70,38 @@ if !@isdefined(data)
 end
 
 
-# Look at image data
-pd = jim(data[:,:,1:50,:], "Data";
+# Look at some of the image data
+pd = jim(data[:,:,1:50,:], "Data, M=$(nx*ny), N=$(nrep*ndigit)";
     colorbar=nothing, size=(600,400), tickfontsize=6, ncol=25)
 
 ## savefig(pd, "nmf-data.pdf")
 
+
+#=
+## Run NMF
+=#
 Y = reshape(data, nx*ny, :) # unfold
 K = 20
 out = nnmf(Y, K)
 
+#=
+## Results
+Examine the left factor vectors as images.
+=#
 W = reshape(out.W, nx, ny, K)
 ## H = out.H
-pw = jim(W/maximum(W); title="Factor images", color=:cividis)
+pw = jim(W/maximum(W); title="Left NMF factor images, K=$K", color=:cividis)
 
+## savefig(pw, "nmf-w.pdf")
+
+
+#=
+## SVD basis
+Examine the left singular vectors as images.
+=#
 U = reshape(svd(Y).U[:,1:K], nx, ny, K)
 pu = jim(U/maximum(U); title="Left singular vectors", color=:cividis)
 
-#
-#prompt()
+## savefig(pu, "nmf-u.pdf")
 
-#todo include("../../../inc/reproduce.jl")
+include("../../../inc/reproduce.jl")
