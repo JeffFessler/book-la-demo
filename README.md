@@ -21,6 +21,20 @@ click this button:
 
 <img src="docs/src/assets/logo.png" alt="logo" width="150">
 
+
+## Samples
+
+Here are some examples of the kinds of figures generated in the demos.
+
+- Binary classification
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/binary-classify.png" alt="binary-class" width="300">
+demo-fig/binary-classify.png
+
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/96022bee4e6c91cd88744096a13dfa952675fdef/demo-fig/binary-classify.png" alt="binary-class" width="300">
+
+<img src="https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/src/assets/logo.png" alt="binary-class" width="300">
+
+
 <!-- URLs -->
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-mmaj-demo
