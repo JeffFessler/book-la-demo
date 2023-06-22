@@ -45,25 +45,33 @@ at the University of Michigan.
   If your browser window is wide enough,
   you should see a menu to the left.
   If your window is narrow,
-  you should see a
+  you should see a ☰
   [hamburger menu button](https://en.wikipedia.org/wiki/Hamburger_button)
   that will toggle open the demos menu sidebar.
-
-* View the excellent documentation at
-  [JuliaImages](https://juliaimages.org)
-
-* Use the package
-  [AbbreviatedStackTraces.jl](https://github.com/BioTurboNick/AbbreviatedStackTraces.jl)
-  to get more interpretable error messages.
 
 * Check out some [Julia tutorials](https://julialang.org/learning/tutorials),
   especially the one titled
   "Just the Julia you need to get started in Data Science and ML" by Raj Rao.
 
+
+## More resources
+
 * Install the
   [web browser shortcut](https://discourse.julialang.org/t/how-to-search-the-manual-more-efficiently/19314)
   for fast access to the online
   [Julia manual](https://docs.julialang.org/en/v1).
+
+* Use the package
+  [AbbreviatedStackTraces.jl](https://github.com/BioTurboNick/AbbreviatedStackTraces.jl)
+  to get more interpretable error messages.
+
+* For image processing,
+  view the excellent documentation at
+  [JuliaImages](https://juliaimages.org)
+
+* For a machine learning introduction, see the
+  [Julia programming for Machine Learning course material](https://github.com/adrhill/julia-ml-course).
+
 
 ## Getting started with Julia for matrix methods
 
