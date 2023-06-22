@@ -87,7 +87,7 @@ Y3 = stack(yf) # (nx,ny,nf)
 py = jim([yf[1], yf[end], yf[end]-yf[1]];
     nrow = 1, size = (600, 200),
     title="Frame 001  |  Frame $nf  |  Difference")
- 
+
 
 #=
 ## Cost function
@@ -168,7 +168,7 @@ function robust_pca(Y;
         (iter, xk, yk, is_restart) -> (xk, Fcost(xk), is_restart),
     kwargs..., # for pogm_restart
 )
-    
+
     X0 = stack([L, S])
     f_grad = X -> A' * (A * X - Y) # gradient of smooth term
     f_L = 2 # Lipschitz constant of f_grad
@@ -223,41 +223,76 @@ pc = plot(0:niter, tmp;
 
 #
 prompt()
- 
+
 
 #=
 ## Alternatives
-Explore simpler method: average of each color channel
+Explore simpler methods:
+- average of each color channel
+- first SVD component of each color channel
 =#
 
-Xmean = Array{Any}(undef, 3)
+Xmean = Vector{Matrix{Float32}}(undef, 3)
+Xsvd = Vector{Matrix{Float32}}(undef, 3)
+refold = v -> reshape(v, nx, ny)
 for (i, c) in enumerate(channels) # separate color channels
     @info "channel $c"
     tmp_ = map(y -> getfield(y, c), Y3) # (nx,ny,nf)
-##  Xsvd[i] = svd(reshape(tmp_, :, nf)).U[:,1] # first component
-    Xmean[i] = mean(tmp_, dims=3)
-@show size(Xmean[i])
-end;
-Xmean = reshape(map(RGB{Float32}, Xmean...), nx, ny) # reassemble colors
+    Xsvd[i] = refold(svd(reshape(tmp_, :, nf)).U[:,1]) # first component
+    Xmean[i] = refold(mean(tmp_, dims=3))
+end
+Xmean = map(RGB{Float32}, Xmean...) # reassemble colors
 L1 = Lpogm[:,:,1]
 extrema(norm.(Lpogm .- Xmean))
 
 
 #=
-In this case the low-rank component
-is within 3.5% of the temporal average of the video sequence,
+In this case
+the temporal average of the video sequence
+is pretty close to the low-rank component,
 because this video is so simple.
 The benefits of robust PCA
 would be more apparent
 with more complicated videos,
 e.g.,
 with illumination changes.
+Even here one can see undesirable effects
+of the sparse component
+in the average
+when we scale the difference image.
 =#
-jim(
+pm = jim(
  jim(Xmean, "Average"),
  jim(L1, L"L_1"),
- jim(abs.(L1 - Xmean), "|L_1 - average|"),
+ jim(9 * abs.(L1 - Xmean), "9 × |L_1 - average|"),
 ## jim(L1 .== Xmean),
+)
+
+#=
+Examining the first SVD component of each color
+takes a bit more work.
+SVD components have unit norm,
+but RGB values should be in [0,1] range.
+And the SVD has a sign ambiguity.
+Even after correcting for those issues,
+the SVD version has a somewhat color tint.
+=#
+jim(Xsvd; nrow=1, title="Xsvd before corrections")
+
+# Correct for SVD sign ambiguity
+Xsvd = map(x -> x / sign(mean(x)), Xsvd)
+jim(Xsvd; nrow=1, title="Xsvd after sign correction")
+
+# Correct for scaling
+svdmax = maximum(maximum, Xsvd)
+Xsvd = map(x -> x / svdmax, Xsvd)
+Xsvd = map(RGB{Float32}, Xsvd...) # reassemble colors
+ps = jim(
+ jim(yf[1], "First frame"),
+ jim(Lpogm[:,:,1], L"L_1"),
+ jim(Xsvd, "Xsvd"),
+ layout = (1,3),
+ size = (600,200),
 )
 
 
