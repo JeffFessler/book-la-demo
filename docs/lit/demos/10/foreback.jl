@@ -34,12 +34,13 @@ if false
         "MIRT"
         "MIRTjim"
         "Plots"
+        "Statistics"
         "VideoIO"
     ])
 end
 
 
-# Tell this Julia session to use the following packages.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using ColorTypes: RGB, N0f8
@@ -53,6 +54,7 @@ using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, savefig
 using Plots: gif, @animate, Plots
+using Statistics: mean
 using VideoIO
 default(); default(markerstrokecolor=:auto, label = "", markersize=6,
 legendfontsize = 8) # todo: https://github.com/JuliaPlots/Plots.jl/issues/4621
@@ -223,6 +225,42 @@ pc = plot(0:niter, tmp;
 prompt()
  
 
+#=
+## Alternatives
+Explore simpler method: average of each color channel
+=#
+
+Xmean = Array{Any}(undef, 3)
+for (i, c) in enumerate(channels) # separate color channels
+    @info "channel $c"
+    tmp_ = map(y -> getfield(y, c), Y3) # (nx,ny,nf)
+##  Xsvd[i] = svd(reshape(tmp_, :, nf)).U[:,1] # first component
+    Xmean[i] = mean(tmp_, dims=3)
+@show size(Xmean[i])
+end;
+Xmean = reshape(map(RGB{Float32}, Xmean...), nx, ny) # reassemble colors
+L1 = Lpogm[:,:,1]
+extrema(norm.(Lpogm .- Xmean))
+
+
+#=
+In this case the low-rank component
+is within 3.5% of the temporal average of the video sequence,
+because this video is so simple.
+The benefits of robust PCA
+would be more apparent
+with more complicated videos,
+e.g.,
+with illumination changes.
+=#
+jim(
+ jim(Xmean, "Average"),
+ jim(L1, L"L_1"),
+ jim(abs.(L1 - Xmean), "|L_1 - average|"),
+## jim(L1 .== Xmean),
+)
+
+
 # Animate videos
 anim1 = @animate for it in 1:nf
     tmp = stack([Y3[:,:,it], Lpogm[:,:,it], Spogm[:,:,it]])
@@ -233,5 +271,6 @@ end
 gif(anim1; fps = 6)
 
 #src todo: compare pgm=ista, fpgm=fista, pogm
+
 
 include("../../../inc/reproduce.jl")
