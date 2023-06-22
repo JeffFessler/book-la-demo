@@ -277,11 +277,11 @@ And the SVD has a sign ambiguity.
 Even after correcting for those issues,
 the SVD version has a somewhat color tint.
 =#
-jim(Xsvd; nrow=1, title="Xsvd before corrections")
+jim(Xsvd; nrow=1, title="Xsvd before corrections", size=(600,200))
 
 # Correct for SVD sign ambiguity
 Xsvd = map(x -> x / sign(mean(x)), Xsvd)
-jim(Xsvd; nrow=1, title="Xsvd after sign correction")
+jim(Xsvd; nrow=1, title="Xsvd after sign correction", size=(600,200))
 
 # Correct for scaling
 svdmax = maximum(maximum, Xsvd)
