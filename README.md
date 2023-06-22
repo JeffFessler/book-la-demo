@@ -26,14 +26,26 @@ click this button:
 
 Here are some examples of the kinds of figures generated in the demos.
 
-- Binary classification
+- [Binary classification](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/class01)
 <img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/binary-classify.png" alt="binary-class" width="300">
-demo-fig/binary-classify.png
 
-<img src="https://github.com/JeffFessler/book-mmaj-data/blob/96022bee4e6c91cd88744096a13dfa952675fdef/demo-fig/binary-classify.png" alt="binary-class" width="300">
+- [Video foreground/background separation](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/foreback)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/foreground-background.png" alg="pic" width="400">
 
-<img src="https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/src/assets/logo.png" alt="binary-class" width="300">
+- [Non-negative matrix factorization](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/nmf)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/nmf.png" alg="pic" width="400">
 
+- [Photometric stereo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/photometric3)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/photometric-stereo.png" alg="pic" width="400">
+
+- [Preconditioning](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/precon1)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/preconditioning.png" alg="pic" width="400">
+
+- [Source localization](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/source-local)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/source-localize.png" alg="pic" width="400">
+
+- [Spectral clustering](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/spectral-cluster)
+<img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/spectral-clustering.png" alg="pic" width="400">
 
 <!-- URLs -->
 [demos-img]: https://img.shields.io/badge/-Demos-blue
