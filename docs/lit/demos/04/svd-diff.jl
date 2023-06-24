@@ -12,7 +12,7 @@ by
 
 #=
 ## Setup
-Add the Julia packages that are need for this demo.
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
