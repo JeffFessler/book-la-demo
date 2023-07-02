@@ -47,6 +47,11 @@ Here are some examples of the kinds of figures generated in the demos.
 - [Spectral clustering](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/spectral-cluster)
 <img src="https://github.com/JeffFessler/book-mmaj-data/blob/main/demo-fig/spectral-clustering.png" alg="pic" width="400">
 
+# Demo index
+
+- [2.1](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/dot)
+- [2.2](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/gauss2d)
+
 <!-- URLs -->
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-mmaj-demo
