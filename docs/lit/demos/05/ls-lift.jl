@@ -35,6 +35,7 @@ using LaTeXStrings
 using LinearAlgebra: Diagonal, svd
 using MIRTjim: prompt
 using Plots: default, gr, plotly, plot!, scatter, surface!, savefig
+using Plots.PlotMeasures: px
 using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
  markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=16)
@@ -107,11 +108,10 @@ Use `plotly()` backend here to view surface interactively.
 =#
 
 ## plotly()
-p2 = scatter(A2[:,1], A2[:,2], y, color=:blue,
-    xaxis=(L"t", (0,1), [0,1]),
-    yaxis=(L"t^2", (0,1), [0,1]),
-    zaxis=(L"y_m", (0,1), [0,1]),
-    tick=[0,1],
+p2 = scatter(A2[:,1], A2[:,2], y, color=:blue, right_margin = 10px,
+    xaxis = (L"t", (0,1), -1:1),
+    yaxis = (L"t^2", (0,1), -1:1),
+    zaxis = (L"y_m", (0,1), -1:1),
 )
 t1 = range(0, 1, 101)
 t2 = range(0, 1, 102)
@@ -121,7 +121,7 @@ surface!(t1, t2, (t1,t2) -> x2[1]*t1 + x2[2]*t2, alpha=0.3)
 prompt()
 
 ## gr(); # restore
-## savefig("04-ls-lift-2.pdf") # with gr()
+## savefig(p2, "04-ls-lift-2.pdf") # with gr()
 
 
 include("../../../inc/reproduce.jl")
