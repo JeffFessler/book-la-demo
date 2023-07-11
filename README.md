@@ -14,6 +14,8 @@ by Jeff Fessler
 and Raj Nadakuditi
 of the University of Michigan.
 
+The demos expect Julia 1.9 or above.
+
 To view the demos,
 click this button:
 [![demos][demos-img]][demos-url]
