@@ -101,7 +101,8 @@ prompt()
 
 #=
 ## Robust regression
-Using p-norm with ``1 < p ≪ 2``
+Using (differentiable) p-norm with ``1 < p ≪ 2``
+avoids over-fitting the outlier data points.
 =#
 
 p = 1.1 # close to ℓ₁
@@ -113,8 +114,10 @@ xlp = outp.minimizer
 plot!(p2, t0, Afun(t0)*xlp, color=:green, line=:dash,
  label="Robust fit p=$p")
 
+
 #=
-Using 1-norm
+Using 1-norm produces nearly the same results
+as using the p=1.1 norm.
 =#
 cost1 = x -> norm(A * x - y, 1) # ℓ₁
 out1 = optimize(cost1, x0)
