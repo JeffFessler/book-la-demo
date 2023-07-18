@@ -118,10 +118,13 @@ prompt()
 This data is not linearly separable originally,
 but a simple nonlinearity makes it so.
 =#
-X = hcat(Xtrain...)
+lift1 = x -> [x; sqrt(sum(abs2, x))] # lift 1 feature vector
+lifter = xx -> mapslices(lift1, xx, dims=1) # apply to each data column
+Xtrain_lift = lifter.(Xtrain)
+X = hcat(Xtrain_lift...)
+#X = hcat(Xtrain...)
 Y = hcat(Ytrain...)
-tmp = sqrt.(sum(abs2, X, dims=1))
-plot(tmp)
+plot(X[3,:])
 gui(); throw()
 
 perm = randperm(size(X,2))
