@@ -69,8 +69,9 @@ sy[1:Ktrue]
 
 # ### Plot singular values
 ps = plot(xaxis = (L"k", (1,N), [1, Ktrue, N]), yaxis = (L"σ", (0,5.5), 0:5))
-scatter!(1:N, sy, color=:blue, label=L"\sigma_k(Y) \ \mathrm{noisy}")
-scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
+scatter!(1:N, sy, color=:red, marker=:hexagon,
+ label=L"\sigma_k(Y) \ \mathrm{noisy}")
+scatter!(1:N, sx, color=:blue, label=L"\sigma_k(X) \ \mathrm{noiseless}")
 
 #
 prompt()
@@ -99,7 +100,7 @@ pk = plot(xaxis = (L"K", (1,N), [0, 2, Ktrue, N]),
     yaxis = ("'Error' [%]", (0, 100), 0:20:100))
 scatter!(klist, nrmse_K, color=:blue,
     label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_K - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
-scatter!(klist, nrmsd_K, color=:red,
+scatter!(klist, nrmsd_K, color=:red, marker=:diamond,
     label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_K - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
@@ -128,7 +129,7 @@ pb = plot(legend=:bottomright, xaxis = (L"β", (0,6), 0:6),
     yaxis = ("'Error' [%]", (0, 100), 0:20:100))
 scatter!(reglist, nrmse_reg, color=:blue,
     label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_{\beta} - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
-scatter!(reglist, nrmsd_reg, color=:red,
+scatter!(reglist, nrmsd_reg, color=:red, marker=:diamond,
     label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_{\beta} - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
@@ -172,9 +173,9 @@ psb = plot(legend=:bottomright, widen=true,
 )
 scatter!(reglist, nrmse_reg, color=:blue,
     label=L"\mathrm{NRMSE\ } ‖ \! \hat{X}_\beta - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%")
-scatter!(reglist, nrmsd_reg, color=:red,
+scatter!(reglist, nrmsd_reg, color=:red, marker=:diamond,
     label=L"\mathrm{NRMSD\ } ‖ \! \hat{X}_\beta - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
-scatter!(reglist, sqrt.(sure_reg)/norm(Y)*100, color=:green,
+scatter!(reglist, sqrt.(sure_reg)/norm(Y)*100, color=:green, marker=:star,
     label=L"(\mathrm{SURE}(\beta))^{1/2} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%")
 
 #
@@ -189,9 +190,9 @@ psk = plot(
     xaxis = (L"k", (1, N), [1, Ktrue, sum(sh .!= 0), N]),
     yaxis = (L"σ", (0, 5.5), 0:6),
 )
-scatter!(1:N, sy, color=:blue, label=L"\sigma_k(Y) \ \mathrm{noisy}")
-scatter!(1:N, sx, color=:red, label=L"\sigma_k(X) \ \mathrm{noiseless}")
-scatter!(1:N, sh, color=:green, label=L"\hat{\sigma}_k \ \mathrm{SURE} \ \hat{\beta}")
+scatter!(1:N, sy, color=:red, marker=:hexagon, label=L"\sigma_k(Y) \ \mathrm{noisy}")
+scatter!(1:N, sx, color=:blue, label=L"\sigma_k(X) \ \mathrm{noiseless}")
+scatter!(1:N, sh, color=:green, marker=:star, label=L"\hat{\sigma}_k \ \mathrm{SURE} \ \hat{\beta}")
 
 #
 prompt()

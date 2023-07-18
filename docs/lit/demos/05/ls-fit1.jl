@@ -98,7 +98,7 @@ prompt()
 
 xh = A \ y # backslash for LS solution using all M samples
 
-plot!(p1, t0, Afun(t0)*xh, color=:magenta, label="Fit cubic to M=$(M) points")
+plot!(p1, t0, Afun(t0)*xh, color=:orange, label="Fit cubic to M=$(M) points")
 
 #
 prompt()

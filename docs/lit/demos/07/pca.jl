@@ -137,8 +137,9 @@ pz = plot(title = "Score plot for $ndigit digits",
  xaxis=("Score 1", (-5,8), -3:3:6),
  yaxis=("Score 2", (-6,4), -4:4:4),
 )
-for d in digitn
-    scatter!(z[1,labels .== d], z[2,labels .== d], label="Digit $d")
+markers = (:circle, :diamond, :square)
+for (i,d) in enumerate(digitn)
+    scatter!(z[1,labels .== d], z[2,labels .== d], label="Digit $d", marker=markers[i])
 end
 pz
 ## savefig(pz, "pca-score.pdf")

@@ -84,12 +84,12 @@ plot!(p1, t0, Afun(t0,1)*x1, color=:red, label="linear model fit")
 prompt()
 
 x2 = A2 \ y # quadratic fit
-plot!(p1, t0, Afun(t0,2)*x2, color=:magenta, label="quadratic model fit")
+plot!(p1, t0, Afun(t0,2)*x2, color=:orange, label="quadratic model fit")
 
 #
 prompt()
 
-## savefig("04-ls-lift-1.pdf")
+## savefig(p1, "04-ls-lift-1.pdf")
 
 
 #=
