@@ -38,7 +38,7 @@ using Plots: default, gr, plotly, plot!, scatter, surface!, savefig
 using Plots.PlotMeasures: px
 using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
- markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=16)
+ markersize = 6, tickfontsize=14, labelfontsize = 18, legendfontsize=16)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -59,9 +59,9 @@ tm = sort(rand(M)) # M random sample locations
 y = sfun.(tm) + σ * randn(M); # noisy samples
 
 t0 = range(0, 1, 101) # fine sampling for showing curve
-p1 = scatter(tm, y, color=:blue, label=L"\mathrm{data\ } y_m",
+p1 = scatter(tm, y, color=:blue, label=L"\mathrm{data\ } y",
 	xaxis = (L"t", (0, 1), 0:0.5:1),
-	yaxis = (L"y_m", (-0.1, 1.1), 0:0.5:1),
+	yaxis = (L"y", (-0.1, 1.1), 0:0.5:1),
 )
 plot!(t0, sfun.(t0), color=:black, label=L"s(t)", legend=:topleft)
 
@@ -108,10 +108,11 @@ Use `plotly()` backend here to view surface interactively.
 =#
 
 ## plotly()
-p2 = scatter(A2[:,1], A2[:,2], y, color=:blue, right_margin = 10px,
+p2 = scatter(A2[:,1], A2[:,2], y, color=:blue, right_margin = 15px,
+    cticks = [0,1],
     xaxis = (L"t", (0,1), -1:1),
     yaxis = (L"t^2", (0,1), -1:1),
-    zaxis = (L"y_m", (0,1), -1:1),
+    zaxis = (L"y", (0,1), -1:1),
 )
 t1 = range(0, 1, 101)
 t2 = range(0, 1, 102)
