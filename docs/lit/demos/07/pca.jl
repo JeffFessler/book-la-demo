@@ -43,6 +43,7 @@ using LinearAlgebra: svd
 using MIRTjim: jim, prompt
 using MLDatasets: MNIST
 using Plots: default, gui, plot, savefig, scatter, scatter!
+using Plots.PlotMeasures: px
 using Random: seed!, randperm
 using StatsBase: mean
 default(); default(markersize=5, markerstrokecolor=:auto, label="",
@@ -82,8 +83,11 @@ end
 
 
 # Look at "unlabeled" image data prior to unsupervised dimensionality reduction
-pd = jim(data, "Data"; size=(600,300), tickfontsize=8,)
+pd = jim(data, "Data"; size=(600,300), cticks=0:1,
+## xticks = false, yticks = false, tickfontsize=12, right_margin=-5px, # book
+)
 ## savefig(pd, "pca-data.pdf")
+
 
 # Compute sample average of data
 μ = mean(data, dims=3)

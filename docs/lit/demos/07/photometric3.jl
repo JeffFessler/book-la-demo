@@ -221,7 +221,7 @@ end;
 # Note the different shadings in the different images.
 # Obviously the bunny cannot "jump around" during the imaging...
 pd = jim(images; title="Images for $nlight different lighting directions",
-#   xticks = false, yticks = false, tickfontsize=12, # book
+##  xticks = false, yticks = false, tickfontsize=12, # book
     caxis=("Intensity", (0,1), 0:1),
 )
 
