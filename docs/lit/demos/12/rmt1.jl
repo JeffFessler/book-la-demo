@@ -37,9 +37,11 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: rank, svd, svdvals, Diagonal, norm
 using MIRTjim: prompt
-using Plots: plot, plot!, scatter, scatter!, savefig, default, histogram
+using Plots: default, gui, plot, plot!, scatter, scatter!, savefig, histogram
 using StatsBase: mean, var
-default(markerstrokecolor=:auto, label="", widen=true)
+default(markerstrokecolor=:auto, label="", widen=true, markersize = 6,
+ tickfontsize = 12, labelfontsize = 18,
+)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -67,13 +69,13 @@ sigma[1], abs(sigma[1] - 1)
 
 #
 xaxis = (L"k", (1,n), [1, n÷2, n])
-p1 = scatter(sigma; xaxis, ylabel=L"σ_k", color=:blue)
+p1 = scatter(sigma; xaxis, yaxis = (L"σ_k", (-0.02, 1.02), -1:1), color=:blue)
 good = findall(sigma .> 0)
 xaxis = (L"k", (1,n), [2, n÷2, n])
 p2 = scatter(good, log10.(sigma[good]);
-    xaxis, ylabel=L"\log_{10}(σ_k)", color=:red)
-plot(p1, p2, layout=(2,1))
-#src savefig("round1.pdf")
+    xaxis, yaxis = (L"\log_{10}(σ_k)", (-40, 2), -40:20:0), color=:red)
+p12 = plot(p1, p2, layout=(2,1))
+#src savefig(p12, "round1.pdf")
 
 #
 prompt()
