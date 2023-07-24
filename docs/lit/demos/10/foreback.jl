@@ -211,7 +211,8 @@ iz = nf * 81 ÷ 100
 tmp = stack([Y3[:,:,iz], Lpogm[:,:,iz], Spogm[:,:,iz]])
 jim(:line3type, :white)
 pf = jim(tmp; nrow=1, size=(700, 250),
-  title="Original frame $iz | low-rank background | sparse foreground")
+## xaxis = false, yaxis = false, # book
+ title="Original frame $iz | low-rank background | sparse foreground")
 ## savefig(pf, "foreback-81.pdf")
 
 

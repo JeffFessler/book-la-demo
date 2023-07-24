@@ -86,9 +86,13 @@ jim1 = (X ; kwargs...) -> jim(X; size = (600,300),
 jimc = (X ; kwargs...) -> jim1(X; clim=(0,100), kwargs...);
 # and with NRMSE label
 nrmse = (Xh) -> round(norm(Xh - Xtrue) / norm(Xtrue) * 100, digits=1)
-jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %", kwargs...)
+args = (xaxis = false, yaxis = false, colorbar = :none) # book
+args = (;) # web
+jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %",
+ args..., kwargs...,
+)
 title = latexstring("\$\\mathbf{\\mathit{X}}\$ : Latent image")
-pt = jimc(Xtrue; title)
+pt = jimc(Xtrue; title, xlabel = " ", args...)
 
 ## savefig(pt, "mc_ap_x.pdf")
 
@@ -119,7 +123,7 @@ py = jime(Y ; title)
 # Show mask, count proportion of missing entries
 frac_nonzero = count(M) / length(M)
 title = latexstring("\$\\mathbf{\\mathit{M}}\$ : Locations of observed entries")
-pm = jim1(M; title,
+pm = jim1(M; title, args...,
     xlabel = "sampled fraction = $(round(frac_nonzero * 100, digits=1))%")
 ## savefig(pm, "mc_ap_m.pdf")
 
