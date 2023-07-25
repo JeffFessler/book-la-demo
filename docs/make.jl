@@ -91,8 +91,8 @@ Documenter.makedocs(;
         "08 Special" => demos("08"),
         "09 Optimize" => demos("09"),
         "10 Complete" => demos("10"),
-#       "11 RMT" => demos("11"),
-#       "12 RMT" => demos("12"),
+#       "11 Neural nets" => demos("11"),
+        "12 RMT" => demos("12"),
 #       "Other" => demos("other"),
     ],
 )
