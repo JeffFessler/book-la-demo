@@ -38,9 +38,9 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: dot, rank, svd
+using LinearAlgebra: dot, rank, svd, svdvals
 using MIRTjim: prompt
-using Plots: default, gui, plot, plot!, scatter!, savefig
+using Plots: default, gui, plot, plot!, scatter!, savefig, histogram
 using Plots.PlotMeasures: px
 using Random: seed!
 using StatsBase: mean, var
@@ -181,5 +181,56 @@ prompt()
 ## savefig(ps, "gauss1-s.pdf")
 ## savefig(pu, "gauss1-u.pdf")
 ## savefig(pv, "gauss1-v.pdf")
+
+
+#=
+## Marčenko–Pastur distribution
+
+Examine the singular values of the noise-only matrix ``Z``.
+having elements
+``z_{ij} ∼ N(0, 1/N)``.
+and compare to the asymptotic prediction by the
+[Marčenko–Pastur distribution](https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution).
+The agreement is remarkably good,
+even for a modest matrix size of 100 × 100.
+=#
+
+# Marčenko–Pastur pdf
+function mpfun(x::Real, c::Real)
+    bm = 1 - sqrt(c)
+    bp = 1 + sqrt(c)
+    return (bm < x < bp) ?
+        sqrt(4c - (x^2 - 1 - c)^2) / (π * c * x) : 0.
+end;
+
+ntrial = 150
+M = 100
+Nlist = [1, 4, 9] * M
+bins = range(0, 2, 101)
+pp = Vector{Any}(undef, 3)
+for (i, N) in enumerate(Nlist)
+    c = M//N
+
+    pred = mpfun.(bins, c)
+    pmax = ceil(maximum(pred), digits=1)
+    data = [svdvals(randn(M, N) / sqrt(N)) for _ in 1:ntrial]
+    data = reduce(hcat, data)
+    bm = 1 - sqrt(c)
+    bp = 1 + sqrt(c)
+    xticks = (c == 1) ? (0:2) : round.([0, bm, 1, bp, 2]; digits=2)
+    cstr = c == 1 ? L"c = 1" : latexstring("c = $(c.num)/$(c.den)")
+    histogram(vec(data); bins, linewidth=0,
+     xaxis = (L"σ", (0, 2), xticks),
+     yaxis = ("", (0, 2.0), [-1, 0, pmax]),
+     label = "Empirical", normalize = :pdf,
+     left_margin = 10px,
+     annotate = (0.2, 1.3, cstr),
+    )
+    pp[i] = plot!(bins, pred, label="Predicted")
+end
+p3 = plot(pp...; layout=(3,1), size=(600,800))
+
+## savefig(p3, "gauss-mp.pdf")
+## savefig(pp[2], "gauss-mp-c4.pdf")
 
 include("../../../inc/reproduce.jl")
