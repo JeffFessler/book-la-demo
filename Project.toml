@@ -4,4 +4,4 @@ authors = ["Jeff Fessler <fessler@umich.edu>"]
 version = "0.1.0"
 
 [compat]
-julia = "1.7"
+julia = "1.9"

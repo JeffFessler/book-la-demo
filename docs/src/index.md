@@ -13,7 +13,7 @@ compiled using
 and
 [Documenter](https://github.com/JuliaDocs/Documenter.jl)
 to accompany the book
-"Matrix Methods and Applications in Julia"
+"Matrix Methods and Applications"
 by Jeff Fessler
 and Raj Nadakuditi
 at the University of Michigan.
@@ -24,8 +24,8 @@ at the University of Michigan.
 * Install Julia from
   [https://julialang.org](https://julialang.org/downloads)
 
-* Launch the Julia app
-  should open a
+* Launch the Julia app;
+  it should open a
   [Julia REPL](https://docs.julialang.org/en/v1/stdlib/REPL).
 
 * To develop code, select an editor, preferably with Julia integration, such as
@@ -45,20 +45,32 @@ at the University of Michigan.
   If your browser window is wide enough,
   you should see a menu to the left.
   If your window is narrow,
-  you should see a
+  you should see a ☰
   [hamburger menu button](https://en.wikipedia.org/wiki/Hamburger_button)
   that will toggle open the demos menu sidebar.
 
-* View the excellent documentation at
-  [JuliaImages](https://juliaimages.org)
+* Check out some [Julia tutorials](https://julialang.org/learning/tutorials),
+  especially the one titled
+  "Just the Julia you need to get started in Data Science and ML" by Raj Rao.
+
+
+## More resources
+
+* Install the
+  [web browser shortcut](https://discourse.julialang.org/t/how-to-search-the-manual-more-efficiently/19314)
+  for fast access to the online
+  [Julia manual](https://docs.julialang.org/en/v1).
 
 * Use the package
   [AbbreviatedStackTraces.jl](https://github.com/BioTurboNick/AbbreviatedStackTraces.jl)
   to get more interpretable error messages.
 
-* Check out some [Julia tutorials](https://julialang.org/learning/tutorials),
-  especially the one titled
-  "Just the Julia you need to get started in Data Science and ML" by Raj Rao.
+* For image processing,
+  view the excellent documentation at
+  [JuliaImages](https://juliaimages.org)
+
+* For a machine learning introduction, see the
+  [Julia programming for Machine Learning course material](https://github.com/adrhill/julia-ml-course).
 
 
 ## Getting started with Julia for matrix methods
@@ -82,11 +94,11 @@ that generated any of these examples.
 
 For example,
 the code for the
-[SVD demo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/03/svd-diff)
+[SVD demo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/04/svd-diff)
 is at
-[this url](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/03/svd-diff.jl).
+[this url](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl).
 After downloading such a file such as
-[svd-demo.jl](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/03/svd-diff.jl),
+[svd-demo.jl](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl),
 you can run it
 by typing
 `include("svd-demo.jl")`

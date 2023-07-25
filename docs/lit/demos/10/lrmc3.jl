@@ -1,5 +1,5 @@
 #=
-# [Low-rank matrix completion](@id lrmc3)
+# [Low-rank matrix completion: ADMM](@id lrmc3)
 
 This example illustrates
 low-rank matrix completion
@@ -16,7 +16,8 @@ History:
 #srcURL
 
 #=
-Add the Julia packages that are need for this demo.
+## Setup
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -36,7 +37,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using DelimitedFiles: readdlm
@@ -47,7 +48,7 @@ using LinearAlgebra: svd, svdvals, Diagonal, norm
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: plot, scatter, scatter!, savefig, default
-default(markerstrokecolor=:auto, label = "")
+default(); default(markerstrokecolor=:auto, label = "")
 
 
 # The following line is helpful when running this jl-file as a script;

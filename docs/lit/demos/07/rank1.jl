@@ -8,7 +8,8 @@ using the Julia language.
 #srcURL
 
 #=
-Add the Julia packages that are need for this demo.
+## Setup
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -26,7 +27,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
@@ -35,7 +36,7 @@ using LinearAlgebra: svd, rank
 using MIRTjim: prompt
 using Plots: default, plot!, scatter, scatter!, savefig
 using Random: seed!
-default(label="", markerstrokecolor=:auto,
+default(); default(label="", markerstrokecolor=:auto,
     guidefontsize=14, legendfontsize=14, tickfontsize=12)
 
 
@@ -110,7 +111,7 @@ pa = lineplot(pl, slope, :green, "LS")
 #
 prompt()
 
-#src savefig(pa, "06_low_rank1_all.pdf")
+## savefig(pa, "06_low_rank1_all.pdf")
 
 
 # ## Illustrate the Frobenius norm approximation error graphically
@@ -124,7 +125,7 @@ scatter!(pf, xb, yb, color=:black, markersize=5, marker=:square, label="rank1")
 #
 prompt()
 
-#src savefig(pf, "06_low_rank1_r1.pdf")
+## savefig(pf, "06_low_rank1_r1.pdf")
 
 
 # ## Illustrate the LS residual graphically
@@ -139,7 +140,7 @@ scatter!(ps, xl, yl, color=:green, markersize=5, marker=:square, label="LS")
 #
 prompt()
 
-#src savefig(ps, "06_low_rank1_ls.pdf")
+## savefig(ps, "06_low_rank1_ls.pdf")
 
 
 include("../../../inc/reproduce.jl")

@@ -16,7 +16,8 @@ See
 #srcURL
 
 #=
-Add the Julia packages that are need for this demo.
+## Setup
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -35,7 +36,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using ImagePhantoms: rect, phantom
@@ -43,9 +44,12 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: norm, Diagonal, eigen, svd, svdvals
 using MIRTjim: jim, prompt
-using Plots: plot, scatter, savefig, default
+using Plots: default, gui, plot, savefig, scatter
+using Plots.PlotMeasures: px
 using Random: seed!
-default(label = "", markerstrokecolor = :auto)
+default(); default(label = "", markerstrokecolor = :auto,
+ tickfontsize = 12, labelfontsize = 16,
+)
 seed!(0)
 
 
@@ -113,9 +117,12 @@ if !@isdefined(data)
     nx,ny = 40,40
     nrep = 500
     @time data, angles, widths = make_phantoms(nx, ny, nrep)
-    pj = jim(data[:,:,1:88]; title = "88 of $nrep images")
+    pj = jim(data[:,:,1:72]; title = "72 of $nrep images",
+     xaxis = false, yaxis = false, colorbar = :none, # book
+     size = (400, 480), nrow = 9,
+    )
 end
-#src savefig(pj, "eigmap-data.pdf")
+## savefig(pj, "eigmap-data.pdf")
 
 
 #=
@@ -131,7 +138,7 @@ ps = scatter(tmp; title = "Data singular values", widen=true,
  xaxis = (L"k", (1, 40), [1, 40, nx*ny]),
  yaxis = (L"σ_k", (0, 216), [0, 32, 48, 72, 215]),
 )
-#src savefig(ps, "eigmap-svd.pdf")
+## savefig(ps, "eigmap-svd.pdf")
 
 #
 prompt()
@@ -152,7 +159,7 @@ distance = [norm(d1 - d2) for
     d2 in eachslice(data; dims=3)
 ]
 pd = jim(distance; title = L"‖ X_j - X_i \; ‖", xlabel = L"i", ylabel = L"j")
-#src savefig(pd, "eigmap-dis.pdf")
+## savefig(pd, "eigmap-dis.pdf")
 
 
 #=
@@ -167,7 +174,7 @@ here we follow the approach given in
 α = Float64(sum(abs2, distance) / nrep^2) # per Sanders eqn. (4)
 W = @. exp(-distance^2 / α)
 pw = jim(W; title = L"W_{ij}", xlabel = L"i", ylabel = L"j")
-#src savefig(pw, "eigmap-w.pdf")
+## savefig(pw, "eigmap-w.pdf")
 
 
 #=
@@ -182,7 +189,7 @@ d = vec(sum(W; dims=2))
 D = Diagonal(d)
 L = D - W # Laplacian
 pl = jim(L; title = L"L_{ij}", xlabel = L"i", ylabel = L"j", color=:cividis)
-#src savefig(pl, "eigmap-l.pdf")
+## savefig(pl, "eigmap-l.pdf")
 
 #=
 Compute the
@@ -202,7 +209,7 @@ pe = scatter(F.values;
  xticks = [1,nrep],
  yticks = [0, 0.7, 0.9, 1],
 )
-#src savefig(pe, "eigmap-eigval.pdf")
+## savefig(pe, "eigmap-eigval.pdf")
 
 #
 prompt()
@@ -217,8 +224,8 @@ for the reduced dimension.
 features = 1000 * F.vectors[:,2:3]
 pf = scatter(features[:,1], features[:,2];
   title = "Eigenmap features",
-  xlabel="feature 1", ylabel="feature 2")
-#src savefig(pf, "eigmap-f.pdf")
+  xlabel = "feature 1", ylabel = "feature 2")
+## savefig(pf, "eigmap-f.pdf")
 
 #
 prompt()
@@ -241,15 +248,21 @@ rectangle width.
 
 pc = plot(
  scatter(features[:,1], features[:,2], marker_z = widths, color=:cividis,
-  xlabel="feature 1", ylabel="feature 2",
-  colorbar_title="width",
+  xaxis = ("feature 1", (-7,8), -6:6:6),
+  yaxis = ("feature 2", (-6,5), -4:2:4),
+## colorbar_title = "width", colorbar_fontsize = 15,
+  annotate = (7, 4, "width"),
  ),
  scatter(features[:,1], features[:,2], marker_z = angles, color=:cividis,
+  xaxis = ("feature 1", (-7,8), -6:6:6),
+  yaxis = ("feature 2", (-6,5), -4:2:4),
   xlabel="feature 1", ylabel="feature 2",
-  colorbar_title="angle",
- ),
+## colorbar_title = "angle",
+  annotate = (7, 4, "angle"),
+ );
+ layout = (2,1), size = (600, 400), right_margin = 10px,
 )
-#src savefig(pc, "eigmap-c.pdf")
+## savefig(pc, "eigmap-c.pdf")
 
 #
 prompt()
@@ -264,7 +277,7 @@ of similar orientation, but various widths.
 
 tmp = data[:,:, -1.5 .< features[:,1] .< -1]
 pf1 = jim(tmp; title = "Feature 1 set")
-#src savefig(pf1, "eigmap-pf1.pdf")
+## savefig(pf1, "eigmap-pf1.pdf")
 
 
 #=
@@ -277,7 +290,7 @@ of similar widths, but various rotations.
 
 tmp = data[:,:, 0.2 .< features[:,2] .< 0.5]
 pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
-#src savefig(pf2, "eigmap-pf2.pdf")
+## savefig(pf2, "eigmap-pf2.pdf")
 
 
 #src X = [features ones(nrep)]
@@ -293,12 +306,12 @@ pf2 = jim(tmp; nrow=2, title = "Feature 2 set", size=(600,300))
 tmp = reshape(data, nx*ny, nrep)
 U2 = svd(tmp).U[:,1:2]
 pup = jim(reshape(U2, nx, ny, 2); title="First 2 PCA components")
-#src savefig(pup, "eigmap-pca-u.pdf")
+## savefig(pup, "eigmap-pca-u.pdf")
 
 # Projection onto a 2-dimensional subspace works poorly:
 lr2 = reshape(U2 * (U2' * tmp), nx, ny, :)
 plr = jim(lr2[:,:,1:88], "Projection onto 2-dimensional subspace")
-#src savefig(plr, "eigmap-pca-lr2.pdf")
+## savefig(plr, "eigmap-pca-lr2.pdf")
 
 # Nevertheless, the corresponding features
 # are reasonably correlated with width and angle.
@@ -315,7 +328,7 @@ pp = plot(
  ),
  plot_title = "First two PCA coefficients",
 )
-#src savefig(pp, "eigmap-pca-f.pdf")
+## savefig(pp, "eigmap-pca-f.pdf")
 
 #
 prompt()

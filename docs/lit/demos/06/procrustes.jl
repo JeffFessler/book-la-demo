@@ -11,7 +11,7 @@ using the Julia language.
 #=
 ## Setup
 
-Add the Julia packages that are need for this demo.
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -27,7 +27,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo

@@ -11,7 +11,8 @@ by
 #srcURL
 
 #=
-Add the Julia packages that are need for this demo.
+## Setup
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -20,6 +21,7 @@ if false
     import Pkg
     Pkg.add([
         "InteractiveUtils"
+        "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
@@ -27,13 +29,15 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: norm, I, diag, diagm, Diagonal
 using MIRTjim: jim, prompt
-using Plots; default(label="", markerstrokecolor=:auto, color=:blue)
+using Plots: default, plot, scatter
+default(); default(label="", markerstrokecolor=:auto, color=:blue, widen=:true)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -51,22 +55,22 @@ N = 16
 jim(Δ'; title="$(N-1) × $N finite-difference matrix Δ", color=:cividis)
 
 
-# ## Left singular vectors are cos functions
+# ## Right singular vectors are cos functions
 h = π / N
 v = k -> cos.(((1:N)*2 .- 1) * k * h / 2) / sqrt(N/2)
 
-plot(v(5), line=:stem, marker=:circle, title="5th left singular vector",
- xtick=1:N, ylims=(-0.5,0.5), yticks=(-1:1)*0.5)
+plot(v(5), line=:stem, marker=:circle, title="5th right singular vector",
+ xaxis = (L"i", (1,N), 1:N), yaxis=(L"v_5[i]", (-0.5,0.5), (-1:1)*0.5))
 
 #
 prompt()
 
 
-# ## Right singular vectors are -sin functions
+# ## Left singular vectors are -sin functions
 u = k -> -sin.((1:(N-1)) * k * h) / sqrt(N/2) # "derivative of cos is -sin"
 
-plot(u(5), line=:stem, marker=:circle, title="5th right singular vector",
- xtick=1:N, ylims=(-0.5,0.5), yticks=(-1:1)*0.5)
+plot(u(5), line=:stem, marker=:circle, title="5th left singular vector",
+ xaxis = (L"i", (1,N), 1:N-1), yaxis=(L"u_5[i]", (-0.5,0.5), (-1:1)*0.5))
 
 #
 prompt()
@@ -78,7 +82,7 @@ prompt()
 k = 1:(N-1)
 
 scatter(k, σ.(k), title="$(N-1) singular values (unordered)",
- color=:red, xtick=1:N, ylims=(0,2), yticks=0:2, ywiden=true)
+ color=:red, xaxis=(L"k", (1,N-1), 1:N-1), yaxis=(L"σ_k", (0,2), 0:2))
 
 #
 prompt()
@@ -90,8 +94,8 @@ U = hcat([u(k) for k in 1:(N-1)]...) # (N-1,N-1) DST
 Σ = Diagonal(σ.(1:(N-1))) # (N-1,N_1) Σ_N
 
 jim(
- jim(V', "U: Left singular vectors"; color=:cividis),
- jim(U', "V: Right singular vectors"; color=:cividis),
+ jim(U', "U: Left singular vectors"; color=:cividis),
+ jim(V', "V: Right singular vectors"; color=:cividis),
  jim(Σ', "Σ: Singular values"; color=:cividis),
 )
 

@@ -24,7 +24,7 @@ the original least-squares approach of
 #=
 ## Setup
 
-Add the Julia packages that are need for this demo.
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -45,7 +45,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Downloads: download
@@ -54,10 +54,11 @@ using LaTeXStrings
 using LinearAlgebra: Diagonal, svd, svdvals, rank, norm, pinv
 using MIRTjim: jim, prompt
 using NPZ: npzread
-using Plots: plot, scatter, scatter!, ylims!, cgrad, default, RGB, savefig
-    default(label="", markerstrokecolor=:auto),
+using Plots: gui, plot, scatter, scatter!, ylims!, cgrad, default, RGB, savefig
+using Plots.PlotMeasures: px
 using Printf: @sprintf
 using Random: seed!
+default(); default(label="", markerstrokecolor=:auto)
 
 
 # The following line is helpful when running this jl-file as a script;
@@ -119,7 +120,12 @@ end;
 
 # The three images are the x, y, and z components
 pn_gt = jim(gt_normal; title="Ground-truth normals", nrow=1,
-    xaxis=L"x", yaxis=L"y", size=(600,300), clim=(-1,1), colorbar_ticks=-1:1)
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+##  xaxis=L"x", yaxis=L"y",
+    size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
+## savefig(pn_gt, "photometric3_gt.pdf")
 
 
 #=
@@ -215,9 +221,11 @@ end;
 # Note the different shadings in the different images.
 # Obviously the bunny cannot "jump around" during the imaging...
 pd = jim(images; title="Images for $nlight different lighting directions",
-    caxis=("Intensity", (0,1), 0:1))
+##  xticks = false, yticks = false, tickfontsize=12, # book
+    caxis=("Intensity", (0,1), 0:1),
+)
 
-#src savefig(pd, "photometric3_data.pdf")
+## savefig(pd, "photometric3_data.pdf")
 
 
 #=
@@ -259,7 +267,7 @@ end
 #
 prompt()
 
-#src savefig(ps, "photometric3_svdvals.pdf")
+## savefig(ps, "photometric3_svdvals.pdf")
 
 
 
@@ -359,18 +367,28 @@ The accuracy is very good,
 except in the shadow regions.
 =#
 pn_hat = jim(normal3; nrow=1, title="Estimated normals",
-    clim=(-1,1), colorbar_ticks=-1:1)
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+##  xaxis=L"x", yaxis=L"y",
+    size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
+## savefig(pn_hat, "photometric3_hat.pdf")
 RGB255(args...) = RGB((args ./ 255)...)
 color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)])
+pn_d = jim(normal3 - gt_normal; nrow=1, title="Difference", color,
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+    xaxis=L"x", yaxis=L"y", size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
 pn = jim(
  pn_gt,
  pn_hat,
- jim(normal3 - gt_normal; nrow=1, title="Difference", color,
-     clim=(-1,1), colorbar_ticks=-1:1);
+ pn_d,
  layout=(3,1),
+ size=(550, 600),
 )
 
-#src savefig(pn, "photometric3_pn1.pdf")
+## savefig(pn, "photometric3_pn1.pdf")
 
 
 #=

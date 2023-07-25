@@ -1,8 +1,6 @@
 #=
 # [Spectral clustering](@id spectral-cluster)
 
-## Spectral clustering illustration
-
 This example illustrates
 [spectral clustering](https://en.wikipedia.org/wiki/Spectral_clustering)
 via normalized graph Laplacian
@@ -11,10 +9,10 @@ applied to hand-written digits.
 
 #srcURL
 
-# ### Setup
-
 #=
-Add the Julia packages that are need for this demo.
+## Setup
+
+Add the Julia packages used in this demo.
 Change `false` to `true` in the following code block
 if you are using any of the following packages for the first time.
 =#
@@ -35,7 +33,7 @@ if false
 end
 
 
-# Tell this Julia session to use the following packages for this example.
+# Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Clustering: kmeans
@@ -47,7 +45,7 @@ using MLDatasets: MNIST
 using Plots: default, gui, plot, scatter, plot!, scatter!
 using Random: seed!, randperm
 using StatsBase: mean
-default(markersize=5, markerstrokecolor=:auto, label="")
+default(); default(markersize=5, markerstrokecolor=:auto, label="")
 
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each figure is displayed.
@@ -84,7 +82,7 @@ end
 
 # Look at "unlabeled" image data for unsupervised clustering
 jim(data)
-#src savefig("spectral-cluster-data.pdf")
+## savefig("spectral-cluster-data.pdf")
 
 # Choose similarity function
 σ = 2^-2 # tuning parameter
