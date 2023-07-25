@@ -91,7 +91,7 @@ Documenter.makedocs(;
         "07 Special" => demos("07"),
 #       "08 Optimize" => demos("08"),
         "09 Complete" => demos("09"),
-        "11 RMT" => demos("11"),
+        "12 RMT" => demos("12"),
 #       "Other" => demos("other"),
     ],
 )
