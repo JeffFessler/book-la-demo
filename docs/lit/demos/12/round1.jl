@@ -20,7 +20,6 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
-        "DelimitedFiles"
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
@@ -160,7 +159,7 @@ end
 
 T = Float32
 Y = T.(X) # quantize
-Z = T.(Y - X) # quantization error
+Z = T.(Y - X); # quantization error
 
 # Examine histogram of floating point quantization errors
 ph = histogram(vec(Z), bins = (-40:40)/40 * eps(T))
