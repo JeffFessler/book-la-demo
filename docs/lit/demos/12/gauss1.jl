@@ -39,7 +39,7 @@ end
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: dot, rank, svd, svdvals
-using MIRTjim: prompt
+using MIRTjim: prompt, jim
 using Plots: default, gui, plot, plot!, scatter!, savefig, histogram
 using Plots.PlotMeasures: px
 using Random: seed!
@@ -112,6 +112,7 @@ if !@isdefined(ugrid)
         end
     end
 end
+
 
 #=
 ## σ1 plot
@@ -196,41 +197,109 @@ even for a modest matrix size of 100 × 100.
 =#
 
 # Marčenko–Pastur pdf
-function mpfun(x::Real, c::Real)
-    bm = 1 - sqrt(c)
-    bp = 1 + sqrt(c)
-    return (bm < x < bp) ?
+function mp_predict(x::Real, c::Real)
+    σm = 1 - sqrt(c)
+    σp = 1 + sqrt(c)
+    return (σm < x < σp) ?
         sqrt(4c - (x^2 - 1 - c)^2) / (π * c * x) : 0.
 end;
 
-ntrial = 150
-M = 100
-Nlist = [1, 4, 9] * M
-bins = range(0, 2, 101)
-pp = Vector{Any}(undef, 3)
-for (i, N) in enumerate(Nlist)
-    c = M//N
 
-    pred = mpfun.(bins, c)
+function mp_plot(M::Int, N::Int, rando::Function, name::String;
+    ntrial = 150,
+    bins = range(0, 2, 101),
+)
+    c = M//N
+    pred = mp_predict.(bins, c)
     pmax = ceil(maximum(pred), digits=1)
-    data = [svdvals(randn(M, N) / sqrt(N)) for _ in 1:ntrial]
+    data = [svdvals(rando()) for _ in 1:ntrial]
     data = reduce(hcat, data)
-    bm = 1 - sqrt(c)
-    bp = 1 + sqrt(c)
-    xticks = (c == 1) ? (0:2) : round.([0, bm, 1, bp, 2]; digits=2)
-    cstr = c == 1 ? L"c = 1" : latexstring("c = $(c.num)/$(c.den)")
+    σm = 1 - sqrt(c)
+    σp = 1 + sqrt(c)
+    xticks = (c == 1) ? (0:2) : round.([0, σm, 1, σp, 2]; digits=2)
+    cstr = c == 1 ? L"c = 1" : latexstring("c = $(c.num)/$(c.den) $name")
     histogram(vec(data); bins, linewidth=0,
      xaxis = (L"σ", (0, 2), xticks),
      yaxis = ("", (0, 2.0), [-1, 0, pmax]),
      label = "Empirical", normalize = :pdf,
      left_margin = 10px,
-     annotate = (0.2, 1.3, cstr),
+     annotate = (0.1, 1.5, cstr, :left),
     )
-    pp[i] = plot!(bins, pred, label="Predicted")
-end
+    return plot!(bins, pred, label="Predicted")
+end;
+
+M = 100
+Nlist = [1, 4, 9] * M
+fun1 = N -> mp_plot(M, N, () -> randn(M, N) / sqrt(N), "")
+pp = fun1.(Nlist)
 p3 = plot(pp...; layout=(3,1), size=(600,800))
 
 ## savefig(p3, "gauss-mp.pdf")
 ## savefig(pp[2], "gauss-mp-c4.pdf")
+
+#
+prompt()
+
+
+#=
+## Universality
+
+Repeat the previous experiment
+with a (zero-mean) Bernoulli distribution.
+=#
+
+M = 100
+N = 4 * M
+randb = () -> rand((-1,1), M, N) / sqrt(N) # Bernoulli, variance 1/N
+if false
+    tmp = randb()
+    @show mean(tmp) # check mean is 0
+    @show mean(abs2, tmp), 1/N # check variance is 1/N (exact!)
+end
+pb = mp_plot(M, N, randb, ", \\mathrm{Bernoulli}")
+
+#
+prompt()
+
+
+#=
+## Sparsity
+
+Universality can break down
+if the data is too sparse.
+Here we modify Bernoulli to be a categorical distribution
+with values
+``(-a, 0, a)``
+and probabilities
+``((1-p)/2, p, (1-p)/2)``,
+with ``a`` set so that the variance is ``1/N``.
+
+Here we set ``p`` so that most of the random matrix elements are zero.
+In this extremely sparse case,
+the Marčenko–Pastur distribution
+no longer applies.
+=#
+
+M = 100
+N = 4 * M
+p = (1 - 8/N) # just a few non-zero per row
+
+rands = () -> rand((-1,1), M, N) / sqrt(N * (1-p)) .* (rand(M,N) .> p)
+if false
+    tmp = rands()
+    @show count(==(0), tmp) / (M*N), p
+    @show mean(tmp) # check mean is 0
+    @show mean(abs2, tmp), 1/N # check variance is 1/N (exact!)
+end
+
+# Show a typical matrix realization to illustrate the sparsity
+pj = jim(rands()', "Very sparse 'Bernoulli' matrix";
+ size=(600,200), right_margin = 20px)
+
+# Now make the plot
+ps = mp_plot(M, N, rands, ", \\mathrm{Sparse},  p = $p")
+
+#
+prompt()
 
 include("../../../inc/reproduce.jl")
