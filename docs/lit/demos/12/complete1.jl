@@ -95,7 +95,7 @@ if !@isdefined(vgrid)
 
     ## Simulation parameters
     T = Float32
-    p_obs = 0.64
+    p_obs = 0.49
     Mlist = [30, 300]
     θmax = 4
     nθ = θmax * 4 + 1
@@ -103,7 +103,7 @@ if !@isdefined(vgrid)
     θlist = T.(range(0, θmax, nθ));
     labels = map(n -> latexstring("\$M = $n\$"), Mlist)
 
-    c = 0.5 # non-square matrix to test
+    c = 0.7 # non-square matrix to test
     c4 = c^0.25
     tmp = ((θ, M) -> trial2(nrep, θ, M, ceil(Int, M/c) #= N =#, p_obs)).(θlist, Mlist')
     σgrid = map(x -> x[1], tmp)
@@ -122,7 +122,7 @@ between theory and empirical results here.
 
 # σ1 plot
 colors = [:orange, :red]
-θfine = range(0, 2θmax, 50θmax + 1)
+θfine = range(0, 2θmax, 60θmax + 1)
 θmod = θfine .* sqrt(p_obs) # key modification from RMT!
 sbg(θ) = θ > c4 ? sqrt((1 + θ^2) * (c + θ^2)) / θ : 1 + √(c)
 stheory = sbg.(θmod) * sqrt(p_obs) # note modification!
@@ -132,12 +132,12 @@ ps = plot(θfine, stheory, color=:blue, label="theory",
     aspect_ratio = 1, legend = :topleft,
     xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (1,θmax), 1:θmax),
-    annotate = (4.1, 4.5, latexstring("c = $c"), :left),
+    annotate = (3.1, 3.6, latexstring("c = $c"), :left),
 )
 scatter!(θlist, σgrid[:,1], marker=:square, color=colors[1], label = labels[1])
 scatter!(θlist, σgrid[:,2], marker=:circle, color=colors[2], label = labels[2])
-tmp = latexstring("θ p, p = $p_obs")
-plot!(θlist, θlist * p_obs, label=tmp, color=:black, linewidth=2)
+plot!(θlist, θlist * p_obs, label=L"p \; θ", color=:black, linewidth=2,
+    annotate = (3.1, 3.3, latexstring("p = $p_obs"), :left))
 
 #
 prompt()
