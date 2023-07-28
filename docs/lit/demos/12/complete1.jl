@@ -1,9 +1,9 @@
 #=
 # [RMT and matrix completion](@id complete1)
 
-This example examines matrix completion
-(recovery of a low-rank matrix from data with missing measurements)
-with the lens of random matrix theory,
+This example examines noisy matrix completion
+(estimating a low-rank matrix from noisy data with missing measurements)
+through the lens of random matrix theory,
 using the Julia language.
 =#
 
@@ -34,7 +34,7 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: dot, rank, svd, svdvals
+using LinearAlgebra: Diagonal, dot, norm, rank, svd, svdvals
 using MIRTjim: prompt, jim
 using Plots: default, gui, plot, plot!, scatter!, savefig
 using Plots.PlotMeasures: px
@@ -68,8 +68,8 @@ function gen1(
     mask = rand(M, N) .<= p_obs
     u = rand((-1,+1), M) / T(sqrt(M)) # Bernoulli just for variety
     v = rand((-1,+1), N) / T(sqrt(N))
-##  u = randn(T, M) / T(sqrt(M))
-##  v = randn(T, N) / T(sqrt(N))
+    ## u = randn(T, M) / T(sqrt(M))
+    ## v = randn(T, N) / T(sqrt(N))
     X = θ * u * v' # theoretically rank-1 matrix
     Z = randn(M, N) / sqrt(N) # gaussian noise
     Y = mask .* (X + Z) # missing entries set to zero
@@ -182,5 +182,115 @@ if false
  pp = plot(ps, pu, pv; layout=(3,1), size=(600, 900))
 end
 
+
+#=
+## Image example
+
+Apply an SVD-based matrix completion approach
+to some noisy and incomplete image data.
+=#
+
+#=
+## Latent matrix
+Make a matrix that has low rank:
+=#
+tmp = [
+    zeros(1,20);
+    0 1 0 0 0 0 1 0 0 0 1 1 1 1 0 1 1 1 1 0;
+    0 1 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 1 0 0;
+    0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0;
+    0 0 1 1 1 1 0 0 0 0 1 1 0 0 0 0 0 1 1 0;
+    zeros(1,20)
+]';
+rank(tmp)
+
+# Turn it into an image:
+Xtrue = kron(10 .+ 80*tmp, ones(9,9))
+rtrue = rank(Xtrue)
+
+# plots with consistent size
+jim1 = (X ; kwargs...) -> jim(X; size = (700,300),
+ leftmargin = 10px, rightmargin = 10px, kwargs...);
+# and consistent display range
+jimc = (X ; kwargs...) -> jim1(X; clim=(0,99), kwargs...);
+# and with NRMSE label
+nrmse = (Xh) -> round(norm(Xh - Xtrue) / norm(Xtrue) * 100, digits=1)
+args = (xaxis = false, yaxis = false, colorbar = :none) # book
+args = (;) # web
+jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %",
+ args..., kwargs...,
+)
+title = latexstring("\$$(bm(:X))\$ : Latent image")
+pt = jimc(Xtrue; title, xlabel = " ", args...)
+
+
+#=
+## Noisy / incomplete data
+=#
+seed!(0)
+p_see = 0.8
+mask = rand(Float32, size(Xtrue)) .<= p_see
+sigZ = 6
+Mx,Nx = sort(collect(size(Xtrue)))
+Z = sigZ * randn(size(Xtrue)) # AWGN
+Y = mask .* (Xtrue + Z);
+
+title = latexstring("\$$(bm(:Y))\$ : Corrupted image matrix\n(missing pixels set to 0)")
+py = jime(Y ; title)
+
+# Show mask; count proportion of missing entries
+frac_nonzero = count(mask) / length(mask)
+title = latexstring("\$$(bm(:M))\$ : Locations of observed entries")
+pm = jim1(mask; title, args...,
+    xlabel = "sampled fraction = $(round(frac_nonzero * 100, digits=1))%")
+
+#=
+## Singular values.
+
+The first 3 singular values of ``Y``
+are well above the "noise floor" caused by masking,
+but, relative to those of ``X``
+they are scaled down by a factor of ``p`` as expected.
+
+We also show the critical value of ``σ``
+where the phase transition occurs.
+``σ₄(X)`` is just barely above the threshold,
+and ``σ₅(X)`` below the threshold,
+so we cannot expect a simple SVD approach
+to recover them.
+=#
+c_4 = (Mx / Nx)^(1/4)
+σcrit = sigZ^2 * sqrt(Nx) * c_4 / sqrt(p_see) # from RMT
+
+pg = plot([1, Nx], [1, 1] * σcrit, color=:cyan,
+ title="singular values",
+ xaxis=(L"k", (1, Mx), [1, 3, 6, Mx]),
+ yaxis=(L"σ_k",),
+ leftmargin = 15px, bottommargin = 20px, size = (600,350), widen = true,
+)
+sv_x = svdvals(Xtrue)
+sv_y = svdvals(Y)
+scatter!(pg, sv_x, color=:blue, label="Xtrue", marker=:utriangle)
+scatter!(pg, sv_y, color=:red, label="Y (data)", marker=:dtriangle)
+scatter!(pg, sv_y[1:3] / p_see, color=:green, label="Y/p", marker=:hex, alpha=0.8)
+
+#
+prompt()
+
+#=
+## Low-rank estimate
+
+A simple low-rank estimate of ``X``
+from the first few SVD components of ``Y``
+works just so-so here.
+A simple SVD approach recovers the first 3 components well,
+but cannot estimate the 4th and 5th components.
+=#
+r = 3
+U,s,V = svd(Y)
+s ./= p_see # correction for masking effect
+Xr = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]'
+title = latexstring("Rank $r approximation of data \$$(bm(:Y))\$")
+pr = jime(Xr ; title)
 
 include("../../../inc/reproduce.jl")
