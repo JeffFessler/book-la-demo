@@ -118,22 +118,19 @@ end
 ## σ1 plot
 Compare theory and empirical results.
 =#
+bm = s -> "\\mathbf{\\mathit{$s}}"
 colors = [:orange, :red]
 θfine = range(0, θmax, 50θmax + 1)
 sbg(θ) = θ > c4 ? sqrt((1 + θ^2) * (c + θ^2)) / θ : 1 + √(c)
 stheory = sbg.(θfine)
-ylabel = latexstring("\$σ_1(Y)\$ (Avg)") # of $nrep trials)")
+ylabel = latexstring("\$σ_1($(bm(:Y)))\$ (Avg)") # of $nrep trials)")
 ps = plot(θlist, θlist, color=:black, linewidth=2, aspect_ratio = 1,
     xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (1,θmax), 1:θmax),
 )
 plot!(θfine, stheory, color=:blue, label="theory")
-scatter!([θlist[1]], [σgrid[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!([θlist[1]], [σgrid[1,2]], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, σgrid[:,1], marker=:square, color=colors[1])
-plot!(θlist, σgrid[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, σgrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, σgrid[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
@@ -142,17 +139,13 @@ prompt()
 # u1 plot
 ubg(θ) = (θ > c4) ? 1 - c * (1 + θ^2) / (θ^2 * (θ^2 + c)) : 0
 utheory = ubg.(θfine)
-ylabel = latexstring("\$|⟨\\hat{u}, u⟩|^2\$ (Avg)")# of $nrep trials)")
+ylabel = latexstring("\$|⟨\\hat{$(bm(:u))}, $(bm(:u))⟩|^2\$ (Avg)")
 pu = plot(θfine, utheory, color=:blue, label="theory", left_margin = 10px,
     xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (0,1), 0:0.5:1),
 )
-scatter!([θlist[1]], [ugrid[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!([θlist[1]], [ugrid[1,2]], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, ugrid[:,1], marker=:square, color=colors[1])
-plot!(θlist, ugrid[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, ugrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, ugrid[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
@@ -163,25 +156,23 @@ pow = 1.0
 vbg(θ) = ( (θ > c^0.25) ? 1 - (c + θ^2) / (θ^2 * (θ^2 + 1)) : 0 )^pow
 vtheory = @. vbg(θfine)^pow
 vgr = vgrid.^pow
-ylabel = latexstring("\$|⟨\\hat{v}, v⟩|^2\$ (Avg)")# of $nrep trials)")
+ylabel = latexstring("\$|⟨\\hat{$(bm(:v))}, $(bm(:v))⟩|^2\$ (Avg)")
 pv = plot(θfine, vtheory, color=:blue, label="theory", left_margin = 10px,
     xaxis = (L"θ", (0,3), 0:3),
     yaxis = (ylabel, (0,1), 0:0.5:1),
 )
-scatter!([θlist[1]], [vgr[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!(θlist, vgr[:,2], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, vgr[:,1], marker=:square, color=colors[1])
-plot!(θlist, vgr[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, vgr[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, vgr[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
 
 
-## savefig(ps, "gauss1-s.pdf")
-## savefig(pu, "gauss1-u.pdf")
-## savefig(pv, "gauss1-v.pdf")
+if false
+    savefig(ps, "gauss1-s.pdf")
+    savefig(pu, "gauss1-u.pdf")
+    savefig(pv, "gauss1-v.pdf")
+end
 
 
 #=
@@ -297,7 +288,7 @@ pj = jim(rands()', "Very sparse 'Bernoulli' matrix";
  size=(600,200), right_margin = 20px)
 
 # Now make the plot
-ps = mp_plot(M, N, rands, ", \\mathrm{Sparse},  p = $p")
+pss = mp_plot(M, N, rands, ", \\mathrm{Sparse},  p = $p")
 
 #
 prompt()
