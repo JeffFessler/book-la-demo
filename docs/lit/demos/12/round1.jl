@@ -1,5 +1,5 @@
 #=
-# [Roundoff errors and rank](@id round1)
+# [Roundoff errors and rank](@id rmt-round1)
 
 This example examines the effects of
 [roundoff error](https://en.wikipedia.org/wiki/Round-off_error)

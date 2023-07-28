@@ -1,5 +1,5 @@
 #=
-# [Random matrix theory and rank-1 signal + noise](@id gauss1)
+# [Random matrix theory and rank-1 signal + noise](@id rmt-gauss1)
 
 This example compares results from random matrix theory
 with empirical results
@@ -61,16 +61,24 @@ isinteractive() && prompt(:prompt);
 ## Helper functions
 =#
 
-c = 1 # square matrices for simplicity
-c4 = c^0.25
-
-function rmt1(T::Type{<:Real}, n::Int, θ::Real) # one trial
-    m = n # c = 1
-    u = randn(T, m) / T(sqrt(m))
-    v = randn(T, n) / T(sqrt(n))
+# Generate random data for one trial:
+function gen1(
+    θ::Real = 3,
+    M::Int = 100,
+    N::Int = 2M,
+    T::Type{<:Real} = Float32,
+)
+    u = randn(T, M) / T(sqrt(M))
+    v = randn(T, N) / T(sqrt(N))
     X = θ * u * v' # theoretically rank-1 matrix
-    Z = randn(T, m, n) / T(sqrt(n))
+    Z = randn(T, M, N) / T(sqrt(N)) # gaussian noise
     Y = X + Z
+    return Y, u, v, θ
+end;
+
+# SVD results for 1 trial:
+function trial1(args...)
+    Y, u, v, θ = gen1(args...)
     fac = svd(Y)
     σ1 = fac.S[1]
     u1 = fac.U[:,1]
@@ -78,62 +86,54 @@ function rmt1(T::Type{<:Real}, n::Int, θ::Real) # one trial
     return [σ1, abs2(dot(u1, u)), abs2(dot(v1, v))]
 end;
 
-function rmt2(T::Type{<:Real}, n::Int, θ::Real, nrep::Int) # avg nrep trials
-    sum = [0, 0, 0]
-    for _ in 1:nrep
-        sum += rmt1(T, n, θ)
-    end
-    return sum / nrep
+# Average `nrep` trials:
+trial2(nrep::Int, args...) = mean((_) -> trial1(args...), 1:nrep);
+
+
+# SVD for each of multiple trials, for different SNRs and matrix sizes:
+if !@isdefined(vgrid)
+
+    ## Simulation parameters
+    T = Float32
+    Mlist = [30, 300]
+    θmax = 4
+    nθ = θmax * 4 + 1
+    nrep = 100
+    θlist = T.(range(0, θmax, nθ));
+    labels = map(n -> latexstring("\$M = $n\$"), Mlist)
+
+    c = 1 # square matrices for simplicity
+    c4 = c^0.25
+    tmp = ((θ, M) -> trial2(nrep, θ, M, ceil(Int, M/c) #= N =#)).(θlist, Mlist')
+    σgrid = map(x -> x[1], tmp)
+    ugrid = map(x -> x[2], tmp)
+    vgrid = map(x -> x[3], tmp)
 end;
-
-# Simulation parameters
-T = Float32
-nlist = [30, 300]
-nn = length(nlist)
-θmax = 3
-nθ = θmax * 4 + 1
-nrep = 100
-θlist = T.(range(0, θmax, nθ));
-
-# SVD for each of multiple trials, for different SNRs and matrix sizes
-if !@isdefined(ugrid)
-    labels = Vector{LaTeXString}(undef, nn)
-    σgrid = zeros(nθ, nn)
-    ugrid = zeros(nθ, nn)
-    vgrid = zeros(nθ, nn)
-    for (i_n, n) in enumerate(nlist) # sizes
-        labels[i_n] = latexstring("\$N = $n\$")
-        for (it, θ) in enumerate(θlist) # SNRs
-            ## @show i_n, it
-            tmp = rmt2(T, n, θ, nrep)
-            σgrid[it, i_n] = tmp[1]
-            ugrid[it, i_n] = tmp[2]
-            vgrid[it, i_n] = tmp[3]
-        end
-    end
-end
 
 
 #=
-## σ1 plot
-Compare theory and empirical results.
+## Results
+Compare theory predictions and empirical results.
+There is again notable agreement
+between theory and empirical results here.
 =#
+
+# σ1 plot
 colors = [:orange, :red]
-θfine = range(0, θmax, 50θmax + 1)
+θfine = range(0, θmax, 40θmax + 1)
 sbg(θ) = θ > c4 ? sqrt((1 + θ^2) * (c + θ^2)) / θ : 1 + √(c)
 stheory = sbg.(θfine)
-ylabel = latexstring("\$σ_1(Y)\$ (Avg)") # of $nrep trials)")
-ps = plot(θlist, θlist, color=:black, linewidth=2, aspect_ratio = 1,
+bm = s -> "\\mathbf{\\mathit{$s}}"
+ylabel = latexstring("\$σ_1($(bm(:Y)))\$ (Avg)")
+ps = plot(θfine, θfine, color=:black,
+    aspect_ratio = 1, linewidth = 2,
     xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (1,θmax), 1:θmax),
+    annotate = (2.1, 3.6, latexstring("c = $c"), :left),
 )
 plot!(θfine, stheory, color=:blue, label="theory")
-scatter!([θlist[1]], [σgrid[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!([θlist[1]], [σgrid[1,2]], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, σgrid[:,1], marker=:square, color=colors[1])
-plot!(θlist, σgrid[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, σgrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, σgrid[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
@@ -142,46 +142,40 @@ prompt()
 # u1 plot
 ubg(θ) = (θ > c4) ? 1 - c * (1 + θ^2) / (θ^2 * (θ^2 + c)) : 0
 utheory = ubg.(θfine)
-ylabel = latexstring("\$|⟨\\hat{u}, u⟩|^2\$ (Avg)")# of $nrep trials)")
-pu = plot(θfine, utheory, color=:blue, label="theory", left_margin = 10px,
+ylabel = latexstring("\$|⟨\\hat{$(bm(:u))}, $(bm(:u))⟩|^2\$ (Avg)")
+pu = plot(θfine, utheory, color=:blue, label="theory",
+    left_margin = 10px, legend = :bottomright,
     xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (0,1), 0:0.5:1),
 )
-scatter!([θlist[1]], [ugrid[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!([θlist[1]], [ugrid[1,2]], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, ugrid[:,1], marker=:square, color=colors[1])
-plot!(θlist, ugrid[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, ugrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, ugrid[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
 
 
 # v1 plot
-pow = 1.0
-vbg(θ) = ( (θ > c^0.25) ? 1 - (c + θ^2) / (θ^2 * (θ^2 + 1)) : 0 )^pow
-vtheory = @. vbg(θfine)^pow
-vgr = vgrid.^pow
-ylabel = latexstring("\$|⟨\\hat{v}, v⟩|^2\$ (Avg)")# of $nrep trials)")
-pv = plot(θfine, vtheory, color=:blue, label="theory", left_margin = 10px,
-    xaxis = (L"θ", (0,3), 0:3),
+vbg(θ) = (θ > c^0.25) ? 1 - (c + θ^2) / (θ^2 * (θ^2 + 1)) : 0
+vtheory = vbg.(θfine)
+ylabel = latexstring("\$|⟨\\hat{$(bm(:v))}, $(bm(:v))⟩|^2\$ (Avg)")
+pv = plot(θfine, vtheory, color=:blue, label="theory",
+    left_margin = 10px, legend = :bottomright,
+    xaxis = (L"θ", (0,θmax), 0:θmax),
     yaxis = (ylabel, (0,1), 0:0.5:1),
 )
-scatter!([θlist[1]], [vgr[1,1]], marker=:square, color=colors[1],
- label = labels[1])
-scatter!(θlist, vgr[:,2], marker=:circle, color=colors[2],
- label = labels[2])
-plot!(θlist, vgr[:,1], marker=:square, color=colors[1])
-plot!(θlist, vgr[:,2], marker=:circle, color=colors[2])
+scatter!(θlist, vgrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, vgrid[:,2], marker=:circle, color=colors[2], label = labels[2])
 
 #
 prompt()
 
 
-## savefig(ps, "gauss1-s.pdf")
-## savefig(pu, "gauss1-u.pdf")
-## savefig(pv, "gauss1-v.pdf")
+if false
+    savefig(ps, "gauss1-s.pdf")
+    savefig(pu, "gauss1-u.pdf")
+    savefig(pv, "gauss1-v.pdf")
+end
 
 
 #=
@@ -297,7 +291,7 @@ pj = jim(rands()', "Very sparse 'Bernoulli' matrix";
  size=(600,200), right_margin = 20px)
 
 # Now make the plot
-ps = mp_plot(M, N, rands, ", \\mathrm{Sparse},  p = $p")
+pss = mp_plot(M, N, rands, ", \\mathrm{Sparse},  p = $p")
 
 #
 prompt()

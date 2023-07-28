@@ -1,5 +1,5 @@
 #=
-# [RMT and matrix completion](@id complete1)
+# [RMT and matrix completion](@id rmt-complete1)
 
 This example examines noisy matrix completion
 (estimating a low-rank matrix from noisy data with missing measurements)
@@ -71,7 +71,7 @@ function gen1(
     ## u = randn(T, M) / T(sqrt(M))
     ## v = randn(T, N) / T(sqrt(N))
     X = θ * u * v' # theoretically rank-1 matrix
-    Z = randn(M, N) / sqrt(N) # gaussian noise
+    Z = randn(T, M, N) / T(sqrt(N)) # gaussian noise
     Y = mask .* (X + Z) # missing entries set to zero
     return Y, u, v, θ, p_obs
 end;
@@ -84,7 +84,7 @@ function trial1(args...)
     u1 = fac.U[:,1]
     v1 = fac.Vt[1,:]
     return [σ1, abs2(dot(u1, u)), abs2(dot(v1, v))]
-end
+end;
 
 # Average `nrep` trials:
 trial2(nrep::Int, args...) = mean((_) -> trial1(args...), 1:nrep);
@@ -110,7 +110,6 @@ if !@isdefined(vgrid)
     ugrid = map(x -> x[2], tmp)
     vgrid = map(x -> x[3], tmp)
 end;
-
 
 
 #=
