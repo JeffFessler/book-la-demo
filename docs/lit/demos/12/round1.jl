@@ -38,6 +38,7 @@ using LaTeXStrings
 using LinearAlgebra: rank, svd, svdvals, Diagonal, norm
 using MIRTjim: prompt
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig, histogram
+using Plots.PlotMeasures: px
 using StatsBase: mean, var
 default(markerstrokecolor=:auto, label="", widen=true, markersize = 6,
  tickfontsize = 12, labelfontsize = 18, legendfontsize = 18, linewidth=2,
@@ -138,10 +139,13 @@ plot!([1, n], [1,1] * log10(tol2),
 scatter!(1:n, log10.(s); label="singular values", alpha=0.8,
  xaxis = (L"k", (1,n), [2, n÷2, n]),
  yaxis = (L"\log_{10}(σ)", (-45, 2), [-40:20:0; -5]),
+ left_margin = 40px, bottom_margin = 20px,
+ annotate = (200, -8, Sys.MACHINE, :left),
 )
 
 #
 prompt()
+## savefig(p16, "round1-p16-$(Sys.MACHINE).pdf")
 
 
 #=
