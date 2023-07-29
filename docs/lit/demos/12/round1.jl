@@ -119,11 +119,17 @@ Here the matrix `Y` nicely fits the assumptions of RMT;
 there may be other situations
 with "worst case" data matrices
 where the conservative threshold is needed.
+
+We have noticed that this plot looks different
+on a Mac and on Linux with Julia 1.9.2.
+Apparently some differences in the SVD libraries
+on different systems can affect the details
+of the tiny singular values.
 =#
 s = svdvals(Y)
 tol = minimum(size(Y)) * eps(T) * s[1] # from rank()
 tol2 = sqrt(maximum(size(Y))) * eps(T) * s[1] # from RMT
-plot([1, n], [1,1] * log10(tol),
+p16 = plot([1, n], [1,1] * log10(tol),
  label="rank threshold: tol=$(round(tol,digits=2))",
  title = "Rank-1 matrix with $T elements",
 )
