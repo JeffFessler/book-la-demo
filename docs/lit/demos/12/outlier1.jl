@@ -103,7 +103,7 @@ pt = jimc(Xtrue; title, xlabel = " ", args...)
 function outliers(dims::Dims, τ::Real = 6, p::Real = 0.05)
     Z = τ * sign.(randn(dims)) .* (rand(dims...) .< p)
     return Z
-end
+end;
 
 
 #=
@@ -180,7 +180,7 @@ sv1 = [
 ## Non-iterative "robust" PCA
 
 Try simple outlier removal method.
-Look at the residual between ``Y`` and ``\hat{X}''
+Look at the residual between ``\hat{X}`` and ``Y``:
 =#
 residual = Xr - Y
 
@@ -192,11 +192,10 @@ pd = jim1(residual; clim = (-1,1) .* 7, cticks = (-1:1:1) * 8,
 badpixel = @. abs(residual) > 3
 jim1(badpixel)
 
-# Identify "bad" pixels with large residual errors
-Ymod = copy(Y)
 # Replace "bad" pixels with typical image values
+Ymod = copy(Y)
 Ymod[badpixel] .= mean(Y[.!badpixel])
-jime(Ymod) # already reduces NRMSE by a lot!
+jime(Ymod) # already reduces NRMSE by a lot compared to Y itself!
 
 # Examine singular values of modified ``Y``.
 # The noise floor is lower.
