@@ -141,7 +141,7 @@ is a `circshift` operator.
 ## Define circshift permutation map
 Pforw = shifts -> (x -> circshift(x, shifts))
 Pback = shifts -> (y -> circshift(y, -1 .* shifts))
-Pmap = shifts -> LinearMapAA(Pforw(shifts), Pback(shifts), (nx*ny,nx*ny); 
+Pmap = shifts -> LinearMapAA(Pforw(shifts), Pback(shifts), (nx*ny,nx*ny);
     odim=(nx,ny), idim=(nx,ny), T=Float32, prop=(; shifts, name="shift"))
 
 p12 = Pmap((1,2))
@@ -157,7 +157,7 @@ Pmaps = [Pmap((xs,ys)) for xs in shifts, ys in shifts]
 K = length(Pmaps)
 Tforw = x -> stack(k -> (W * (Pmaps[k] * x)) / sqrt(K), 1:K, dims=3)
 Tback = y -> sum(k -> Pmaps[k]' * (W' * y[:,:,k]), 1:K) / sqrt(K)
-Top = LinearMapAA(Tforw, Tback, (nx*ny*K, nx*ny); 
+Top = LinearMapAA(Tforw, Tback, (nx*ny*K, nx*ny);
     odim=(nx,ny,K), idim=(nx,ny), T=Float32, prop=(; name="Top"))
 
 ## Sanity check that the operator satisfies the tight frame condition:

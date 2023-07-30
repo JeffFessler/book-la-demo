@@ -292,4 +292,15 @@ Xr = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]'
 title = latexstring("Rank $r approximation of data \$$(bm(:Y))\$")
 pr = jime(Xr ; title)
 
+#=
+How well do the singular vectors match?
+The first 3 components match quite well:
+=#
+[sum(svd(Xr).U[:,1:r] .* svd(Xtrue).U[:,1:r], dims=1).^2;
+ sum(svd(Xr).V[:,1:r] .* svd(Xtrue).V[:,1:r], dims=1).^2]
+
+# The next 2 components match very poorly, as predicted:
+[sum(svd(Y).U[:,4:5]/p_see .* svd(Xtrue).U[:,4:5], dims=1).^2;
+ sum(svd(Y).V[:,4:5]/p_see .* svd(Xtrue).V[:,4:5], dims=1).^2]
+
 include("../../../inc/reproduce.jl")

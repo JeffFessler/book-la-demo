@@ -255,6 +255,10 @@ pb = mp_plot(M, N, randb, ", \\mathrm{Bernoulli}")
 #
 prompt()
 
+# Show a typical Bernoulli matrix realization
+pb0 = jim(randb()', "'Bernoulli' matrix"; clim = (-1,1) .* 0.05,
+ size=(600,200), right_margin = 30px, cticks=(-1:1)*0.05)
+
 
 #=
 ## Sparsity
@@ -287,7 +291,7 @@ if false
 end
 
 # Show a typical matrix realization to illustrate the sparsity
-pj = jim(rands()', "Very sparse 'Bernoulli' matrix";
+pb1 = jim(rands()', "Very sparse 'Bernoulli' matrix";
  size=(600,200), right_margin = 20px)
 
 # Now make the plot
