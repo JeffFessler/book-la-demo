@@ -21,7 +21,7 @@ To view the demos,
 click this button:
 [![demos][demos-img]][demos-url]
 
-[Table of contents](toc.htm)
+[Table of contents](https://htmlpreview.github.io/?https://github.com/JeffFessler/book-mmaj-demo/blob/main/toc.htm)
 
 <img src="docs/src/assets/logo.png" alt="logo" width="150">
 
