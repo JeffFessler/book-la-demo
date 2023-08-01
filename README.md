@@ -21,6 +21,7 @@ To view the demos,
 click this button:
 [![demos][demos-img]][demos-url]
 
+[Table of contents](toc.htm)
 
 <img src="docs/src/assets/logo.png" alt="logo" width="150">
 

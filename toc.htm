@@ -1,0 +1,111 @@
+<html>
+<head>
+    <style type='text/css'>
+        table.test { border-collapse: collapse; }
+        table.test td { border-bottom: 1px solid black; }
+        table.test td { border-right: 1px solid black; }
+        table.test td { border-left: 1px solid black; }
+        table.test td { border-top: 1px solid black; }
+        table.test td { align: center; }
+    </style>
+</head>
+<body>
+
+<h2>
+Matrix Methods and Applications:
+Algorithms for Signal Processing, Data Science and Machine Learning
+</h2>
+<h3>
+Jeffrey A. Fessler and Raj Rao Nadakuditi
+</h3>
+
+<b>
+Keywords and chapter abstracts
+</b>
+<p>
+
+<!--
+<table class="table table-bordered table-hover table-condensed">
+<table>
+-->
+<table class="test">
+<thead><tr><th title="Field #1">Chapter</th>
+<th title="Field #2">Title</th>
+<th title="Field #3">Keywords</th>
+<th title="Field #4">Abstract</th>
+</tr></thead>
+<tbody><tr>
+<td align="center">1</td>
+<td>Getting started</td>
+<td>vector spaces, fields, Julia, notation</td>
+<td>Introductory material including visual examples that motivate the rest of the book. It explains the book formatting, previews the notation, provides pointers for getting started with Julia, and briefly reviews fields and vector spaces. </td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td>Introduction to Matrices</td>
+<td>matrices, circulant, Toeplitz, transpose, Hermitian symmetry, dot product, outer product, matrix multiplication, invertibility, orthogonality, Euclidean norm, determinant, eigenvalues, trace</td>
+<td>This chapter reviews vectors and matrices and basic properties like shape, orthogonality, determinant, eigenvalues and trace. It also reviews operations like multiplication and transpose. These operations are used throughout the book and are pervasive in the literature. In short, arranging data into vectors and matrices allows one to apply powerful data analysis techniques over a wide spectrum of applications. Throughout, this chapter (and book) illustrates how the ideas are implemented in practice in Julia. </td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td>Matrix factorization: eigendecomposition and SVD</td>
+<td>eigenvectors, eigendecomposition, spectral theorem, normal matrices, diagonalization, Jordan form, singular values, singular vectors, SVD, spectral norm, positive semidefinite matrices, min vs argmin</td>
+<td>This chapter introduces matrix factorizations; somewhat like the reverse of matrix multiplication. It starts with the eigendecomposition of symmetric matrices, then generalizes to normal and asymmetric matrices. It introduces the basics of the singular value decomposition (SVD) of general matrices. It discusses a simple application of the SVD that uses the largest singular value of a matrix (the spectral norm), posed as an optimization problem, and then describes optimization problems related to eigenvalues and the smallest singular value. (The "real" SVD applications appear in subsequent chapters.) It discusses the special situations when one can relate the eigendecomposition and an SVD of a matrix, leading to the special class of positive (semi)definite matrices. Along the way there are quite a few small eigendecomposition and SVD examples. </td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td>Subspaces, rank and nearest-subspace classification</td>
+<td>subspaces, span, linear independent, basis, dimension, direct sum, orthogonal complement, linear maps, range, rank, unitary invariance, nullspace, four fundamental spaces, orthogonal bases, signal classification application, optimization preview: convex functions and sets</td>
+<td>An important operation in signal processing and machine learning is dimensionality reduction. There are many such methods, but the starting point is usually linear methods that map data to a lower-dimensional set called a subspace. When working with matrices, the notion of dimension is quantified by rank. This chapter reviews subspaces, span, dimension, rank and nullspace. These linear algebra concepts are crucial to thoroughly understanding the SVD, a primary tool for the rest of the book (and beyond). The chapter concludes with a machine learning application, signal classification by nearest subspace, that builds on all the concepts of the chapter. </td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td>Linear least-squares regression and binary classification</td>
+<td>linear equations, linear regression, linear least squares, gradients, normal equations, compact SVD, over-determined, under-determined, Moore-Penrose pseudoinverse, orthogonality principle, minimum norm solution, truncated SVD, Tikhonov regularization, ridge regression, frames, tight frames, Parseval tight frames, projection, orthogonal projections, empirical risk minimization, recursive least squares, binary classification</td>
+<td>Many applications require solving a system of linear equations A x = y for x given A and y. In practice, often there is no exact solution for x, so one seeks an approximate solution. This chapter focuses on least-squares formulations of this type of problem. It briefly reviews the "A x = y" case and then motivates the more general "A x ≈ y" cases. It then focuses on the over-determined case where A is tall, emphasizing the insights offered by the SVD of A. It introduces the pseudo inverse that is especially important for the under-determined case where A is wide. It describes alternative approaches for the under-determined case such as Tikhonov regularization. It introduces frames, a generalization of unitary matrices. It uses the SVD analysis of this chapter to describe projection onto a subspace, completing the subspace-based classification ideas introduced in the previous chapter, and also introduces a LS approach to binary classifier design. It introduces recursive least-squares (RLS) methods that are important for streaming data. </td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td>Norms and Procrustes problems</td>
+<td>vector norms, inner products, robust regression, matrix norms, operator norms, induced norms, nuclear norm, Ky-Fan norm, sub-multiplicativity, spectral radius, convergence of sequences, generalized inverse, Procrustes analysis</td>
+<td>Previous chapters considered the Euclidean norm the spectral norm and the Frobenius_norm. These three norms are particularly important, but there are many other important norms for applications. This chapter discusses vector norms, matrix norms, and operator norms, and uses these norms to analyze convergence of sequences. It revisits the Moore-Penrose pseudoinverse from a norm minimizing perspective. It applies norms to the orthogonal Procrustes problem and its extensions. </td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td>Low-rank approximation and multidimensional scaling</td>
+<td>low-rank approximation, Eckart-Young-Mirsky theorem, photometric stereo, multidimensional scaling, proximal operators, singular value hard thresholding, soft thresholding, Stein's unbiased risk estimate (SUR), OptShrink, linear autoencoders, PCA, subspace learning, classification, subspace tracking, streaming PCA</td>
+<td>In many applications, dimensionality reduction is important. Uses of dimensionality reduction include visualization, removing noise, and decreasing compute and memory requirements, such as for image compression. This chapter focuses on low-rank approximation of a matrix. There are theoretical models for why big matrices should be approximately low rank. Low-rank approximations are also used to compress large neural-network models to reduce computation and storage. The chapter begins with the classic approach to approximating a matrix by a low-rank matrix, using a non-convex formulation that has a remarkably simple SVD solution. It then applies this approach to the source localization application via the multidimensional scaling (MDS) method and to the photometric stereo application. It then turns to convex formulations of low-rank approximation based on proximal operators that involve singular value shrinkage. It discusses methods for choosing the rank of the approximation, and describes the optimal shrinkage method called OptShrink. It discusses related dimensionality-reduction methods including (linear) autoencoders and principal component analysis (PCA). It applies the methods to learning low-dimensionality subspaces from training data for subspace-based classification problems. Finally, it extends the method to streaming applications with time-varying data.   This chapter bridges the classical SVD tool with modern applications in signal processing and machine learning.</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td>Special matrices, Markov chains and PageRank</td>
+<td>companion matrices, Vandermonde matrices, circulant matrices, Toeplitz matrices, Kronecker sum, discrete Fourier transform, power iteration, nonnegative matrices, primitive matrices, weighted directed graphs, strongly connected graphs, irreducible matrices, Perron-Frobenius theorems, Markov chains, equilibrium distributions, PageRank application, graph Laplacian, spectral clustering, Laplacian eigenmaps</td>
+<td>This chapter contains topics related to matrices with special structures that arise in many applications. It discusses companion matrices that are a classic linear algebra topic. It constructs circulant matrices from a particular companion matrix and describes their signal processing applications. It discusses the closely related family of Toeplitz matrices. It describes the power iteration that is used later in the chapter for Markov chains. It discusses nonnegative matrices and their relationships to graphs, leading to the analysis of Markov chains. The chapter ends with two applications: Google's PageRank method and spectral clustering using graph Laplacians. </td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td>Optimization basics and logistic regression</td>
+<td>preconditioned gradient descent, matrix square root, convergence rate, step size, commuting matrices, preconditioned steepest descent, Lipschitz continuity, Nesterov's fast gradient method, momentum, optimized gradient method (OGM), gradient projection method, machine learning via logistic regression, stochastic gradient descent</td>
+<td>Many of the preceding chapters involved optimization formulations: linear LS, Procrustes, low-rank approximation, multidimensional scaling. All these have analytical solutions, like the pseudoinverse for minimum-norm LS problems and the truncated SVD for low-rank approximation. But often we need iterative optimization algorithms, e.g., if no closed-form minimizer exists, or if the analytical solution requires too much computation and/or memory, e.g., SVD for large problems. To solve an optimization problem via an iterative method, we start with some initial guess and then the algorithm produces a sequence that hopefully converges to a minimizer. This chapter describes the basics of gradient-based iterative optimization algorithms, including preconditioned gradient descent (PGD) for the linear LS problem. PGD uses a fixed step size, whereas preconditioned steepest descent (PSD) uses a line search to determine the step size. It then considers gradient descent and accelerated versions for general smooth convex functions. It applies GD to the machine learning application of binary classification via logistic regression. Finally, it summarizes stochastic gradient descent.  </td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td>Matrix completion and recommender systems</td>
+<td>matrix completion, recommender systems, Netflix problem, alternating projection, projection onto convex sets (POCS), majorize-minimize (MM) method, iterative soft thresholding algorithm (ISTA), debiasing methods, factorization approaches, matrix sensing, robust PCA, video foreground/background separation, nonnegative matrix factorization</td>
+<td>This chapter discusses the important problem of matrix completion, where we know some, but not all, elements of a matrix and want to "complete" the matrix by filling in the missing entries. This problem is ill posed in general because one could assign arbitrary values to the missing entries, unless one assumes some model for the matrix elements. The most common model is that the matrix is low-rank, an assumption that is reasonable in many applications. It defines the problem and describes an alternating projection approach for noiseless data. It discusses algorithms for the practical case of missing and noisy data. It extends the methods to consider the effects of outliers with the robust PCA method, and applies robust PCA to video foreground/background separation. It describes nonnegative matrix factorization, including the case of missing data.   A particularly famous application of low-rank matrix completion (LRMC) is the Netflix problem; this topic is also relevant to dynamic MR image reconstruction, and numerous other applications with missing data (incomplete observations). </td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td>Neural network models</td>
+<td>artificial neural networks, nonlinearity, fully connected models, perceptron model, multilayer perceptron, training, weight regularization, universal approximation theorem, convolutional neural network (CNN) models, rectified linear unit (ReLU), classification applications</td>
+<td>This chapter focuses on artificial neural network (NN) models and methods. Although these methods have been studied for over 50 years, they have skyrocketed in popularity in recent years due to accelerated training methods, wider availability of large training sets, and the use of deeper networks that have significantly improved performance for many classification and regression problems. Previous chapters emphasized subspace models. Subspaces are very useful for many applications, but they cannot model all types of signals. For example, images of a single person's face (in a given pose) under different lighting conditions lie in a subspace. However, a linear combination of face images from two different people will not look like a plausible face. Thus, all possible face images do not lie in a subspace. A manifold model is more plausible for images of faces (and hand-written digits) and other applications, and such models require more complicated algorithms. Entire books are devoted to NN methods. This chapter introduces the key methods, focusing on the role of matrices and nonlinear operations. It illustrates the benefits of nonlinearity, and describes the classic perceptron model for neurons and the multi-layer perceptron. It describes the basics of NN training and reviews convolutional neural network (CNN) models; such models are used widely in applications. </td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td>Random matrix theory, signal+noise matrices, and phase transitions</td>
+<td>random matrix theory, signal+noise matrices, phase transitions, roundoff error, Talagrand's concentration inequality, asymptotic properties of singular values and singular vectors, Marchenko-Pastur distribution, universality, outliers, matrix completion</td>
+<td>There are many applications of the low-rank signal-plus-noise model Y = X + Z where X is a low-rank matrix and Z is noise, such as denoising and dimensionality reduction. We are interested in the properties of the latent matrix X, such as its SVD, but all we are given is the noisy matrix Y. It is important to understand how the SVD components of Y relate to those of X in the presence of a random noise matrix Z. The field of random matrix theory (RMT) provides insights into those relationships and this chapter summarizes some key results from RMT that help explain how the noise in Z perturbs the SVD components, by analyzing limits as matrix dimensions increase. The perturbations considered include roundoff error, additive Gaussian noise, outliers, and missing data. This is the only chapter that requires familiarity with the distributions of continuous random variables and it provides many pointers to the literature on this modern topic, along with several demos that illustrate remarkable agreement between the asymptotic predictions and the empirical performance even for modest matrix sizes. </td>
+</tr>
+</tbody></table>
+</body>
+</html>
