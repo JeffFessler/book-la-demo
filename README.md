@@ -1,4 +1,4 @@
-# Demos for Matrix Methods in Julia book [WIP]
+# Demos for book "Matrix Methods and Applications"
 
 [![license][license-img]][license-url]
 [![demos][demos-img]][demos-url]
@@ -9,7 +9,8 @@ This repo contains demo code
 in the
 [Julia language](https://julialang.org/)
 to accompany the book
-"Matrix Methods and Applications in Julia"
+"Matrix Methods and Applications:
+Algorithms for Signal Processing, Data Science and Machine Learning"
 by Jeff Fessler
 and Raj Nadakuditi
 of the University of Michigan.
