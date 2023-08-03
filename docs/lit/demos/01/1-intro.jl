@@ -45,27 +45,34 @@ r = 3.0
 # Variables in Julia have a type:
 typeof(r)
 
+#
 i = 3
 
+#
 typeof(i)
 
+#
 c = 3. + 2im
 
+#
 typeof(c)
 
 # We can add, subtract, multiply and divide like usual:
 4. + 5
 
+#
 4. - 5
 
+#
 4. * 3
 
+#
 2. / 3
 
 # Dividing `Int` values with `/` produces a `Float`:
-#
 2/3
 
+#
 4/2
 
 # This is different from Python 2, but similar to Python 3.
@@ -104,8 +111,10 @@ This is a true **one**-dimensional array of **`Float64`** values.
 
 size(x) # returns a tuple
 
+#
 length(x)
 
+#
 x_ints = [1,3,2]
 
 # This is a **one**-dimensional array of **`Int64`** values.
@@ -113,6 +122,7 @@ x_ints = [1,3,2]
 
 size(x_ints)
 
+#
 length(x_ints)
 
 #=
@@ -132,6 +142,7 @@ A = [1.1 1.2 1.3; 2.1 2.2 2.3]
 
 size(A)
 
+#
 length(A)
 
 # Different from Matlab, `length` always returns the total number of elements.
@@ -150,6 +161,7 @@ zeros(2,3)
 
 ones(3)
 
+#
 ones(2,3)
 
 #=
@@ -162,8 +174,10 @@ Look at the following examples:
 using LinearAlgebra: I
 ones(3,3) - I
 
+#
 ones(2,2) * I
 
+#
 I(3)
 
 #=
@@ -207,6 +221,7 @@ A = \begin{bmatrix}
 
 x = randn(3)
 
+#
 A = randn(2,3)
 
 #=
@@ -222,14 +237,17 @@ not **0** (like in C or Python).
 
 A = [1.1 1.2 1.3; 2.1 2.2 2.3]
 
+#
 A[1,1]
 
+#
 A[1,2:3]
 
 # This row-slice is a one-dimensional slice (!) not a `1×2` matrix:
 
 A[1:2,1]
 
+#
 A[2,:]
 
 # Vector dot product:
@@ -237,8 +255,10 @@ A[2,:]
 x = randn(3)
 xdx = x'x
 
+#
 xdx = dot(x,x)
 
+#
 xdx = x'*x
 
 # Different from Matlab! The output is a scalar, **not** a `1×1` "matrix:"
@@ -261,7 +281,8 @@ A*B
 
 A = 10*reshape(1:6, 2, 3) + im * reshape(1:6, 2, 3)
 
-A' # conjugate transpose, could also use adjoint(A)
+# conjugate transpose, could also use `adjoint(A)`:
+A'
 
 #=
 For complex arrays, rarely do we need a non-conjugate transpose.
@@ -275,6 +296,7 @@ transpose(A) # essentially sets a flag about transpose without reordering data
 A = Diagonal(2:4)
 det(A)
 
+#
 B = randn(3,3)
 [det(A*B) det(A)*det(B)]
 
@@ -315,6 +337,7 @@ Ranges are different from (and much more efficient than) Matlab!
 
 myrange = -2:3
 
+#
 typeof(myrange)
 
 # Not an Array! But it can be indexed:
@@ -335,11 +358,13 @@ collect(myrange)
 
 srange = 1:-1:-5
 
+#
 typeof(srange)
 
-#lrange = linspace(0,10,6) # deprecated in 0.7
-lrange = range(0, step=2, stop=10)
+#
+lrange = range(0, 2, 10)
 
+#
 typeof(lrange)
 
 # Yet another option that looks the most like `linspace`:
@@ -353,7 +378,8 @@ LinRange(0,10,6)
 
 comp = [i+0.1 for i in 1:5]
 
-comp = [i+0.1*j for i in 1:5, j in 1:4]
+#
+comp = [10i + j for i in 1:5, j in 1:4]
 
 # ## Defining functions
 
@@ -374,17 +400,18 @@ f3 = (x,y) -> x+y
 
 # Functions can return multiple outputs:
 
-function f_mult(x,y)
+function f_mult(x, y)
     add = x + y
     sub = x - y
     return add, sub
-end
+end;
 
 f_mult(2,3)
 
 # The output is a `Tuple` of the outputs:
 out_tuple = f_mult(2,3)
 
+#
 typeof(out_tuple)
 
 
@@ -392,16 +419,20 @@ typeof(out_tuple)
 
 out1, out2 = f_mult(2,3)
 
+#
 out1
 
+#
 out2
 
 # Any function can be "vectorized" using "broadcast" capability:
 
 myquad = x -> (x+1)^2
 
+#
 myquad(1)
 
+#
 try
     myquad([1,2,3]) # this does not work!
 catch
@@ -466,14 +497,14 @@ y = x.^2
 plot(x, y, xlabel="x", ylabel="y", label="parabola")
 
 #=
-## heatmap
+## `heatmap`
 =#
 
 x = range(-2, 2, 101)
 y = range(-1.1, 1.1, 103)
 A = x.^2 .+ 30 * (y.^2)'
 F = exp.(-A)
-heatmap(x, y, F, transpose=true, # for F(x,y)
+p1 = heatmap(x, y, F', # for F(x,y)
     color=:grays, aspect_ratio=:equal, xlabel="x", ylabel="y", title="bump")
 
 #=
@@ -493,6 +524,7 @@ This is one many examples of how Julia exploits "multiple dispatch."
 
 plot(range(0,1,100), abs2, label="x^2")
 
+#
 heatmap(range(-2,2,102), range(-1.1,1.1,100),
     (x,y) -> exp(-x^2-30*y^2), aspect_ratio=1)
 
@@ -510,13 +542,16 @@ then be sure to enclose it in parentheses.
 x = 9
     - 7
 
+#
 y = 9 -
     7
 
+#
 z = (9
     - 7)
 
-@show (x,y,z);
+#
+(x,y,z)
 
 
 #=
@@ -532,7 +567,7 @@ Implement a function that takes two inputs and outputs them in reverse order.
 
 function template1(x, y)
     return (y, x)
-end
+end;
 
 template1(2, 3)
 
@@ -543,7 +578,7 @@ and email to `eecs551@autograder.eecs.umich.edu`.
 Make sure that:
 - All reasonable input types can be handled.
   Internally trying to convert a `Float64` to an `Int64` can produce `InexactError`
-- File extension is ".jl". Watch out for hidden extensions!
+- File extension is `.jl`. Watch out for hidden extensions!
 - File has just the Julia function.
 - (Your HW solutions can also contain `using` statements.)
 
@@ -559,8 +594,8 @@ function template2(x,y)
     return (y,x)
 end
 
-# You can see the docstring by using the `?` key:
+# You can see the docstring by using the `?` key or `@doc`:
 
 @doc template2
 
-## include("../../../inc/reproduce.jl")
+#src include("../../../inc/reproduce.jl")

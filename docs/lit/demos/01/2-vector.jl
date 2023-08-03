@@ -44,10 +44,13 @@ end
 
 a = 4 # this is a scalar
 
+#
 b1 = [4] # this is a Vector with one element
 
+#
 b2 = reshape([4], 1, 1) # here is a 1×1 Array
 
+#
 b3 = reshape([4], 1, 1, 1) # here is a 1×1×1 Array
 
 # In Julia the following all differ! (In Matlab they are the same.)
@@ -122,4 +125,4 @@ B
 A = zeros(2); B = copy(A); B[1] = 7; # B here uses different memory than A
 A # here it is unchanged
 
-## include("../../../inc/reproduce.jl")
+#src include("../../../inc/reproduce.jl")
