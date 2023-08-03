@@ -99,7 +99,7 @@ x = \begin{bmatrix} 1.0 \\ 3.5 \\ 2 \end{bmatrix}
 x = [1, 3.5, 2]
 
 #=
-Note the type: `Vector{Float64}`.  
+Note the type: `Vector{Float64}`.
 
 Having just one real number in the array sufficed
 for the array have all `Float64` elements.
@@ -152,7 +152,7 @@ length(A)
 zeros(3)
 
 # Different from Matlab!
-# Do not write `zeros(3,1)` because Julia has proper 1D arrays.  
+# Do not write `zeros(3,1)` because Julia has proper 1D arrays.
 # `zeros(3,1)` and `zeros(3)` are different!
 
 zeros(2,3)
@@ -166,7 +166,7 @@ ones(2,3)
 
 #=
 The "identity matrix" ``I``
-in Julia's `LinearAlgebra` package is sophisticated.  
+in Julia's `LinearAlgebra` package is sophisticated.
 
 Look at the following examples:
 =#
@@ -228,7 +228,7 @@ A = randn(2,3)
 ## Matrix operations
 
 Indexing is done with **square** brackets
-(like in C and Python, unlike Matlab). 
+(like in C and Python, unlike Matlab).
 
 Index and begins at **1**
 (like in Matlab and counting)
@@ -287,7 +287,7 @@ A'
 #=
 For complex arrays, rarely do we need a non-conjugate transpose.
 Usually we need `A'` instead.  But if we do:
-=# -
+=#
 
 transpose(A) # essentially sets a flag about transpose without reordering data
 
@@ -305,11 +305,12 @@ B = randn(3,3)
 A = ones(3,3)
 tr(A) # in Matlab would be "trace(A)"
 
-# More info here: https://docs.julialang.org/en/v1/manual/arrays
-
-# ### Important Aside: Getting help!
-
 #=
+More info in
+[Julia manual](https://docs.julialang.org/en/v1/manual/arrays)
+
+## Getting help
+
 Julia analogue of Matlab's `help` is `?`.
 
 Type `?pwd` to get help on the `pwd` function.
@@ -320,16 +321,14 @@ It does not work in this online documentation so we use `@doc` instead:
 @doc pwd
 
 #=
-Full documentation online: https://docs.julialang.org/en/stable/  
-Searching Julia's Github repo can
-sometimes also uncover folks with similar issues:
-https://github.com/JuliaLang/julia
-
-Also lots of neat talks on their Youtube Channel:
-https://www.youtube.com/user/JuliaLanguage  
-
-Here is an interesting one about vector transpose:
-https://www.youtube.com/watch?v=C2RO34b_oPM
+- [Full documentation](https://docs.julialang.org)
+- Searching Julia's
+  [Github repo](https://github.com/JuliaLang/julia
+  can sometimes also uncover similar issues.
+- Lots of neat talks on their
+  [YouTube channel](https://www.youtube.com/user/JuliaLanguage)
+- Here is an interesting one about
+  [vector transpose](https://www.youtube.com/watch?v=C2RO34b_oPM)
 
 ## Ranges
 Ranges are different from (and much more efficient than) Matlab!
@@ -425,7 +424,11 @@ out1
 #
 out2
 
-# Any function can be "vectorized" using "broadcast" capability:
+#=
+## Broadcast
+
+Any Julia function can be "vectorized" using "broadcast"
+=#
 
 myquad = x -> (x+1)^2
 
@@ -441,11 +444,11 @@ end
 
 #=
 This particular function was not designed
-to be applied to vector input arguments!  
+to be applied to vector input arguments!
 But it can be used with vectors (or arrays)
 by adding a `.` to tell Julia to apply it element-wise.
-This is called a "broadcast"
-https://docs.julialang.org/en/v1/manual/functions
+This is called 
+[broadcasting](https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting)
 =#
 
 myquad.([1,2,3])
@@ -477,11 +480,11 @@ mystring = 2 > 3 ? "2 is greater than 3" : "2 is not greater than 3"
 ## Plotting
 Suggested package: `Plots.jl` with its default `gr` backend.
 
-**Note:** Usually slower the first time you plot due to precompiling.  
+**Note:** Usually slower the first time you plot due to precompiling.
 You must `add` the "Plots" package first.
 In a regular Julia REPL you do this
 by using the `]` key to enter the package manager REPL,
-and then type `add Plots` then wait.  
+and then type `add Plots` then wait.
 
 In a Jupyter notebook,
 type `using Pkg` then `add Plots` and wait.
@@ -509,8 +512,9 @@ p1 = heatmap(x, y, F', # for F(x,y)
 
 #=
 Using the `jim` function the `MIRTjim.jl` package simplifies
-the display of 2D images, among other features. See:
-https://jefffessler.github.io/MIRTjim.jl/stable/examples/1-examples/
+the display of 2D images, among other features.
+See its
+[examples](https://jefffessler.github.io/MIRTjim.jl/stable/generated/examples/1-examples).
 =#
 
 
@@ -518,7 +522,7 @@ https://jefffessler.github.io/MIRTjim.jl/stable/examples/1-examples/
 ## A convenient way to plot functions
 
 `Plots.jl` allows you to pass in the domain and a function.
-It does the rest. :)  
+It does the rest. :)
 This is one many examples of how Julia exploits "multiple dispatch."
 =#
 
@@ -528,11 +532,14 @@ plot(range(0,1,100), abs2, label="x^2")
 heatmap(range(-2,2,102), range(-1.1,1.1,100),
     (x,y) -> exp(-x^2-30*y^2), aspect_ratio=1)
 
-# More info about plotting here: https://juliaplots.github.io
+#=
+More info about plotting at
+[https://juliaplots.github.io](https://juliaplots.github.io)
+=#
 
 
 #=
-## Caution about line breaks (newlines)  
+## Caution about line breaks (newlines)
 #
 If you want an expression to span multiple lines,
 then be sure to enclose it in parentheses.
@@ -582,7 +589,7 @@ Make sure that:
 - File has just the Julia function.
 - (Your HW solutions can also contain `using` statements.)
 
-An undocumented function is bad programming practice.  
+An undocumented function is bad programming practice.
 Julia supports `docstrings` for comments like this:
 =#
 
@@ -598,4 +605,4 @@ end
 
 @doc template2
 
-#src include("../../../inc/reproduce.jl")
+## include("../../../inc/reproduce.jl")
