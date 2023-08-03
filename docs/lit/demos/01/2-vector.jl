@@ -1,5 +1,5 @@
 #=
-# [Tutorial: Vectors in Julia](@id tutor-vector)
+# [Tutorial: Vectors in Julia](@id tutor-2-vector)
 
 Vectors in Julia differ a bit from Matlab.  
 In Matlab, everything is an array, including vectors (and even scalars).  
