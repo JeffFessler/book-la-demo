@@ -124,5 +124,3 @@ B
 
 A = zeros(2); B = copy(A); B[1] = 7; # B here uses different memory than A
 A # here it is unchanged
-
-#src include("../../../inc/reproduce.jl")

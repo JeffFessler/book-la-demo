@@ -1,7 +1,7 @@
 #=
 # [Tutorial: Julia Overview](@id tutor-1-intro)
 
-Julia overview for EECS 551
+Julia overview.
 
 - 2018-08-11 Julia 0.7.0 Jeff Fessler (based on 2017 version by David Hong)
 - 2019-01-20 Julia 1.0.3 and add note about line breaks
@@ -84,9 +84,9 @@ typeof(c)
 
 #=
 More info about numbers here:
-- https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers
-- https://docs.julialang.org/en/v1/manual/mathematical-operations
-- https://docs.julialang.org/en/v1/manual/complex-and-rational-numbers
+- [numbers](https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers)
+- [operations](https://docs.julialang.org/en/v1/manual/mathematical-operations)
+- [complex](https://docs.julialang.org/en/v1/manual/complex-and-rational-numbers)
 
 ## Vectors and matrices (i.e., arrays)
 
@@ -448,7 +448,7 @@ to be applied to vector input arguments!
 But it can be used with vectors (or arrays)
 by adding a `.` to tell Julia to apply it element-wise.
 This is called 
-[broadcasting](https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting)
+[broadcasting](https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting).
 =#
 
 myquad.([1,2,3])
@@ -457,7 +457,7 @@ myquad.([1,2,3])
 #=
 ## Conditionals
 
-If, Else, End, For
+`if` `else` `end` `for`
 
 Generally similar to Matlab.
 Optional use of `in` instead of `=` in the for loop.
@@ -519,7 +519,7 @@ See its
 
 
 #=
-## A convenient way to plot functions
+## Plotting functions
 
 `Plots.jl` allows you to pass in the domain and a function.
 It does the rest. :)
@@ -539,8 +539,8 @@ More info about plotting at
 
 
 #=
-## Caution about line breaks (newlines)
-#
+## Caution: line breaks (newlines)
+
 If you want an expression to span multiple lines,
 then be sure to enclose it in parentheses.
 =#
@@ -604,5 +604,3 @@ end
 # You can see the docstring by using the `?` key or `@doc`:
 
 @doc template2
-
-## include("../../../inc/reproduce.jl")
