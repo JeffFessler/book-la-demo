@@ -313,7 +313,7 @@ More info in
 
 Julia analogue of Matlab's `help` is `?`.
 
-Type `?pwd` to get help on the `pwd` function.
+Type `?pwd` in the REPL to get help on the `pwd` function.
 
 It does not work in this online documentation so we use `@doc` instead:
 =#
@@ -323,7 +323,7 @@ It does not work in this online documentation so we use `@doc` instead:
 #=
 - [Full documentation](https://docs.julialang.org)
 - Searching Julia's
-  [Github repo](https://github.com/JuliaLang/julia
+  [Github repo](https://github.com/JuliaLang/julia)
   can sometimes also uncover similar issues.
 - Lots of neat talks on their
   [YouTube channel](https://www.youtube.com/user/JuliaLanguage)
@@ -407,7 +407,7 @@ end;
 
 f_mult(2,3)
 
-# The output is a `Tuple` of the outputs:
+# The output is a `Tuple` of the returned values:
 out_tuple = f_mult(2,3)
 
 #
@@ -447,7 +447,7 @@ This particular function was not designed
 to be applied to vector input arguments!
 But it can be used with vectors (or arrays)
 by adding a `.` to tell Julia to apply it element-wise.
-This is called 
+This is called
 [broadcasting](https://docs.julialang.org/en/v1/manual/arrays/#Broadcasting).
 =#
 
@@ -465,9 +465,9 @@ Optional use of `in` instead of `=` in the for loop.
 
 for j in 1:3
     if j == 2
-        println("This is a two! ^^")
+        println("$j is a two! ^^")
     else
-        println("This is not a two. :(")
+        println("$j is not a two. :(")
     end
 end
 

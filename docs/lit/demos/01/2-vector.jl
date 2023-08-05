@@ -1,11 +1,11 @@
 #=
 # [Tutorial: Vectors in Julia](@id tutor-2-vector)
 
-Vectors in Julia differ a bit from Matlab.  
-In Matlab, everything is an array, including vectors (and even scalars).  
+Vectors in Julia differ a bit from Matlab.
+In Matlab, everything is an array, including vectors (and even scalars).
 In Julia, there are distinct data types
-for scalars, vectors, rowvectors, and 1D arrays.  
-This notebook illustrates the differences.  
+for scalars, vectors, rowvectors, and 1D arrays.
+This tutorial illustrates the differences.
 - Jeff Fessler, University of Michigan
 - 2017-07-24, original
 - 2020-08-05, Julia 1.5.0
@@ -15,34 +15,15 @@ This notebook illustrates the differences.
 
 #srcURL
 
-#=
-## Setup
-Add the Julia packages used in this demo.
-Change `false` to `true` in the following code block
-if you are using any of the following packages for the first time.
-=#
-
-if false
-    import Pkg
-    Pkg.add([
-        "InteractiveUtils"
-        "LinearAlgebra"
-    ])
-end
-
-
-# Tell Julia to use the following packages.
-# Run `Pkg.add()` in the preceding code block first, if needed.
-
-## using InteractiveUtils: versioninfo
-## using LinearAlgebra:
-
 
 #=
 ## Scalars, Vectors, Arrays
 =#
 
 a = 4 # this is a scalar
+
+#
+typeof(a)
 
 #
 b1 = [4] # this is a Vector with one element
