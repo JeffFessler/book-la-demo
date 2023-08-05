@@ -81,7 +81,7 @@ Documenter.makedocs(;
     strict = true, # fail on "warnings"
     pages = [
         "Home" => "index.md",
-#       "01 Intro" => demos("01"),
+        "01 Tutorials" => demos("01"),
         "02 Matrix" => demos("02"),
 #       "03 Eig/SVD" => demos("03"),
         "04 Subspaces" => demos("04"),
