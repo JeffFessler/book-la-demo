@@ -49,7 +49,7 @@ seed!(0)
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
 
-isinteractive() && prompt(:prompt);
+#todo isinteractive() && prompt(:prompt);
 
 
 
@@ -118,7 +118,7 @@ title = latexstring("\$$(bm(:Y))\$ : Corrupted image matrix\n(with outliers)")
 py = jime(Y ; title)
 
 #=
-## Singular values.
+## Singular values
 
 The first 3 singular values of ``Y``
 are well above the "noise floor" caused by outliers.
@@ -235,5 +235,144 @@ sv2 = [
 pa = jim(stack((Xtrue, abs.(Z), Y, Xr, 6*badpixel, Xh));
  ncol=1, size=(600, 900), clim=(0,9))
 
+
+
+#=
+## More outliers
+
+Now examine a case where the outliers are stronger
+and more prevalent.
+=#
+
+pout2 = 0.1
+Z = outliers((M,N), 50, pout2)
+Y = Xtrue + Z
+
+title = latexstring("\$$(bm(:Y))\$ : Corrupted image matrix\n(with $(100*pout2)% outliers)")
+py2 = jime(Y ; title)
+
+
+#=
+## Singular values
+
+Now all of the singular values of ``X``
+are below the "noise floor" caused by outliers.
+=#
+
+ps3 = plot(
+ title = "Singular values",
+ xaxis = (L"k", (1, N), [1, 3, 6, N]),
+ yaxis = (L"σ_k",),
+ leftmargin = 15px, bottommargin = 20px, size = (600,350), widen = true,
+)
+sv_x = svdvals(Xtrue)
+sv_y = svdvals(Y)
+scatter!(sv_y, color=:red, label="Y (data)", marker=:dtriangle)
+scatter!(sv_x, color=:blue, label="Xtrue", marker=:utriangle)
+
+#
+prompt()
+
+
+#=
+## Low-rank estimate
+
+A simple low-rank estimate of ``X``
+from the first few SVD components of ``Y``
+does not work at all now
+for such heavily corrupted data.
+=#
+
+r = 5
+U,s,V = svd(Y)
+Xr = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]'
+title = latexstring("Rank $r approximation of data \$$(bm(:Y))\$")
+pr2 = jime(Xr ; title)
+
+
+#=
+Examine singular vector estimates.
+The first one is so-so, the rest are useless.
+=#
+
+sv3 = [
+ sum(svd(Xr).U[:,1:r] .* svd(Xtrue).U[:,1:r], dims=1).^2
+ sum(svd(Xr).V[:,1:r] .* svd(Xtrue).V[:,1:r], dims=1).^2
+]
+
+
+#=
+## Non-iterative "robust" PCA
+
+Try simple outlier removal method.
+Look at the residual between ``\hat{X}`` and ``Y``:
+=#
+residual = Xr - Y
+
+pd2 = jim1(residual; clim = (-1,1) .* 70, cticks = (-1:1:1) * 8,
+ title = latexstring("Residual \$$(bm(:Y)) - \\hat{$(bm(:X))}\$"),
+)
+
+# Identify "bad" pixels with large residual errors.
+# This is a nonlinear operation:
+badpixel = @. abs(residual) > 10
+jim1(badpixel)
+
+# Replace "bad" pixels with typical image values
+Ymod = copy(Y)
+Ymod[badpixel] .= mean(Y[.!badpixel])
+jime(Ymod) # already reduces NRMSE by a lot compared to Y itself!
+
+# Examine singular values of modified ``Y``.
+# The noise floor is lower.
+ps4 = plot(
+ title = "Singular values",
+ xaxis = (L"k", (1, N), [1, 3, 6, N]),
+ yaxis = (L"σ_k",),
+ leftmargin = 15px, bottommargin = 20px, size = (600,350), widen = true,
+)
+sv_f = svdvals(Ymod)
+scatter!(sv_f, color=:green, label="Y (modified)", marker=:hex)
+scatter!(sv_x, color=:blue, label="Xtrue", marker=:utriangle)
+
+#
+prompt()
+
+
+#=
+Applying low-rank matrix approximation to modified ``Y``
+leads to lower NRMSE.
+=#
+Um,sm,Vm = svd(Ymod)
+Xh = Um[:,1:r] * Diagonal(sm[1:r]) * Vm[:,1:r]'
+title = latexstring("Rank $r approximation of modified data \$$(bm(:Y))\$")
+ph2 = jime(Xh ; title)
+
+#=
+Now the first three singular components are better recovered.
+=#
+sv4 = [
+ sum(svd(Xh).U[:,1:r] .* svd(Xtrue).U[:,1:r], dims=1).^2
+ sum(svd(Xh).V[:,1:r] .* svd(Xtrue).V[:,1:r], dims=1).^2
+]
+
+#=
+Let's try iterating to see if we can refine it.
+Indeed it does refine it,
+but at this point it starts to become an ad hoc iterative method.
+If we going to iterate,
+then it seems preferable to use a cost function
+like the one used in robust PCA,
+with a proper optimization algorithm.
+=#
+residual = Xh - Y
+badpixel = @. abs(residual) > 10
+jim1(badpixel)
+Ymod = copy(Y)
+Ymod[badpixel] .= mean(Y[.!badpixel])
+Um,sm,Vm = svd(Ymod)
+Xh3 = Um[:,1:r] * Diagonal(sm[1:r]) * Vm[:,1:r]'
+title = latexstring("Rank $r approximation of modified data \$$(bm(:Y))\$")
+ph3 = jime(Xh3 ; title)
 
 include("../../../inc/reproduce.jl")
