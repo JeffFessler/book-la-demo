@@ -49,7 +49,7 @@ seed!(0)
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each image is displayed.
 
-#todo isinteractive() && prompt(:prompt);
+isinteractive() && prompt(:prompt);
 
 
 
