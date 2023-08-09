@@ -10,10 +10,12 @@ in the
 [Julia language](https://julialang.org/)
 to accompany the book
 "Matrix Methods and Applications:
-Algorithms for Signal Processing, Data Science and Machine Learning"
+Algorithms for
+Data Science, Machine Learning and Signal Processing"
 by Jeff Fessler
 and Raj Nadakuditi
 of the University of Michigan.
+Forthcoming in 2024 from Cambridge University Press.
 
 The demos expect Julia 1.9 or above.
 
@@ -22,6 +24,7 @@ click this button:
 [![demos][demos-img]][demos-url]
 
 [Table of contents](https://htmlpreview.github.io/?https://github.com/JeffFessler/book-mmaj-demo/blob/main/toc.htm)
+of the book.
 
 <img src="docs/src/assets/logo.png" alt="logo" width="150">
 
@@ -53,8 +56,20 @@ Here are some examples of the kinds of figures generated in the demos.
 
 # Demo index
 
-- [2.1](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/dot)
-- [2.2](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/gauss2d)
+- [1.1 Julia overview](https://jefffessler.github.io/book-mmaj-demo/generated/demos/01/1-intro/)
+- [1.2 Julia vectors](https://jefffessler.github.io/book-mmaj-demo/generated/demos/01/2-vector/)
+
+- [2.1 dot product](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/dot)
+- [2.2 matrix-vector multiplication](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/mul-mat-vec)
+- [2.3 heatmap](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/gauss2d)
+
+- [4.1 SVD of finite differences](https://jefffessler.github.io/book-mmaj-demo/generated/demos/04/svd-diff)
+
+- [5.1 lifting for LS](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-lift)
+- [5.2 LS fits](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-fit1)
+- [5.3 LS cost functions](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-cost1)
+- [5.4 frames and image denoising with wavelets](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/frame-cycle)
+
 
 <!-- URLs -->
 [demos-img]: https://img.shields.io/badge/-Demos-blue
