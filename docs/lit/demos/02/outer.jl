@@ -81,15 +81,15 @@ function f3!(out, x, y)
     return out
 end
 
-# ### Data for timing tests
+# ## Data for timing tests
 M, N = 2^9, 2^10
 T = ComplexF32
 x = rand(T, M)
 y = rand(T, N)
 out = Matrix{T}(undef, M, N)
-out2 = Matrix{T}(undef, M, N)
+out2 = Matrix{T}(undef, M, N);
 
-# Verify the methods are equivalent
+# Verify the methods are equivalent:
 @assert f0!(out,x,y) ≈ f1!(out2,x,y) # why is ≈ needed here?!
 @assert f1!(out,x,y) == f2!(out2,x,y)
 @assert f1!(out,x,y) == f3!(out2,x,y)
@@ -101,20 +101,20 @@ out2 = Matrix{T}(undef, M, N)
 # x*y'
 t = @benchmark f0!($out, $x, $y)
 timeu = t -> btime(t, unit=:μs)
-t0 = timeu(t)
+t0 = timeu(t);
 
 # double loop
 t = @benchmark f1!($out, $x, $y)
 timeu = t -> btime(t, unit=:μs)
-t1 = timeu(t)
+t1 = timeu(t);
 
 # column times scalar
 t = @benchmark f2!($out, $x, $y)
-t2 = timeu(t)
+t2 = timeu(t);
 
 # threads
 t = @benchmark f3!($out, $x, $y)
-t3 = timeu(t)
+t3 = timeu(t);
 
 # Result summary:
 ["built-in" t0; "double" t1; "column" t2; "thread" t3]
@@ -135,7 +135,9 @@ Interestingly,
 the hand coded loop
 is faster than the built-in `mul!` for `x * y'`.
 
-The results in github's cloud may differ.
+The results in github's cloud may differ,
+because it uses different CPUs
+and typically only one thread.
 =#
 
 include("../../../inc/reproduce.jl")
