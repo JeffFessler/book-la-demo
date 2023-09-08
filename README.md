@@ -1,4 +1,4 @@
-# Demos for book "Matrix Methods and Applications"
+# Demos for book "Linear algebra for DS, ML and SP"
 
 [![license][license-img]][license-url]
 [![demos][demos-img]][demos-url]
@@ -9,9 +9,9 @@ This repo contains demo code
 in the
 [Julia language](https://julialang.org/)
 to accompany the book
-"Matrix Methods and Applications:
-Algorithms for
+"Linear Algebra for
 Data Science, Machine Learning and Signal Processing"
+(formerly known as "Matrix Methods and Applications")
 by Jeff Fessler
 and Raj Nadakuditi
 of the University of Michigan.
