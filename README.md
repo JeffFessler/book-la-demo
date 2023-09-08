@@ -59,10 +59,11 @@ Here are some examples of the kinds of figures generated in the demos.
 - [1.1 Julia overview](https://jefffessler.github.io/book-mmaj-demo/generated/demos/01/1-intro/)
 - [1.2 Julia vectors](https://jefffessler.github.io/book-mmaj-demo/generated/demos/01/2-vector/)
 
-- [2.1 dot product](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/dot)
-- [2.2 outer product](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/outer)
-- [2.3 matrix-vector multiplication](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/mul-mat-vec)
-- [2.4 heatmap](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/gauss2d)
+- [2.1 convolution](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/conv-mat)
+- [2.2 dot product](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/dot)
+- [2.3 outer product](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/outer)
+- [2.4 matrix-vector multiplication](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/mul-mat-vec)
+- [2.5 heatmap](https://jefffessler.github.io/book-mmaj-demo/generated/demos/02/gauss2d)
 
 - [4.1 SVD of finite differences](https://jefffessler.github.io/book-mmaj-demo/generated/demos/04/svd-diff)
 
