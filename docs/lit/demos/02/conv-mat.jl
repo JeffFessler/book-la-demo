@@ -91,8 +91,10 @@ gui()
 
 Define convolution matrices
 for various end conditions.
-The names of the conditions
+The names of the conditions below
 match those of Matlab's `conv` function.
+Submit a github issue
+to request elaboration on these cases.
 =#
 
 N = 10 # input signal length
@@ -101,7 +103,8 @@ kernel[-hp:hp] = psf;
 
 
 #=
-### `'full'` for zero end conditions
+### `'full'`
+for zero end conditions
 where the output signal length is
 ``M = N + K - 1``.
 =#
@@ -112,7 +115,8 @@ size(Az)
 
 
 #=
-### 'circ' for periodic end conditions
+### `'circ'`
+for periodic end conditions
 for which ``M = N``.
 =#
 Ac = LinearMapAA(x -> ifft(fft(x) .* fft(kernel)), (N,N) ; T = ComplexF64)
@@ -122,7 +126,8 @@ size(Ac)
 
 
 #=
-### 'same' for matching input and output signal lengths,
+### `'same'`
+for matching input and output signal lengths,
 so ``M = N``.
 =#
 As = Az[hp .+ (1:N),:]
@@ -130,7 +135,7 @@ size(As)
 
 
 #=
-### 'valid'
+### `'valid'`
 where output is defined only for samples
 where the shifted impulse overlaps the input signal,
 for which ``M = N-K+1``.
@@ -161,6 +166,7 @@ p4 = plot(pz, pv, ps, pc; size=(1000,200), layout=(1,4), left_margin = 20px)
 ## savefig(ps, "a-same.pdf")
 ## savefig(pc, "a-circ.pdf")
 
+#
 l = @layout [
  a{0.3w} b{0.3w}
  c{0.3w} d{0.3w}
