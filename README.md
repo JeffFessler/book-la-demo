@@ -23,7 +23,7 @@ To view the demos,
 click this button:
 [![demos][demos-img]][demos-url]
 
-[Table of contents](https://htmlpreview.github.io/?https://github.com/JeffFessler/book-mmaj-demo/blob/main/toc.htm)
+[![Table of contents][toc-img]][toc-url]
 of the book.
 
 <img src="docs/src/assets/logo.png" alt="logo" width="150">
@@ -99,6 +99,8 @@ Here are some examples of the kinds of figures generated in the demos.
 
 
 <!-- URLs -->
+[toc-img]: https://img.shields.io/badge/-Table_of_Contents-purple
+[toc-url]: https://htmlpreview.github.io/?https://github.com/JeffFessler/book-mmaj-demo/blob/main/toc.htm
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-mmaj-demo
 [license-img]: https://licensebuttons.net/l/by-nc-nd/3.0/88x31.png
