@@ -51,15 +51,15 @@ isinteractive() && prompt(:prompt);
 f(x) = 0.5 * exp(1.8 * x) # nonlinear function
 
 seed!(0) # seed rng
-M = 16 # how many data points
+M = 12 # how many data points
 xm = sort(2*rand(M)) # M random sample locations
 z = 0.5 * randn(M) # noise
 y = f.(xm) + z # noisy samples
 
 x0 = range(0, 2, 501) # fine sampling for showing curve
 xaxis = (L"x", (0,2), 0:2)
-yaxis = (L"y", (-1, 19), 0:4:20)
-p0 = scatter(xm, y, color=:black, label="y (noisy data)"; xaxis, yaxis)
+yaxis = (L"y", (-2, 21), 0:4:20)
+p0 = scatter(xm, y, color=:black, label="y (noisy data), M = $M"; xaxis, yaxis)
 plot!(x0, f.(x0), color=:blue, label="f(x) : latent function", legend=:topleft)
 
 #
@@ -73,7 +73,7 @@ p1 = deepcopy(p0)
 degs = [1, 3, 9]
 for deg in degs
     pol = fit(xm, y, deg)
-    plot!(p1, x0, pol.(x0), label = "$deg")
+    plot!(p1, x0, pol.(x0), label = "degree $deg")
 end
 p1
 
@@ -82,16 +82,49 @@ prompt()
 ## savefig(p1, "ls-cv-fits.pdf")
 
 
+# ## Over-fitting to noisy data
+
+degs = 0:(M-1)
+fits = zeros(length(degs))
+accs = zeros(length(degs))
+for (id, deg) in enumerate(degs)
+    pol = fit(xm, y, deg)
+    fits[id] = sqrt(sum(abs2, pol.(xm) - y))
+    accs[id] = sqrt(sum(abs2, pol.(xm) - f.(xm)))
+end
+pf = scatter(degs, fits; color=:red,
+ xaxis = ("degree", extrema(degs), [0,3,11]),
+ yaxis = ("fits", (0,19), ),
+ label = (L"‖ A_d \hat{x}_d - y ‖_2"),
+)
+scatter!(degs, accs;
+ label = L"‖ A_d \hat{x}_d - f ‖_2", marker=:uptri, color=:blue)
+
+prompt()
+## savefig(pf, "ls-cv-over.pdf")
+
+
 # ## Illustrate uncertainty
 
+colors = [:red, :orange, :yellow, :green, :cyan, :blue, :grey, :black]
 pols = Vector{Any}(undef, M)
 deg1 = 8
+p2 = plot(; xaxis, yaxis, title = "degree = $deg1",
+ legend=:top)
+scatter!(p2, [-9], [-9]; marker=:square, color=:gray, label="prediction")
+scatter!(p2, [-9], [-9]; marker=:circle, color=:black, label="data")
 for m in 1:M
     mm = (1:M)[[1:(m-1); (m+1):M]]
     pols[m] = fit(xm[mm], y[mm], deg1)
+    color = colors[mod1(m, length(colors))]
+    plot!(p2, x0, pols[m].(x0); xaxis, yaxis, title = "degree = $deg1",
+     color,
+    )
+    pred = pols[m](xm[m])
+    scatter!([xm[m]], [pred]; color, marker=:square)
+    scatter!([xm[m]], [y[m]]; color=:black)
+    plot!([1, 1]*xm[m], [y[m], pred]; color, line=:dash)
 end
-tmp = hcat([p.(x0) for p in pols]...)
-p2 = plot(x0, tmp; xaxis, yaxis, title = "degree = $deg1")
 
 #
 prompt()
@@ -111,10 +144,13 @@ for (id, deg) in enumerate(degs)
 end
 tmp = sqrt.(sum(abs2, errs, dims=2))
 
-p3 = scatter(degs, tmp,
+p3 = scatter(degs, tmp; legend = :top,
  xlabel = "degree",
  ylabel = "error",
+ label = "Cross-validation loss",
 )
+scatter!(p3, degs, accs;
+ label = L"‖ A_d \hat{x}_d - f ‖_2", marker=:uptri, color=:blue)
 
 #
 prompt()
