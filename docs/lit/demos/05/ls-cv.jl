@@ -100,6 +100,7 @@ pf = scatter(degs, fits; color=:red,
 scatter!(degs, accs;
  label = L"‖ A_d \hat{x}_d - f ‖_2", marker=:uptri, color=:blue)
 
+#
 prompt()
 ## savefig(pf, "ls-cv-over.pdf")
 
@@ -125,6 +126,7 @@ for m in 1:M
     scatter!([xm[m]], [y[m]]; color=:black)
     plot!([1, 1]*xm[m], [y[m], pred]; color, line=:dash)
 end
+p2
 
 #
 prompt()
