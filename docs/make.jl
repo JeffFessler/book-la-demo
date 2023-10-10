@@ -78,7 +78,6 @@ Documenter.makedocs(;
     authors = "Jeff Fessler and contributors",
     sitename = "Demos",
     format,
-    strict = true, # fail on "warnings"
     pages = [
         "Home" => "index.md",
         "01 Tutorials" => demos("01"),
