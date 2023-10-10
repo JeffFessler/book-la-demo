@@ -91,7 +91,7 @@ for m in 1:M
     pols[m] = fit(xm[mm], y[mm], deg1)
 end
 tmp = hcat([p.(x0) for p in pols]...)
-p2 = plot(x0, tmp; xaxis, yaxis)
+p2 = plot(x0, tmp; xaxis, yaxis, title = "degree = $deg1")
 
 #
 prompt()
