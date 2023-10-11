@@ -71,6 +71,7 @@ Here are some examples of the kinds of figures generated in the demos.
 - [5.2 LS fits](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-fit1)
 - [5.3 LS cost functions](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-cost1)
 - [5.4 frames and image denoising with wavelets](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/frame-cycle)
+- [5.5 cross validation](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-cv)
 
 - [6.1 robust regression](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/robust-regress.jl)
 - [6.2 Procrustes](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/procrustes.jl)
