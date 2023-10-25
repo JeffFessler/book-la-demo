@@ -73,30 +73,30 @@ Here are some examples of the kinds of figures generated in the demos.
 - [5.4 frames and image denoising with wavelets](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/frame-cycle)
 - [5.5 cross validation](https://jefffessler.github.io/book-mmaj-demo/generated/demos/05/ls-cv)
 
-- [6.1 robust regression](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/robust-regress.jl)
-- [6.2 Procrustes](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/procrustes.jl)
+- [6.1 robust regression](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/robust-regress)
+- [6.2 Procrustes](https://jefffessler.github.io/book-mmaj-demo/generated/demos/06/procrustes)
 
-- [7.1 Rank-1](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/rank1.jl)
-- [7.2 Photometric stereo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/photometric3.jl)
-- [7.3 Source localization via MDS](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/source-local.jl)
-- [7.4 SURE](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/lr-sure.jl)
-- [7.5 PCA](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/pca.jl)
+- [7.1 Rank-1](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/rank1)
+- [7.2 Photometric stereo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/photometric3)
+- [7.3 Source localization via MDS](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/source-local)
+- [7.4 SURE](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/lr-sure)
+- [7.5 PCA](https://jefffessler.github.io/book-mmaj-demo/generated/demos/07/pca)
 
-- [8.1 Spectral clustering](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/spectral-cluster.jl)
-- [8.2 Laplacian eigenmaps](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/eigmap.jl)
+- [8.1 Spectral clustering](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/spectral-cluster)
+- [8.2 Laplacian eigenmaps](https://jefffessler.github.io/book-mmaj-demo/generated/demos/08/eigmap)
 
-- [9.1 Preconditioning](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/precon1.jl)
-- [9.2 Binary classification](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/class01.jl)
+- [9.1 Preconditioning](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/precon1)
+- [9.2 Binary classification](https://jefffessler.github.io/book-mmaj-demo/generated/demos/09/class01)
 
-- [10.1 Matrix completion](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/lrmc-m.jl)
-- [10.2 Matrix completion](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/lrmc3.jl)
-- [10.3 Video foreground/background separation](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/foreback.jl)
-- [10.4 Nonnegative matrix factorization](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/nmf.jl)
+- [10.1 Matrix completion](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/lrmc-m)
+- [10.2 Matrix completion](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/lrmc3)
+- [10.3 Video foreground/background separation](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/foreback)
+- [10.4 Nonnegative matrix factorization](https://jefffessler.github.io/book-mmaj-demo/generated/demos/10/nmf)
 
-- [12.1 RMT and roundoff](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/round1.jl)
-- [12.2 RMT and Noise](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/gauss1.jl)
-- [12.3 Outliers](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/outlier1.jl)
-- [12.4 Missing data](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/complete1.jl)
+- [12.1 RMT and roundoff](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/round1)
+- [12.2 RMT and Noise](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/gauss1)
+- [12.3 Outliers](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/outlier1)
+- [12.4 Missing data](https://jefffessler.github.io/book-mmaj-demo/generated/demos/12/complete1)
 
 
 <!-- URLs -->
