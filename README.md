@@ -26,7 +26,7 @@ click this button:
 [![Table of contents][toc-img]][toc-url]
 of the book.
 
-<img src="docs/src/assets/logo.png" alt="logo" width="150">
+<img src="docs/src/assets/cover-front-down2.png" alt="logo" width="150">
 
 
 ## Samples
