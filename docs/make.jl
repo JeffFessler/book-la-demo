@@ -1,6 +1,6 @@
 execute = isempty(ARGS) || ARGS[1] == "run"
 
-org, reps = :JeffFessler, "book-mmaj-demo"
+org, reps = :JeffFessler, "book-la-demo"
 import Documenter
 import Literate
 

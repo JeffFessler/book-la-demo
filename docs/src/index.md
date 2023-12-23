@@ -3,7 +3,7 @@
 
 ## Overview
 
-[https://github.com/JeffFessler/book-mmaj-demo](https://github.com/JeffFessler/book-mmaj-demo)
+[https://github.com/JeffFessler/book-la-demo](https://github.com/JeffFessler/book-la-demo)
 
 Demos
 in the
@@ -94,11 +94,11 @@ that generated any of these examples.
 
 For example,
 the code for the
-[SVD demo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/04/svd-diff)
+[SVD demo](https://jefffessler.github.io/book-la-demo/generated/demos/04/svd-diff)
 is at
-[this url](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl).
+[this url](https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/04/svd-diff.jl).
 After downloading such a file such as
-[svd-demo.jl](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl),
+[svd-demo.jl](https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/04/svd-diff.jl),
 you can run it
 by typing
 `include("svd-demo.jl")`
