@@ -72,7 +72,7 @@ isinteractive() && prompt(:prompt);
 
 # Load raw data
 if !@isdefined(y1)
-    url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
+    url = "https://github.com/JeffFessler/book-la-data/raw/main/data/bmc-12/111-240-320-100.mp4"
     tmp = download(url)
     y1 = VideoIO.load(tmp) # 100 frames of size (240,320)
     if !isinteractive() # downsample for github cloud
