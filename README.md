@@ -84,6 +84,7 @@ Here are some examples of the kinds of figures generated in the demos.
 
 - [8.1 Spectral clustering](https://jefffessler.github.io/book-la-demo/generated/demos/08/spectral-cluster)
 - [8.2 Laplacian eigenmaps](https://jefffessler.github.io/book-la-demo/generated/demos/08/eigmap)
+- [8.3 Kronecker sum](https://jefffessler.github.io/book-la-demo/generated/demos/08/kron-sum-inv)
 
 - [9.1 Preconditioning](https://jefffessler.github.io/book-la-demo/generated/demos/09/precon1)
 - [9.2 Binary classification](https://jefffessler.github.io/book-la-demo/generated/demos/09/class01)
