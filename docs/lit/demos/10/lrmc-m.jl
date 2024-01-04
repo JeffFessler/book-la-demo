@@ -461,7 +461,7 @@ reg_fs = 120
 xh_fs = fista_schatten(Y, M, reg_fs, niter)
 
 p2 = jime(xh_fs; title="FISTA for Schatten p=1/2, $niter iterations")
-#savefig("schatten_complete_fs150_sp.pdf")
+## savefig("schatten_complete_fs150_sp.pdf")
 
 
 # See if the Schatten FISTA result is "low rank"
@@ -478,11 +478,11 @@ prompt()
 
 # error image for nuclear norm
 p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X", clim=(-80,80))
-#savefig("schatten_complete_fs300_nn_err.pdf")
+## savefig("schatten_complete_fs300_nn_err.pdf")
 
 # error image for schatten p=1/2
 p4 = jimc(xh_fs - Xtrue; title = "FISTA Schatten p=1/2 'Norm': Xh-X", clim=(-80,80))
-#savefig("schatten_complete_fs150_sp_err.pdf")
+## savefig("schatten_complete_fs150_sp_err.pdf")
 
 
 include("../../../inc/reproduce.jl")

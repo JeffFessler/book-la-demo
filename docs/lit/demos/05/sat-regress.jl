@@ -44,7 +44,6 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Plots: default, gui, scatter, savefig
-#using Plots.PlotMeasures: px
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
  markersize = 6, tickfontsize=14, labelfontsize = 18, legendfontsize=16)
 
