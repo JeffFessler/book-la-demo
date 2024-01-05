@@ -93,7 +93,6 @@ jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %",
 )
 title = latexstring("\$\\mathbf{\\mathit{X}}\$ : Latent image")
 pt = jimc(Xtrue; title, xlabel = " ", args...)
-
 ## savefig(pt, "mc_ap_x.pdf")
 
 
@@ -115,10 +114,10 @@ py = jime(Y ; title)
 * C 50-59
 * D 60-70
 * E 71-200
-=#
 
-#src rank(Y)
-#src svdvals(Y)
+rank(Y)
+svdvals(Y)
+=#
 
 # Show mask, count proportion of missing entries
 frac_nonzero = count(M) / length(M)
@@ -181,10 +180,10 @@ pa = jime(Xr ; title)
 * C 50-59
 * D 60-70
 * E 71-200
-=#
 
-## rank(Xr)
-## svdvals(Xr)
+rank(Xr)
+svdvals(Xr)
+=#
 
 # Run one more projection step onto the set of rank-r matrices
 Xfinal = projC(Xr, r)
@@ -198,9 +197,10 @@ pf = jime(Xfinal ; title="Alternating Projection at $niter_alt iterations")
 * C 50-59
 * D 60-70
 * E 71-200
+
+rank(Xfinal)
 =#
 
-## rank(Xfinal)
 
 # Plot singular values
 sr = svdvals(Xr)
