@@ -268,10 +268,10 @@ end;
 * B economy
 * C full
 * D none of these
-=#
 
-## U,s,V = svd(Y)
-## @show size(s), size(U), size(V)
+U,s,V = svd(Y)
+@show size(s), size(U), size(V)
+=#
 
 
 #=
