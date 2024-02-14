@@ -12,8 +12,8 @@ compiled using
 [Literate](https://github.com/fredrikekre/Literate.jl)
 and
 [Documenter](https://github.com/JuliaDocs/Documenter.jl)
-to accompany the book
-"Matrix Methods and Applications"
+to accompany the 2024 book
+[Linear Algebra for Data Science, Machine Learning, and Signal Processing](https://www.cambridge.org/highereducation/books/linear-algebra-for-data-science-machine-learning-and-signal-processing/1D558680AF26ED577DBD9C4B5F1D0FED#overview)
 by Jeff Fessler
 and Raj Nadakuditi
 at the University of Michigan.
