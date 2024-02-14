@@ -10,7 +10,7 @@ in the
 [Julia language](https://julialang.org/)
 to accompany the book
 "Linear Algebra for
-Data Science, Machine Learning and Signal Processing"
+Data Science, Machine Learning, and Signal Processing"
 (formerly known as "Matrix Methods and Applications")
 by Jeff Fessler
 and Raj Nadakuditi
