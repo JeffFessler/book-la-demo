@@ -86,10 +86,13 @@ jim1 = (X ; kwargs...) -> jim(X; size = (600,300),
 jimc = (X ; kwargs...) -> jim1(X; clim=(0,100), kwargs...);
 # and with NRMSE label
 nrmse = (Xh) -> round(norm(Xh - Xtrue) / norm(Xtrue) * 100, digits=1)
-jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %", kwargs...)
+args = (xaxis = false, yaxis = false, colorbar = :none) # book
+args = (;) # web
+jime = (X; kwargs...) -> jimc(X; xlabel = "NRMSE = $(nrmse(X)) %",
+ args..., kwargs...,
+)
 title = latexstring("\$\\mathbf{\\mathit{X}}\$ : Latent image")
-pt = jimc(Xtrue; title)
-
+pt = jimc(Xtrue; title, xlabel = " ", args...)
 ## savefig(pt, "mc_ap_x.pdf")
 
 
@@ -111,15 +114,15 @@ py = jime(Y ; title)
 * C 50-59
 * D 60-70
 * E 71-200
-=#
 
-#src rank(Y)
-#src svdvals(Y)
+rank(Y)
+svdvals(Y)
+=#
 
 # Show mask, count proportion of missing entries
 frac_nonzero = count(M) / length(M)
 title = latexstring("\$\\mathbf{\\mathit{M}}\$ : Locations of observed entries")
-pm = jim1(M; title,
+pm = jim1(M; title, args...,
     xlabel = "sampled fraction = $(round(frac_nonzero * 100, digits=1))%")
 ## savefig(pm, "mc_ap_m.pdf")
 
@@ -177,10 +180,10 @@ pa = jime(Xr ; title)
 * C 50-59
 * D 60-70
 * E 71-200
-=#
 
-## rank(Xr)
-## svdvals(Xr)
+rank(Xr)
+svdvals(Xr)
+=#
 
 # Run one more projection step onto the set of rank-r matrices
 Xfinal = projC(Xr, r)
@@ -194,9 +197,10 @@ pf = jime(Xfinal ; title="Alternating Projection at $niter_alt iterations")
 * C 50-59
 * D 60-70
 * E 71-200
+
+rank(Xfinal)
 =#
 
-## rank(Xfinal)
 
 # Plot singular values
 sr = svdvals(Xr)
@@ -264,10 +268,10 @@ end;
 * B economy
 * C full
 * D none of these
-=#
 
-## U,s,V = svd(Y)
-## @show size(s), size(U), size(V)
+U,s,V = svd(Y)
+@show size(s), size(U), size(V)
+=#
 
 
 #=
@@ -457,7 +461,7 @@ reg_fs = 120
 xh_fs = fista_schatten(Y, M, reg_fs, niter)
 
 p2 = jime(xh_fs; title="FISTA for Schatten p=1/2, $niter iterations")
-#savefig("schatten_complete_fs150_sp.pdf")
+## savefig("schatten_complete_fs150_sp.pdf")
 
 
 # See if the Schatten FISTA result is "low rank"
@@ -474,11 +478,11 @@ prompt()
 
 # error image for nuclear norm
 p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X", clim=(-80,80))
-#savefig("schatten_complete_fs300_nn_err.pdf")
+## savefig("schatten_complete_fs300_nn_err.pdf")
 
 # error image for schatten p=1/2
 p4 = jimc(xh_fs - Xtrue; title = "FISTA Schatten p=1/2 'Norm': Xh-X", clim=(-80,80))
-#savefig("schatten_complete_fs150_sp_err.pdf")
+## savefig("schatten_complete_fs150_sp_err.pdf")
 
 
 include("../../../inc/reproduce.jl")

@@ -3,7 +3,7 @@
 
 ## Overview
 
-[https://github.com/JeffFessler/book-mmaj-demo](https://github.com/JeffFessler/book-mmaj-demo)
+[https://github.com/JeffFessler/book-la-demo](https://github.com/JeffFessler/book-la-demo)
 
 Demos
 in the
@@ -12,8 +12,8 @@ compiled using
 [Literate](https://github.com/fredrikekre/Literate.jl)
 and
 [Documenter](https://github.com/JuliaDocs/Documenter.jl)
-to accompany the book
-"Matrix Methods and Applications"
+to accompany the 2024 book
+[Linear Algebra for Data Science, Machine Learning, and Signal Processing](https://www.cambridge.org/highereducation/books/linear-algebra-for-data-science-machine-learning-and-signal-processing/1D558680AF26ED577DBD9C4B5F1D0FED#overview)
 by Jeff Fessler
 and Raj Nadakuditi
 at the University of Michigan.
@@ -94,11 +94,11 @@ that generated any of these examples.
 
 For example,
 the code for the
-[SVD demo](https://jefffessler.github.io/book-mmaj-demo/generated/demos/04/svd-diff)
+[SVD demo](https://jefffessler.github.io/book-la-demo/generated/demos/04/svd-diff)
 is at
-[this url](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl).
+[this url](https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/04/svd-diff.jl).
 After downloading such a file such as
-[svd-demo.jl](https://github.com/JeffFessler/book-mmaj-demo/blob/main/docs/lit/demos/04/svd-diff.jl),
+[svd-demo.jl](https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/04/svd-diff.jl),
 you can run it
 by typing
 `include("svd-demo.jl")`

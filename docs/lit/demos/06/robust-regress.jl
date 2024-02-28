@@ -1,7 +1,8 @@
 #=
-# [LS fitting](@id ls-fit1)
+# [Robust regression](@id robust-regress)
 
-This example illustrates least squares (LS) polynomial fitting
+This example illustrates robust polynomial fitting
+with ℓₚ norm cost functions
 using the Julia language.
 =#
 
@@ -21,6 +22,7 @@ if false
         "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
+        "Optim"
         "Plots"
         "Random"
     ])
@@ -32,8 +34,9 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: Diagonal, svd
+using LinearAlgebra: norm
 using MIRTjim: prompt
+using Optim: optimize
 using Plots: default, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
@@ -50,21 +53,24 @@ isinteractive() && prompt(:prompt);
 s = (t) -> atan(4*(t-0.5)) # nonlinear function
 
 seed!(0) # seed rng
-M = 15 # how many data points
+M = 12 # how many data points
 tm = sort(rand(M)) # M random sample locations
 y = s.(tm) + 0.1 * randn(M) # noisy samples
+y[2] = 0.3 # simulate an outlier
+y[M-2] = -0.3 # another outlier
 
 t0 = range(0, 1, 101) # fine sampling for showing curve
-xaxis=(L"t", (0,1), 0:0.5:1)
-yaxis=(L"y", (-1.3, 1.3), -1:1)
-p0 = scatter(tm, y, color=:black, label="y (noisy data)"; xaxis, yaxis)
+xaxis = (L"t", (0,1), 0:0.5:1)
+yaxis = (L"y", (-1.2, 1.7), -1:1)
+p0 = scatter(tm, y; color=:black, label="y (data with outliers)",
+ xaxis, yaxis)
 plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
 
 #
 prompt()
 
 
-# ## Polynomial fitting
+# ## Polynomial model
 
 deg = 3 # polynomial degree
 Afun = (tt) -> [t.^i for t in tt, i in 0:deg] # matrix of monomials
@@ -79,47 +85,48 @@ p1
 prompt()
 
 
-# ## Fit 4 unknowns with 4 equations
+#=
+## LS estimation
+This is not robust to the outliers.
+=#
 
-m4 = Int64.(round.(range(1, M-1, 4))) # pick 4 points well separated
-A4 = A[m4,:] # 4 × 4 matrix
-x4 = inv(A4) * y[m4] # inverse of 4×4 matrix to solve "y = A x"
+xls = A \ y # backslash for LS solution using all M samples
 
-p1 = scatter(tm[m4], y[m4], marker=:square, color=:red)
-scatter!(tm, y, color=:black, label="y (noisy data)"; xaxis, yaxis)
-plot!(t0, s.(t0), color=:blue, label="s(t) : latent signal", legend=:topleft)
-plot!(t0, Afun(t0)*x4, color=:red, label="Fit 4 of $M points")
-
-#
-prompt()
-
-
-# ## Fit 4 unknowns using all M=15 equations
-
-xh = A \ y # backslash for LS solution using all M samples
-
-plot!(p1, t0, Afun(t0)*xh, color=:orange, label="Fit cubic to M=$(M) points")
+p2 = deepcopy(p0)
+plot!(p2, t0, Afun(t0)*xls, color=:magenta, label="LS fit")
 
 #
 prompt()
 
-## savefig(p1, "ls-fit-4-15.pdf")
+
+#=
+## Robust regression
+Using (differentiable) p-norm with ``1 < p ≪ 2``
+avoids over-fitting the outlier data points.
+=#
+
+p = 1.1 # close to ℓ₁
+cost = x -> norm(A * x - y, p)
+x0 = xls # initial guess
+outp = optimize(cost, x0)
+xlp = outp.minimizer
+
+plot!(p2, t0, Afun(t0)*xlp, color=:green, line=:dash,
+ label="Robust fit p=$p")
 
 
+#=
+Using 1-norm produces nearly the same results
+as using the p=1.1 norm.
+=#
+cost1 = x -> norm(A * x - y, 1) # ℓ₁
+out1 = optimize(cost1, x0)
+xl1 = out1.minimizer
 
-# ## SVD solution
+plot!(p2, t0, Afun(t0)*xl1, color=:orange, line=:dashdot,
+ label="Robust fit p=1")
 
-U, s, V = svd(A)
-s
-
-
-# ## Verify equivalence of SVD and backslash solutions to LS problem
-
-xh2 = V * Diagonal(1 ./ s) * (U' * y) # SVD-based solution
-xh3 = V * ( (1 ./ s) .* (U' * y) ) # mathematically equivalent alternate expression
-
-@assert xh ≈ xh2
-@assert xh ≈ xh3
+## savefig(p2, "robust-regress.pdf")
 
 
 include("../../../inc/reproduce.jl")

@@ -72,7 +72,7 @@ isinteractive() && prompt(:prompt);
 
 # Load raw data
 if !@isdefined(y1)
-    url = "https://github.com/JeffFessler/book-mmaj-data/raw/main/data/bmc-12/111-240-320-100.mp4"
+    url = "https://github.com/JeffFessler/book-la-data/raw/main/data/bmc-12/111-240-320-100.mp4"
     tmp = download(url)
     y1 = VideoIO.load(tmp) # 100 frames of size (240,320)
     if !isinteractive() # downsample for github cloud
@@ -211,15 +211,16 @@ iz = nf * 81 ÷ 100
 tmp = stack([Y3[:,:,iz], Lpogm[:,:,iz], Spogm[:,:,iz]])
 jim(:line3type, :white)
 pf = jim(tmp; nrow=1, size=(700, 250),
-  title="Original frame $iz | low-rank background | sparse foreground")
+## xaxis = false, yaxis = false, # book
+ title="Original frame $iz | low-rank background | sparse foreground")
 ## savefig(pf, "foreback-81.pdf")
 
 
 # Cost function plot
 # overall cost for all 3 color channels
 tmp = sum(out -> [o[2] for o in out], out)
-pc = plot(0:niter, tmp;
-  xlabel="Iteration", ylabel="Cost function", marker = :circle, label="POGM")
+pc = plot(0:niter, tmp; marker = :circle, label="POGM", widen = true,
+  xaxis=("Iteration", (0,niter), 0:2:niter), ylabel="Cost function")
 
 #
 prompt()
@@ -232,18 +233,20 @@ Explore simpler methods:
 - first SVD component of each color channel
 =#
 
-Xmean = Vector{Matrix{Float32}}(undef, 3)
-Xsvd = Vector{Matrix{Float32}}(undef, 3)
-refold = v -> reshape(v, nx, ny)
-for (i, c) in enumerate(channels) # separate color channels
-    @info "channel $c"
-    tmp_ = map(y -> getfield(y, c), Y3) # (nx,ny,nf)
-    Xsvd[i] = refold(svd(reshape(tmp_, :, nf)).U[:,1]) # first component
-    Xmean[i] = refold(mean(tmp_, dims=3))
+if !@isdefined(Xsvd3)
+    Xmean = Vector{Matrix{Float32}}(undef, 3)
+    Xsvd3 = Vector{Matrix{Float32}}(undef, 3)
+    refold = v -> reshape(v, nx, ny)
+    for (i, c) in enumerate(channels) # separate color channels
+        @info "channel $c"
+        tmp_ = map(y -> getfield(y, c), Y3) # (nx,ny,nf)
+        Xsvd3[i] = refold(svd(reshape(tmp_, :, nf)).U[:,1]) # first component
+        Xmean[i] = refold(mean(tmp_, dims=3))
+    end
+    Xmean = map(RGB{Float32}, Xmean...) # reassemble colors
+    L1 = Lpogm[:,:,1]
+    extrema(norm.(Lpogm .- Xmean))
 end
-Xmean = map(RGB{Float32}, Xmean...) # reassemble colors
-L1 = Lpogm[:,:,1]
-extrema(norm.(Lpogm .- Xmean))
 
 
 #=
@@ -275,13 +278,13 @@ SVD components have unit norm,
 but RGB values should be in [0,1] range.
 And the SVD has a sign ambiguity.
 Even after correcting for those issues,
-the SVD version has a somewhat color tint.
+the SVD version has a visibly different color tint.
 =#
-jim(Xsvd; nrow=1, title="Xsvd before corrections", size=(600,200))
+ps1 = jim(Xsvd3; nrow=1, title="Xsvd before corrections", size=(600,200))
 
 # Correct for SVD sign ambiguity
-Xsvd = map(x -> x / sign(mean(x)), Xsvd)
-jim(Xsvd; nrow=1, title="Xsvd after sign correction", size=(600,200))
+Xsvd = map(x -> x / sign(mean(x)), Xsvd3)
+ps2 = jim(Xsvd; nrow=1, title="Xsvd after sign correction", size=(600,200))
 
 # Correct for scaling
 svdmax = maximum(maximum, Xsvd)
@@ -294,6 +297,37 @@ ps = jim(
  layout = (1,3),
  size = (600,200),
 )
+
+
+# Explore rank-1 approximation of each color channel.
+function lr_channel(arr::Array, r::Int=1)
+    Xlr = Vector{Array{Float32}}(undef, 3)
+    for (i, c) in enumerate(channels) # separate color channels
+        @info "lr_channel $c"
+        tmp = map(y -> getfield(y, c), arr) # (nx,ny,nf)
+        tmp = svd(reshape(tmp, :, nf))
+        tmp = tmp.U[:,1:r] * Diagonal(tmp.S[1:r]) * tmp.Vt[1:r,:]
+        tmp = reshape(tmp, nx, ny, :)
+        Xlr[i] = tmp
+    end
+    return Xlr
+end
+if !@isdefined(Xr1)
+    Xr1 = lr_channel(Y3)
+    Xr1 = map(RGB{Float32}, Xr1...) # reassemble colors
+    jim(Xr1)
+end;
+
+#=
+Examine residual between rank-1 approximation
+and the original video sequence.
+The residual has a lot of sparse structure to it,
+rather than being random noise,
+suggesting that a robust PCA approach
+with a low-rank + sparse signal model
+could be more suitable.
+=#
+pr = jim(Y3 - Xr1)
 
 
 # Animate videos

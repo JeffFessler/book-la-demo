@@ -44,9 +44,12 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: norm, Diagonal, eigen, svd, svdvals
 using MIRTjim: jim, prompt
-using Plots: plot, scatter, savefig, default
+using Plots: default, gui, plot, savefig, scatter
+using Plots.PlotMeasures: px
 using Random: seed!
-default(); default(label = "", markerstrokecolor = :auto)
+default(); default(label = "", markerstrokecolor = :auto,
+ tickfontsize = 12, labelfontsize = 16,
+)
 seed!(0)
 
 
@@ -114,7 +117,10 @@ if !@isdefined(data)
     nx,ny = 40,40
     nrep = 500
     @time data, angles, widths = make_phantoms(nx, ny, nrep)
-    pj = jim(data[:,:,1:88]; title = "88 of $nrep images")
+    pj = jim(data[:,:,1:72]; title = "72 of $nrep images",
+     xaxis = false, yaxis = false, colorbar = :none, # book
+     size = (400, 480), nrow = 9,
+    )
 end
 ## savefig(pj, "eigmap-data.pdf")
 
@@ -218,7 +224,7 @@ for the reduced dimension.
 features = 1000 * F.vectors[:,2:3]
 pf = scatter(features[:,1], features[:,2];
   title = "Eigenmap features",
-  xlabel="feature 1", ylabel="feature 2")
+  xlabel = "feature 1", ylabel = "feature 2")
 ## savefig(pf, "eigmap-f.pdf")
 
 #
@@ -242,13 +248,19 @@ rectangle width.
 
 pc = plot(
  scatter(features[:,1], features[:,2], marker_z = widths, color=:cividis,
-  xlabel="feature 1", ylabel="feature 2",
-  colorbar_title="width",
+  xaxis = ("feature 1", (-7,8), -6:6:6),
+  yaxis = ("feature 2", (-6,5), -4:2:4),
+## colorbar_title = "width", colorbar_fontsize = 15,
+  annotate = (7, 4, "width"),
  ),
  scatter(features[:,1], features[:,2], marker_z = angles, color=:cividis,
+  xaxis = ("feature 1", (-7,8), -6:6:6),
+  yaxis = ("feature 2", (-6,5), -4:2:4),
   xlabel="feature 1", ylabel="feature 2",
-  colorbar_title="angle",
- ),
+## colorbar_title = "angle",
+  annotate = (7, 4, "angle"),
+ );
+ layout = (2,1), size = (600, 400), right_margin = 10px,
 )
 ## savefig(pc, "eigmap-c.pdf")
 

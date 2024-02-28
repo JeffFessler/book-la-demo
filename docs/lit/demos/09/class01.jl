@@ -108,15 +108,19 @@ w = μ1 - μ0; # hand-crafted weights
 
 # images of means and weights
 siz = (540,400)
-p0 = jim(μ0; clim=(0,1), size=siz)
-p1 = jim(μ1; clim=(0,1), size=siz)
-pw = jim(w; color, clim=(-1,1).*0.8, size=siz)
+args = (xaxis = false, yaxis = false) # book
+p0 = jim(μ0; clim=(0,1), size=siz, cticks=[0,1], args...)
+p1 = jim(μ1; clim=(0,1), size=siz, cticks=[0,1], args...)
+pw = jim(w; color, clim=(-1,1).*0.8, size=siz, cticks=(-1:1)*0.75, args...)
 #src jim(w; color=:cividis)
 pm = plot( p0, p1, pw;
   size = (1400, 350),
   layout = (1,3),
   rightmargin = 20px,
 )
+## savefig(p0, "class01-0.pdf")
+## savefig(p1, "class01-1.pdf")
+## savefig(pw, "class01-w.pdf")
 ## savefig(pm, "class01-mean.pdf")
 
 #=
