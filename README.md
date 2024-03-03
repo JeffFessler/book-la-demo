@@ -94,6 +94,8 @@ Here are some examples of the kinds of figures generated in the demos.
 - [10.3 Video foreground/background separation](https://jefffessler.github.io/book-la-demo/generated/demos/10/foreback)
 - [10.4 Nonnegative matrix factorization](https://jefffessler.github.io/book-la-demo/generated/demos/10/nmf)
 
+- [11.1 Neural networks: MLP](https://jefffessler.github.io/book-la-demo/generated/demos/11/ring3)
+
 - [12.1 RMT and roundoff](https://jefffessler.github.io/book-la-demo/generated/demos/12/round1)
 - [12.2 RMT and Noise](https://jefffessler.github.io/book-la-demo/generated/demos/12/gauss1)
 - [12.3 Outliers](https://jefffessler.github.io/book-la-demo/generated/demos/12/outlier1)
