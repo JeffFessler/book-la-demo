@@ -15,7 +15,7 @@ Data Science, Machine Learning, and Signal Processing"
 by Jeff Fessler
 and Raj Nadakuditi
 of the University of Michigan.
-Forthcoming in 2024 from Cambridge University Press.
+Published 2024 by Cambridge University Press.
 
 The demos expect Julia 1.9 or above.
 
@@ -25,6 +25,9 @@ click this button:
 
 [![Table of contents][toc-img]][toc-url]
 of the book.
+
+[![Errata][errata-img]][errata-url]
+list.
 
 <img src="docs/src/assets/cover-front-down2.png" alt="logo" width="150">
 
@@ -107,5 +110,7 @@ Here are some examples of the kinds of figures generated in the demos.
 [toc-url]: https://htmlpreview.github.io/?https://github.com/JeffFessler/book-la-demo/blob/main/toc.htm
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-la-demo
+[errata-img]: https://img.shields.io/badge/-Errata-blue
+[errata-url]: https://JeffFessler.github.io/book-la-demo/errata1.md
 [license-img]: https://licensebuttons.net/l/by-nc-nd/3.0/88x31.png
 [license-url]: LICENSE

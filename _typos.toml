@@ -1,0 +1,10 @@
+[default]
+extend-ignore-identifiers-re = [
+    "ND",
+    "pn",
+    "Strang",
+    "meaned",
+    "ivalid",
+    "iy",
+    "siz",
+]
