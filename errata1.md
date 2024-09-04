@@ -4,4 +4,4 @@ for the
 "Linear Algebra for Data Science, Machine Learning, and Signal Processing"
 by Jeff Fessler and Raj Nadakuditi of the University of Michigan.
 
-p399 Eqn. (12.26): the first σ₊ should instead be σ₋.
+p399 Eqn. (12.26): the first σ₊ should be σ₋ instead.
