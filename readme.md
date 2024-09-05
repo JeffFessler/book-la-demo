@@ -111,6 +111,6 @@ Here are some examples of the kinds of figures generated in the demos.
 [demos-img]: https://img.shields.io/badge/-Demos-blue
 [demos-url]: https://JeffFessler.github.io/book-la-demo
 [errata-img]: https://img.shields.io/badge/-Errata-blue
-[errata-url]: https://JeffFessler.github.io/book-la-demo/errata1.md
+[errata-url]: https://github.com/JeffFessler/book-la-demo/blob/main/errata1.md
 [license-img]: https://licensebuttons.net/l/by-nc-nd/3.0/88x31.png
 [license-url]: LICENSE
