@@ -20,4 +20,6 @@ p216 Eqn. (6.73): k(n) should be p(k)
 
 p228 Example 6.21: B₁'B₂ should be 1/√2 [1 1; 1 -1]
 
+p246 Frobenious should be Frobenius
+
 p399 Eqn. (12.26): the first σ₊ should be σ₋ instead.
