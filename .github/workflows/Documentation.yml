@@ -4,9 +4,11 @@ on:
   pull_request:
     paths-ignore:
       - 'README.md'
+      - 'errata1.md'
   push:
     paths-ignore:
       - 'README.md'
+      - 'errata1.md'
     branches:
       - 'main'
       - 'release-'
