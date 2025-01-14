@@ -7,14 +7,20 @@ by Jeff Fessler and Raj Nadakuditi of the University of Michigan.
 We are grateful to
 Rodrigo Lobos
 for finding many of these errors.
+Other contributors:
+Laura Balzano.
 
 p72
 If …(V’)… represents counter-clockwise…, then …(V)… must represent clockwise…
 Here, counter-clockwise and clockwise are swapped.
 
-p215 Eqn. (6.72): \mathcal{P}_n 𝒫_n should be \mathcal{P}_N 𝒫_N
+p112 Fact 4.20: 𝐅 should be 𝔽
 
-p216 Eqn. (6.73): \mathcal{P}_n 𝒫_n should be \mathcal{P}_K 𝒫_K
+p113 Eqn. (4.27): 𝐅 should be 𝔽
+
+p215 Eqn. (6.72): 𝒫_n should be 𝒫_N
+
+p216 Eqn. (6.73): 𝒫_n should be 𝒫_K
 
 p216 Eqn. (6.73): k(n) should be p(k)
 
