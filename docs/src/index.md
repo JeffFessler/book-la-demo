@@ -65,6 +65,10 @@ at the University of Michigan.
   [AbbreviatedStackTraces.jl](https://github.com/BioTurboNick/AbbreviatedStackTraces.jl)
   to get more interpretable error messages.
 
+* Use the package
+  [Infiltrator.jl](https://github.com/JuliaDebug/Infiltrator.jl)
+  for convenient code debugging.
+
 * For image processing,
   view the excellent documentation at
   [JuliaImages](https://juliaimages.org)
