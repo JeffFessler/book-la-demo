@@ -37,4 +37,8 @@ p354 Eqn. (9.44) is missing the "3" in "3/32" in the numerator
 
 p399 Eqn. (12.26): the first σ₊ should be σ₋ instead.
 
-p408 Ref. [65] by Lobos appeared in 2024 (doi 10.1109/TMI.2023.3297851)
+p408 Ref. [65] by Lobos should be dated Jan. 2024
+ [doi 10.1109/TMI.2023.3297851](https://doi.org/10.1109/TMI.2023.3297851)
+
+p415 Ref. [212] by Lipor should be dated Mar. 2021
+ [doi 10.1093/imaiai/iaab026](https://doi.org/10.1093/imaiai/iaab026)
