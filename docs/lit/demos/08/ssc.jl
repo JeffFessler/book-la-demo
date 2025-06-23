@@ -40,7 +40,7 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Clustering: kmeans
-using Distributions: Normal, Random
+using Distributions: Normal
 using InteractiveUtils: versioninfo
 using LinearAlgebra: Diagonal, eigen, I, opnorm
 using MIRT: pogm_restart
@@ -59,7 +59,7 @@ isinteractive() ? jim(:prompt, true) : prompt(:draw);
 todo explain
 =#
 
-Random.seed!(3) # fix random generation for better debugging
+seed!(3) # fix random generation for better debugging
 
 d = Normal(0, 0.5) # noise distributions for x and y locations
 e = Normal(0, 0.5)
@@ -127,7 +127,7 @@ E = eigen(L) # eigen value decomposition, really only need vectors
 eigenVectors = E.vectors[:, 1:2]
 
 K = 2
-# subspaces so we look for K clusters in rows of eigenvectors
+# K subspaces so we look for K clusters in rows of eigenvectors
 results = kmeans(eigenVectors', K)
 assign = results.assignments; # store assignments
 
@@ -135,7 +135,6 @@ seriescolor = palette([:orange, :skyblue], 2)
 p4 = scatter(eigenVectors[:,1], eigenVectors[:,2],
  title="Spectral Embedding Plot",
  marker_z = clusters;
-# legend=false,
  seriescolor)
 
 # plot truth on the left
