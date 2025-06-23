@@ -24,7 +24,6 @@ if false
     import Pkg
     Pkg.add([
         "Clustering"
-        "Distributions"
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
@@ -40,7 +39,6 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using Clustering: kmeans
-using Distributions: Normal
 using InteractiveUtils: versioninfo
 using LinearAlgebra: Diagonal, eigen, I, opnorm
 using MIRT: pogm_restart
@@ -56,19 +54,22 @@ isinteractive() ? jim(:prompt, true) : prompt(:draw);
 
 #=
 ## Synthetic data
-todo explain
+
+Generate synthetic data points in ℝ²
+that lie along `K = 2` subspaces
+in the span of `(1,1)` and `(1,-1)`.
 =#
 
 seed!(3) # fix random generation for better debugging
 
-d = Normal(0, 0.5) # noise distributions for x and y locations
-e = Normal(0, 0.5)
 xval = -9.5:1:9.5 # x locations before adding noise
 
-x1 = xval .+ rand(e, 20) # noisy data that lies on union of subspaces
-x2 = xval .+ rand(e, 20)
-y1 = 1 * x1 .+ rand(d, 20) # y=x and y=-x is the subspace
-y2 = -1 * x2 .+ rand(d, 20)
+N = length(xval)
+σ = 0.5
+x1 = xval + σ * randn(N) # noisy data that lies on union of subspaces
+x2 = xval + σ * randn(N)
+y1 = 1 * x1 .+ σ * randn(N) # y=x and y=-x are the 2 subspaces
+y2 = -1 * x2 .+ σ * randn(N)
 
 data = [ [x1';y1'] [x2';y2'] ] # gathering data to one matrix
 clusters = [1*ones(20,1); 2*ones(20,1)]; # clusters of our data to compare method
@@ -88,7 +89,20 @@ scatter!(x2, y2, color=2)
 
 #=
 ## POGM for SSC
-todo explain
+
+Solve the SSC problem with the self-representation cost function
+```\arg\min_C ‖Y - Y (M ⊙ C)‖_F² + λ ‖ C ‖_{1,1}``
+where `M` is a mask matrix
+that is unity everywhere except 0 along the diagonal
+that forces each column of `Y`
+to be represented as a (sparse) linear combination
+of *other* columns of `Y`.
+The regularizer encourages sparsity of `C`.
+
+POGM is an optimal accelerated method
+for convex composite cost functions.
+- https://doi.org/10.1007/s10957-018-1287-4
+- https://doi.org/10.1137/16m108104x
 =#
 
 z_lam = 0.001 # regularization parameter for sparsity term
@@ -109,7 +123,11 @@ jim(A, "A")
 
 #=
 ## Spectral clustering
-todo explain
+
+Cluster via a spectral method;
+see:
+- https://doi.org/10.1109/JSTSP.2018.2867446
+- https://doi.org/10.1109/TPAMI.2013.57
 =#
 
 W = transpose(abs.(A)) + abs.(A) # Weight matrix, force Hermitian
@@ -135,7 +153,8 @@ seriescolor = palette([:orange, :skyblue], 2)
 p4 = scatter(eigenVectors[:,1], eigenVectors[:,2],
  title="Spectral Embedding Plot",
  marker_z = clusters;
- seriescolor)
+ seriescolor,
+)
 
 # plot truth on the left
 p1 = scatter(data[1,:], data[2,:];
