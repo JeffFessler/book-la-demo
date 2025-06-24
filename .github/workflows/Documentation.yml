@@ -16,6 +16,14 @@ on:
 
 jobs:
   build:
+    # These permissions are needed to:
+    # - Deploy the documentation: https://documenter.juliadocs.org/stable/man/hosting/#Permissions
+    # - Delete old caches: https://github.com/julia-actions/cache#usage
+    permissions:
+      actions: write
+      contents: write
+      pull-requests: read
+      statuses: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,16 +42,16 @@ jobs:
             ${{ runner.os }}-test-
             ${{ runner.os }}-
       - name: InstallDependencies
+        shell: julia --color=yes --project=docs {0}
         run: |
-          julia --project=docs/ -e '
-            ENV["JULIA_PKG_SERVER"] = ""
+#           ENV["JULIA_PKG_SERVER"] = ""
             using Pkg
             Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
+            Pkg.instantiate()
       - name: BuildAndDeploy
         env:
 # https://juliadocs.github.io/Documenter.jl/stable/man/hosting/#Authentication:-GITHUB_TOKEN
 #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ssh: ${{ secrets.DOCUMENTER_KEY }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-        run: julia --project=docs/ docs/make.jl
+        run: julia --color=yes --project=docs/ docs/make.jl
