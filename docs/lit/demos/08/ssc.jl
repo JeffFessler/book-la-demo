@@ -40,11 +40,12 @@ end
 
 using Clustering: kmeans
 using InteractiveUtils: versioninfo
+using LaTeXStrings
 using LinearAlgebra: Diagonal, eigen, I, opnorm
 using MIRT: pogm_restart
 using MIRTjim: jim, prompt
 using Plots: default, gui, palette, plot, plot!, scatter, scatter!
-using Random: seed!
+using Random: randperm, seed!
 default(); default(markersize=5, markerstrokecolor=:auto, label="")
 
 # The following line is helpful when running this file as a script;
@@ -72,26 +73,32 @@ y1 = 1 * x1 .+ σ * randn(N) # y=x and y=-x are the 2 subspaces
 y2 = -1 * x2 .+ σ * randn(N)
 
 data = [ [x1';y1'] [x2';y2'] ] # gathering data to one matrix
-clusters = [1*ones(20,1); 2*ones(20,1)]; # clusters of our data to compare method
+clusters = [1*ones(20,1); 2*ones(20,1)]; # ground-truth clusters
 
-#=
-permuteOrder = randperm(40)[1:40] # permute our points in data matrix to be safe
-data = data[:,permuteOrder]
-clusters = clusters[permuteOrder]
-=#
+if true # permute data points
+    permuteOrder = randperm(40)
+    data = data[:,permuteOrder]
+    clusters = clusters[permuteOrder]
+end
+reord = invperm(permuteOrder)
 
-plot(aspect_ratio = 1, size = (550, 500))
-plot!(xval, 1 .* xval) # plot subspaces and data points
-plot!(xval, -1 .* xval)
-scatter!(x1, y1, color=1)
-scatter!(x2, y2, color=2)
+# plot subspaces and data points
+p0 = plot(aspect_ratio = 1, size = (550, 500), xlabel=L"x_1", ylabel=L"x_2")
+plot!(p0, xval, 1 .* xval)
+plot!(p0, xval, -1 .* xval)
+pd = deepcopy(p0)
+scatter!(pd, x1, y1, color=1)
+scatter!(pd, x2, y2, color=2)
+plot!(pd, title = "Data and Subspaces")
 
 
 #=
 ## POGM for SSC
 
 Solve the SSC problem with the self-representation cost function
-```\arg\min_C ‖Y - Y (M ⊙ C)‖_F² + λ ‖ C ‖_{1,1}``
+```
+\arg\min_C (1/2) ‖ Y (M ⊙ C) - Y ‖_{\mathrm{F}}² + λ ‖ C ‖_{1,1}
+```
 where `M` is a mask matrix
 that is unity everywhere except 0 along the diagonal
 that forces each column of `Y`
@@ -99,26 +106,25 @@ to be represented as a (sparse) linear combination
 of *other* columns of `Y`.
 The regularizer encourages sparsity of `C`.
 
-POGM is an optimal accelerated method
+POGM is an optimal accelerated optimization method
 for convex composite cost functions.
-- https://doi.org/10.1007/s10957-018-1287-4
-- https://doi.org/10.1137/16m108104x
+- [https://doi.org/10.1007/s10957-018-1287-4](https://doi.org/10.1007/s10957-018-1287-4)
+- [https://doi.org/10.1137/16m108104x](https://doi.org/10.1137/16m108104x)
 =#
 
-z_lam = 0.001 # regularization parameter for sparsity term
+λ = 0.001 # regularization parameter for sparsity term
 Lf = opnorm(data,2)^2 # Lipschitz constant for ∇f: smooth term of obj function
 npoint = size(data,2) # total # of points
 x0 = zeros(npoint, npoint) # initialize solution
-M = 1 .- Diagonal(ones(npoint)) # mask to force diag(C)=0
+M = 1 .- I(npoint); # mask to force diag(C)=0
 
-# smooth grad is -Y'(Y-YC) but must force diag elements to zero for each step
-grad = x -> M .* (-1*data' * (data - data*x)) # gradient of smooth term
-soft = (x,t) -> sign(x) * max(abs(x) - t, 0) # soft threshold at t
-g_prox = (z,c) -> soft.(z, c * z_lam) # proximal operator for c*b*|x|_1
+grad(x) = M .* (data' * (data*x - data)) # ∇f: gradient of smooth term
+soft(x,t) = sign(x) * max(abs(x) - t, 0) # soft threshold at t
+g_prox(z,c) = soft.(z, c * λ) # proximal operator for c*b*|x|_1
 
 niter = 1000
 A, _ = pogm_restart(x0, x->0, grad, Lf ; g_prox, niter) # POGM method
-jim(A, "A")
+jim(A[reord,reord], "A")
 
 
 #=
@@ -126,28 +132,25 @@ jim(A, "A")
 
 Cluster via a spectral method;
 see:
-- https://doi.org/10.1109/JSTSP.2018.2867446
-- https://doi.org/10.1109/TPAMI.2013.57
+- [https://doi.org/10.1109/JSTSP.2018.2867446](https://doi.org/10.1109/JSTSP.2018.2867446)
+- [https://doi.org/10.1109/TPAMI.2013.57](https://doi.org/10.1109/TPAMI.2013.57)
 =#
 
 W = transpose(abs.(A)) + abs.(A) # Weight matrix, force Hermitian
-jim(W, "W")
+jim(W[reord,reord], "W")
 
+#
 D = vec(sum(W, dims=2)) # degree matrix of graph
 D = D .^ (-1/2)
 D = Diagonal(D) # normalized symmetric Laplacian formula
 L = I - D * W * D
-jim(L, "L")
+jim(L[reord,reord], "L")
 
-E = eigen(L) # eigen value decomposition, really only need vectors
-# eigenVectors = eigvecs(L)
 # for K=2 subspaces we pick the bottom K eigenvectors (smallest λ)
-eigenVectors = E.vectors[:, 1:2]
-
 K = 2
-# K subspaces so we look for K clusters in rows of eigenvectors
-results = kmeans(eigenVectors', K)
-assign = results.assignments; # store assignments
+E = eigen(L) # eigen value decomposition, really only need vectors
+#src eigenVectors = eigvecs(L)
+eigenVectors = E.vectors[:, 1:K];
 
 seriescolor = palette([:orange, :skyblue], 2)
 p4 = scatter(eigenVectors[:,1], eigenVectors[:,2],
@@ -156,8 +159,13 @@ p4 = scatter(eigenVectors[:,1], eigenVectors[:,2],
  seriescolor,
 )
 
+# K subspaces so we look for K clusters in rows of eigenvectors
+results = kmeans(eigenVectors', K)
+assign = results.assignments; # store assignments
+
 # plot truth on the left
-p1 = scatter(data[1,:], data[2,:];
+p1 = deepcopy(p0)
+scatter!(p1, data[1,:], data[2,:];
  aspect_ratio = 1, size = (550, 450),
  xlims = (-11,11), ylims = (-11,11),
  marker_z = clusters,
@@ -165,7 +173,8 @@ p1 = scatter(data[1,:], data[2,:];
  title = "Truth",
 )
 # plot ssc results on the right
-p2 = scatter(data[1,:], data[2,:];
+p2 = deepcopy(p0)
+scatter!(p2, data[1,:], data[2,:];
  aspect_ratio = 1, size = (550, 450),
  xlims = (-11,11), ylims = (-11,11),
  marker_z = assign,
