@@ -57,8 +57,8 @@ isinteractive() ? jim(:prompt, true) : prompt(:draw);
 ## Synthetic data
 
 Generate synthetic data points in ℝ²
-that lie along `K = 2` subspaces
-in the span of `(1,1)` and `(1,-1)`.
+that lie along ``K = 2`` subspaces
+in the span of ``(1,1)`` and ``(1,-1)``.
 =#
 
 seed!(3) # fix random generation for better debugging
@@ -73,7 +73,7 @@ y1 = 1 * x1 .+ σ * randn(N) # y=x and y=-x are the 2 subspaces
 y2 = -1 * x2 .+ σ * randn(N)
 
 data = [ [x1';y1'] [x2';y2'] ] # gathering data to one matrix
-clusters = [1*ones(20,1); 2*ones(20,1)]; # ground-truth clusters
+clusters = [1*ones(Int,20); 2*ones(Int,20)]; # ground-truth clusters
 
 if true # permute data points
     permuteOrder = randperm(40)
@@ -96,15 +96,15 @@ plot!(pd, title = "Data and Subspaces")
 ## POGM for SSC
 
 Solve the SSC problem with the self-representation cost function
-```
+```math
 \arg\min_C (1/2) ‖ Y (M ⊙ C) - Y ‖_{\mathrm{F}}² + λ ‖ C ‖_{1,1}
 ```
-where `M` is a mask matrix
+where ``M`` is a mask matrix
 that is unity everywhere except 0 along the diagonal
-that forces each column of `Y`
+that forces each column of ``Y``
 to be represented as a (sparse) linear combination
-of *other* columns of `Y`.
-The regularizer encourages sparsity of `C`.
+of *other* columns of ``Y``.
+The regularizer encourages sparsity of ``C``.
 
 POGM is an optimal accelerated optimization method
 for convex composite cost functions.
@@ -146,7 +146,7 @@ D = Diagonal(D) # normalized symmetric Laplacian formula
 L = I - D * W * D
 jim(L[reord,reord], "L")
 
-# for K=2 subspaces we pick the bottom K eigenvectors (smallest λ)
+# For ``K=2`` subspaces we pick the bottom ``K`` eigenvectors (smallest λ)
 K = 2
 E = eigen(L) # eigen value decomposition, really only need vectors
 #src eigenVectors = eigvecs(L)
@@ -157,28 +157,35 @@ p4 = scatter(eigenVectors[:,1], eigenVectors[:,2],
  title="Spectral Embedding Plot",
  marker_z = clusters;
  seriescolor,
+ colorbar = nothing,
 )
 
-# K subspaces so we look for K clusters in rows of eigenvectors
+#=
+Since there are ``K`` subspaces,
+we look for ``K`` clusters in rows of eigenvectors
+using `kmeans`
+=#
 results = kmeans(eigenVectors', K)
 assign = results.assignments; # store assignments
 
-# plot truth on the left
+# Plot truth (on the left) and SSC results (on the right)
 p1 = deepcopy(p0)
 scatter!(p1, data[1,:], data[2,:];
  aspect_ratio = 1, size = (550, 450),
  xlims = (-11,11), ylims = (-11,11),
  marker_z = clusters,
  seriescolor,
+ colorbar = nothing,
  title = "Truth",
-)
-# plot ssc results on the right
+);
+
 p2 = deepcopy(p0)
 scatter!(p2, data[1,:], data[2,:];
  aspect_ratio = 1, size = (550, 450),
  xlims = (-11,11), ylims = (-11,11),
  marker_z = assign,
  seriescolor, 
+ colorbar = nothing,
  title = "SSC (POGM)",
 )
 p12 = plot(p1, p2, layout = (1, 2), size=(1100, 450))

@@ -95,7 +95,7 @@ prompt()
 As the polynomial degree increases,
 the fit to the _noisy data_ improves.
 In contrast,
-the error w.r.t. the latent function `f`
+the error w.r.t. the latent function ``f``
 initially decreases,
 but then increases
 as the model over-fits to the noise.
@@ -128,7 +128,7 @@ prompt()
 ## Illustrate uncertainty
 
 Leave out one point at a time,
-fit the remaining `M-1` points
+fit the remaining ``M-1`` points
 with a degree 8 polynomial,
 and predict the held-out point.
 =#
@@ -189,7 +189,7 @@ using the cross validation loss.
 In this case the estimate is degree=4,
 which happens to match
 the best degree
-in terms of 2-norm fit to the latent function `f`.
+in terms of 2-norm fit to the latent function ``f``.
 =#
 
 #
@@ -205,14 +205,14 @@ An alternative to cross validation
 to see the hyper-parameter
 (polynomial degree in this case)
 that makes
-```
+```math
 ‖ A_d \hat{x}_d - y ‖_2 ≈ σ \sqrt{M}.
 ```
 This is called the
 [Discrepancy principle](https://www.sciencedirect.com/topics/engineering/discrepancy-principle)
 (DP)
 and its rationale is the fact that
-```
+```math
 \mathbb{E}[ ‖ y - f ‖_2^2 ]
 = \mathbb{E}[ ‖ ε ‖_2^2 ]
 = σ^2 M.
