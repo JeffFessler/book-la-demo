@@ -33,6 +33,7 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings
+using LinearAlgebra: norm
 using MIRTjim: prompt
 using Plots: default, plot, plot!, scatter, scatter!, savefig
 using Polynomials: fit
@@ -53,7 +54,8 @@ f(x) = 0.5 * exp(1.8 * x) # nonlinear function
 seed!(0) # seed rng
 M = 12 # how many data points
 xm = sort(2*rand(M)) # M random sample locations
-z = 0.5 * randn(M) # noise
+σ = 0.5 # noise standard deviation
+z = σ * randn(M) # noise
 y = f.(xm) + z # noisy samples
 
 x0 = range(0, 2, 501) # fine sampling for showing curve
@@ -67,7 +69,12 @@ prompt()
 ## savefig(p0, "ls-cv-data.pdf")
 
 
-# ## Polynomial fitting
+#=
+## Polynomial fitting
+
+Illustrate polynomial fits
+with degrees that are too low, just right, and too high.
+=#
 
 p1 = deepcopy(p0)
 degs = [1, 3, 9]
@@ -82,45 +89,62 @@ prompt()
 ## savefig(p1, "ls-cv-fits.pdf")
 
 
-# ## Over-fitting to noisy data
+#=
+## Over-fitting to noisy data
+
+As the polynomial degree increases,
+the fit to the _noisy data_ improves.
+In contrast,
+the error w.r.t. the latent function `f`
+initially decreases,
+but then increases
+as the model over-fits to the noise.
+=#
 
 degs = 0:(M-1)
 fits = zeros(length(degs))
 accs = zeros(length(degs))
 for (id, deg) in enumerate(degs)
     pol = fit(xm, y, deg)
-    fits[id] = sqrt(sum(abs2, pol.(xm) - y))
-    accs[id] = sqrt(sum(abs2, pol.(xm) - f.(xm)))
+    fits[id] = norm(pol.(xm) - y) # fit to noisy data
+    accs[id] = norm(pol.(xm) - f.(xm)) # "accuracy" w.r.t. true function
 end
 pf = scatter(degs, fits; color=:red,
  xaxis = ("degree", extrema(degs), [0,3,11]),
- yaxis = ("fits", (0,19), ),
+ yaxis = ("fits", (0,8), ),
  label = (L"‖ A_d \hat{x}_d - y ‖_2"),
 )
 scatter!(degs, accs;
  label = L"‖ A_d \hat{x}_d - f ‖_2", marker=:uptri, color=:blue)
+plot!([extrema(degs)...], ones(2)*norm(f.(xm) - y),
+ label = L"‖ y - f ‖_2", color=:green,)
 
 #
 prompt()
 ## savefig(pf, "ls-cv-over.pdf")
 
 
-# ## Illustrate uncertainty
+#=
+## Illustrate uncertainty
+
+Leave out one point at a time,
+fit the remaining `M-1` points
+with a degree 8 polynomial,
+and predict the held-out point.
+=#
 
 colors = [:red, :orange, :yellow, :green, :cyan, :blue, :grey, :black]
 pols = Vector{Any}(undef, M)
 deg1 = 8
-p2 = plot(; xaxis, yaxis, title = "degree = $deg1",
- legend=:top)
+p2 = plot(; xaxis, yaxis, title = "degree = $deg1", legend=:top)
 scatter!(p2, [-9], [-9]; marker=:square, color=:gray, label="prediction")
 scatter!(p2, [-9], [-9]; marker=:circle, color=:black, label="data")
 for m in 1:M
-    mm = (1:M)[[1:(m-1); (m+1):M]]
+    mm = (1:M)[[1:(m-1); (m+1):M]] # omit mth point
     pols[m] = fit(xm[mm], y[mm], deg1)
     color = colors[mod1(m, length(colors))]
     plot!(p2, x0, pols[m].(x0); xaxis, yaxis, title = "degree = $deg1",
-     color,
-    )
+     color,)
     pred = pols[m](xm[m])
     scatter!([xm[m]], [pred]; color, marker=:square)
     scatter!([xm[m]], [y[m]]; color=:black)
@@ -144,9 +168,9 @@ for (id, deg) in enumerate(degs)
         errs[id, m] = pol(xm[m]) - y[m]
     end
 end
-tmp = sqrt.(sum(abs2, errs, dims=2))
+cv_loss = sqrt.(sum(abs2, errs, dims=2))
 
-p3 = scatter(degs, tmp; legend = :top,
+p3 = scatter(degs, cv_loss; legend = :top,
  xlabel = "degree",
  ylabel = "error",
  label = "Cross-validation loss",
@@ -158,5 +182,54 @@ scatter!(p3, degs, accs;
 prompt()
 ## savefig(p3, "ls-cv-scat.pdf")
 
-include("../../../inc/reproduce.jl")
+#=
+Estimate best polynomial degree
+using the cross validation loss.
 
+In this case the estimate is degree=4,
+which happens to match
+the best degree
+in terms of 2-norm fit to the latent function `f`.
+=#
+
+#
+cv_degree = degs[argmin(cv_loss)]
+
+#
+oracle_degree = degs[argmin(accs)]
+
+#=
+Discrepancy principle
+
+An alternative to cross validation
+to see the hyper-parameter
+(polynomial degree in this case)
+that makes
+```
+‖ A_d \hat{x}_d - y ‖_2 ≈ σ \sqrt{M}.
+```
+This is called the
+[Discrepancy principle](https://www.sciencedirect.com/topics/engineering/discrepancy-principle)
+(DP)
+and its rationale is the fact that
+```
+\mathbb{E}[ ‖ y - f ‖_2^2 ]
+= \mathbb{E}[ ‖ ε ‖_2^2 ]
+= σ^2 M.
+```
+when ``y = f + ε ∈ \mathbb{R}^M``.
+
+The DP approach requires that
+the user know the standard deviation ``σ``
+of the elements of the noise vector ``ε``,
+whereas cross-validation does not require that knowledge.
+
+In this particular demo,
+the DP approach happens to pick the best degree=4,
+but in general DP is known to over-regularize.
+=#
+
+dp_degree = argmin(abs.(fits .- σ * sqrt(M)))
+
+#
+include("../../../inc/reproduce.jl")
