@@ -33,6 +33,9 @@ Then by (7.39) this is approximately the minimizer of the MSE.
 
 p301 nonnnegative should be nonnegative
 
+p306 "irreducibly diagonally dominant" should have been
+[defined](https://en.wikipedia.org/wiki/Diagonally_dominant_matrix#Variations).
+
 p354 Eqn. (9.44) is missing the "3" in "3/32" in the numerator
 
 p399 Eqn. (12.26): the first σ₊ should be σ₋ instead.
