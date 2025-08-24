@@ -194,7 +194,6 @@ function lr_cross_validation_by_column(
     errors = zeros(length(n_components), fold)
 
     for fold_idx in 1:fold
-        # Define train and test indices for this fold
         test_indices = ((fold_idx - 1) * fold_size + 1):min(fold_idx * fold_size, n_samples)
         train_indices = setdiff(1:n_samples, test_indices)
 
