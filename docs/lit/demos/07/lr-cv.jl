@@ -1,12 +1,18 @@
 #=
-# [Low-Rank via Cross Validation](@id lr-cv)
+# [Low-Rank Selection via Cross Validation](@id lr-cv)
 
 This example illustrates
 low-rank matrix approximation
-using
-[Bi-Cross-Validation (BCV)](https://doi.org/10.1214/08-AOAS227)
+using cross-validation methods
 for rank parameter selection,
 using the Julia language.
+As discussed by
+[Owen & Perry, 2009](https://doi.org/10.1214/08-AOAS227),
+separate row or column hold-out
+is ineffective,
+whereas
+[Bi-Cross-Validation (BCV)](https://doi.org/10.1214/08-AOAS227)
+is more effective.
 =#
 
 #srcURL
@@ -40,6 +46,7 @@ using LinearAlgebra: svd, svdvals, Diagonal, norm, pinv
 using MIRTjim: prompt
 using Plots: default, gui, plot, plot!, scatter!, savefig
 using Random: seed!, randperm
+using Statistics: mean
 default(); default(label="", markerstrokecolor=:auto, markersize=7,
     labelfontsize=20, tickfontsize=16, legendfontsize=17, widen=true)
 
@@ -157,14 +164,93 @@ is minimized at the correct rank of 5.
 fold = 2
 ranks = 0:min(M,N)÷fold
 cv = bcv(Y, ranks, fold)
-scatter!(pk, ranks, cv, color=:green, marker=:start,
+scatter!(pk, ranks, cv, color=:green, marker=:star,
     label=L"\mathrm{BCV}",
 )
+i_bcv = argmin(cv)
+scatter!([ranks[i_bcv]], [cv[i_bcv]], color=:black, marker=:star, markersize=4,)
 
 #
 prompt()
 
 ## savefig(psk, "lr_bcv1.pdf")
 
+
+#=
+Compare with row or column hold-out CV
+=#
+
+"""
+    function lr_cross_validation_by_column(Y, fold, n_components)
+"""
+function lr_cross_validation_by_column(
+    X::AbstractMatrix{<:Number},
+    fold::Int,
+    n_components::AbstractVector{<:Int},
+)
+
+    n_samples = size(X, 2) # Assuming columns are samples
+    fold_size = n_samples ÷ fold
+    errors = zeros(length(n_components), fold)
+
+    for fold_idx in 1:fold
+        test_indices = ((fold_idx - 1) * fold_size + 1):min(fold_idx * fold_size, n_samples)
+        train_indices = setdiff(1:n_samples, test_indices)
+
+        X_train = X[:, train_indices]
+        X_test = X[:, test_indices]
+
+        U, _, _ = svd(X_train) # "PCA" of training data
+
+        for (comp_idx, n_component) in enumerate(n_components)
+            Ur = U[:,1:n_component]
+            X_test_reconstructed = Ur * (Ur' * X_test)
+            errors[comp_idx, fold_idx] = # calculate reconstruction error
+                norm(X_test - X_test_reconstructed) / norm(X_test)
+        end
+    end
+    return errors * 100
+end;
+
+#=
+## Apply elementary CV to same noisy data
+
+Holding out rows or columns
+leads to highly over-estimated ranks,
+as predicted in the literature.
+
+This is the approach recommended by GPT 4.1 (circa 2025-08),
+presumably because holding out individual data points
+is prevalent in machine learning.
+=#
+
+fold = 5
+Kmax = min(M,N)÷fold
+n_components = 0:Kmax
+errors_by_col = lr_cross_validation_by_column(Y, fold, n_components)
+error_means_by_col = vec(mean(errors_by_col, dims=2))
+i_col = argmin(error_means_by_col) # best based on minimum mean error
+
+errors_by_row = lr_cross_validation_by_column(Y', fold, n_components)
+error_means_by_row = vec(mean(errors_by_row, dims=2));
+i_row = argmin(error_means_by_row) # best based on minimum mean error
+
+optimal_k_col = n_components[i_col]
+optimal_k_row = n_components[i_row]
+
+pcv = plot(
+ xlims=(0,10),
+ xticks=[0, 1, 5, 10],
+ ylims=(0,100),
+ widen = true,
+ xlabel = "rank",
+ ylabel = "NRMSD",
+)
+scatter!(n_components, error_means_by_col, label="by column")
+scatter!(n_components, error_means_by_row, label="by row", marker=:x)
+scatter!([n_components[i_col]], [error_means_by_col[i_col]],
+ color=:black, marker=:circle, markersize=4, )
+scatter!([n_components[i_row]], [error_means_by_row[i_row]],
+ color=:black, marker=:x, markersize=4, )
 
 include("../../../inc/reproduce.jl")
