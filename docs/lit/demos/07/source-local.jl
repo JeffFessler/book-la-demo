@@ -21,6 +21,7 @@ if false
         "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
+        "Optim"
         "Plots"
         "Random"
         "Statistics"
@@ -35,6 +36,7 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: jim, prompt
+using Optim: optimize
 using Plots: default, scatter, savefig
 using Random: seed!
 using Statistics: mean
@@ -135,6 +137,50 @@ pcn = scatter(Cn[1,:], -Cn[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
 
 #
 prompt()
+
+
+#=
+Nonlinear LS fitting / optimization approach to noisy case.
+This cost function was considered in
+[de Leeuw, 1988](https://doi.org/10.1007/BF01897162).
+=#
+
+Dfun(C) = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J]
+cost(C) = norm(Dfun(C) - Dn)^2
+outp = optimize(cost, Cn)
+Cf = outp.minimizer
+pcf = scatter(Cf[1,:], -Cf[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
+ title="Location estimates (noisy case - fitted)")
+
+#
+prompt()
+
+#=
+Compare fitting approach and SVD-based approach
+to the noiseless distance matrix.
+The fitted approach is closer to the noiseless `D`.
+=#
+Dfits = norm(D - Dfun(C)), norm(D - Dfun(Ch)), norm(D - Dfun(Cn)), norm(D - Dfun(Cf))
+round.(Dfits, digits=2)
+
+
+#=
+Compare fitting approach and SVD-based approach
+to the noiseless coordinates.
+Probably there should be a permutation here?
+In principle there should be a Procrustes rotation here
+to make the comparison more meaningful.
+The fitted approach is closer to the noiseless coordinates.
+=#
+(Un,_,Vn) = svd(Ch * Cn')
+(Uf,_,Vf) = svd(Ch * Cf')
+round.( [
+ norm(Cn - Ch),
+ norm(Ch - Un*Vn'*Cn),
+ norm(Ch - Cf),
+ norm(Ch - Uf*Vf'*Cf) ],
+ digits = 3,
+)
 
 
 # ## Constant bias case
