@@ -14,6 +14,8 @@ p72
 If …(V’)… represents counter-clockwise…, then …(V)… must represent clockwise…
 Here, counter-clockwise and clockwise are swapped.
 
+p109 Definition of row space should be ℛ(A^⊤) instead of ℛ(A')
+
 p112 Fact 4.20: 𝐅 should be 𝔽
 
 p113 Eqn. (4.27): 𝐅 should be 𝔽
