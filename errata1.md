@@ -8,7 +8,7 @@ We are grateful to
 Rodrigo Lobos
 for finding many of these errors.
 Other contributors:
-Laura Balzano.
+Laura Balzano, Jacob Root.
 
 p72
 If …(V’)… represents counter-clockwise…, then …(V)… must represent clockwise…
