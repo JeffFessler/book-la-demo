@@ -20,6 +20,8 @@ p112 Fact 4.20: 𝐅 should be 𝔽
 
 p113 Eqn. (4.27): 𝐅 should be 𝔽
 
+p199 Q6.1 answer E should be 6.2a,c,d not a,c,c
+
 p215 Eqn. (6.72): 𝒫_n should be 𝒫_N
 
 p216 Eqn. (6.73): 𝒫_n should be 𝒫_K
