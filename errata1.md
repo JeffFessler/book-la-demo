@@ -8,7 +8,7 @@ We are grateful to
 Rodrigo Lobos
 for finding many of these errors.
 Other contributors:
-Laura Balzano, Jacob Root.
+Laura Balzano, Amaya Murguia, Jacob Root.
 
 p72
 If …(V’)… represents counter-clockwise…, then …(V)… must represent clockwise…
@@ -27,6 +27,8 @@ p215 Eqn. (6.72): 𝒫_n should be 𝒫_N
 p216 Eqn. (6.73): 𝒫_n should be 𝒫_K
 
 p216 Eqn. (6.73): k(n) should be p(k)
+
+p224 Eqn. (6.97) end of middle line: trace{B A' ^Q} should be trace{B A' ^Q'}
 
 p228 Example 6.21: B₁'B₂ should be 1/√2 [1 1; 1 -1]
 
