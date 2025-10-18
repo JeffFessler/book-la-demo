@@ -28,6 +28,8 @@ p216 Eqn. (6.73): 𝒫_n should be 𝒫_K
 
 p216 Eqn. (6.73): k(n) should be p(k)
 
+p218 First line of section 6.4.7, the norm should be squared
+
 p224 Eqn. (6.97) end of middle line: trace{B A' ^Q} should be trace{B A' ^Q'}
 
 p228 Example 6.21: B₁'B₂ should be 1/√2 [1 1; 1 -1]
