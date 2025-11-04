@@ -39,6 +39,8 @@ p246 Frobenious should be Frobenius
 p265 Eqn. (7.40): β* should be defined as minimizer of SURE(β).
 Then by (7.39) this is approximately the minimizer of the MSE.
 
+p299 Eqn. (8.38) upper limit of union should be "N" not "n"
+
 p301 nonnnegative should be nonnegative
 
 p306 "irreducibly diagonally dominant" should have been
