@@ -27,7 +27,6 @@ if false
         "MIRTjim"
         "Plots"
         "Random"
-        "Statistics"
         "StatsBase"
     ])
 end
@@ -68,15 +67,14 @@ P = [
 
 # Define plot helpers
 color = [:red, :green, :blue, :purple];
+xc = [-1, 1, -1, 1] * 20 # node centers
+yc = [1, 1, -1, -1] * 20
 
 function plot_circle!(x, y, ic=0; r=10)
     t = range(0, 2π, 101)
     plot!(x .+ r * cos.(t), y .+ r * sin.(t), color=color[ic], width=2)
     annotate!(x, y+0.7r, ("$ic", 14, color[ic]))
 end;
-
-xc = [-1, 1, -1, 1] * 20
-yc = [1, 1, -1, -1] * 20
 
 # function for plotting the Markov chain diagram
 function plot_chain(steps::Int)
@@ -181,21 +179,6 @@ Which state has the lowest probability in equilibrium?
 - E None: they are all equally likely"
 =#
 
-#=
-# function to nicely print the eigenvector matrix
-function matprint(V)
-    for i in 1:size(V,1)
-        for j in 1:size(V,2)
-            v = V[i,j]
-            @printf("%5.2f", real(v))
-            print(imag(v) < 0 ? " -" : " +")
-            @printf("%5.2fı  ", abs(imag(v)))
-        end
-        println()
-    end
-end;
-=#
-
 # Eigenvectors:
 (d, V) = eigen(P)
 round.(V; digits=3)
@@ -224,7 +207,7 @@ v = real(V[:,4])
 
 #=
 For insight:
-# 4^2 - 2*4 + 2 # N^2 - 2N + 2 in Ch8
+``4^2 - 2 ⋅ 4 + 2 = N^2 - 2N + 2`` in Ch8
 =#
 P^10
 
