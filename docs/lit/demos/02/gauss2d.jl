@@ -42,7 +42,7 @@ default(labelfontsize=18, tickfontsize=12, titlefontsize=18)
 
 
 #=
-## Broadast
+## Broadcast
 =#
 
 x = range(-2, 2, 101)
