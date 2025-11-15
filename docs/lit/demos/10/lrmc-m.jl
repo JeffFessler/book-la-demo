@@ -48,10 +48,12 @@ using LinearAlgebra: svd, svdvals, rank, norm, Diagonal
 using LaTeXStrings
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, savefig, scatter, scatter!, xlabel!, xticks!
+using Plots: RGB, cgrad
 using Plots.PlotMeasures: px
 using Random: seed!
 using Statistics: mean
-default(markersize=7, markerstrokecolor=:auto, label = "",
+default(
+ markersize=7, markerstrokecolor=:auto, label = "",
  tickfontsize = 10, legendfontsize = 18, labelfontsize = 16, titlefontsize = 18,
 )
 
@@ -59,7 +61,7 @@ default(markersize=7, markerstrokecolor=:auto, label = "",
 # this way it will prompt user to hit a key after each image is displayed.
 
 isinteractive() && prompt(:prompt);
-jim(:prompt, true)
+jim(:prompt, true);
 
 
 #=
@@ -76,9 +78,11 @@ tmp = [
 ]';
 rank(tmp)
 
+#
 Xtrue = kron(10 .+ 80*tmp, ones(9,9))
 rtrue = rank(Xtrue)
 
+# Helper functions for
 # plots with consistent size
 jim1 = (X ; kwargs...) -> jim(X; size = (600,300),
  leftmargin = 10px, rightmargin = 10px, kwargs...);
@@ -115,8 +119,8 @@ py = jime(Y ; title)
 * D 60-70
 * E 71-200
 
-rank(Y)
-svdvals(Y)
+`rank(Y)`
+`svdvals(Y)`
 =#
 
 # Show mask, count proportion of missing entries
@@ -142,8 +146,8 @@ pr = jime(Xr ; title)
 ## Alternating projection
 Alternating projection is an
 iterative method that alternates
-between projecting onto the set of rank-5 matrices
-and onto the set of matrices that match the data.
+between projecting onto the set 𝒞 of rank-5 matrices
+and onto the set 𝒟 of matrices that match the data.
 =#
 
 function projC(X, r::Int)
@@ -153,7 +157,7 @@ end;
 
 function lrmc_alt(Y, r::Int, niter::Int)
     Xr = copy(Y)
-    Xr[.!M] .= mean(Y[M]) # fill missing values with mean of other values
+    Xr[.!M] .= mean(Y[M]) # init: fill missing values with mean of other values
     @show nrmse(Xr)
     for iter in 1:niter
         Xr = projC(Xr, r) # project onto "𝒞" &Cscr; U+1D49E
@@ -181,8 +185,8 @@ pa = jime(Xr ; title)
 * D 60-70
 * E 71-200
 
-rank(Xr)
-svdvals(Xr)
+`rank(Xr)`
+`svdvals(Xr)`
 =#
 
 # Run one more projection step onto the set of rank-r matrices
@@ -198,7 +202,7 @@ pf = jime(Xfinal ; title="Alternating Projection at $niter_alt iterations")
 * D 60-70
 * E 71-200
 
-rank(Xfinal)
+`rank(Xfinal)`
 =#
 
 
@@ -219,7 +223,7 @@ scatter!(pa, sr, color=:green, label="Alt. Proj. output")
 
 ## savefig(pa, "mc_ap_sv.pdf")
 
-#
+# ## Think about why ``σ₁(Y) ≪ σ₁(X_{\mathrm{true}})``
 prompt()
 
 #=
@@ -256,21 +260,23 @@ costfun1 = (X,beta) -> 0.5 * norm(M .* (X - Y))^2 + beta * nucnorm(X); # regular
 =#
 
 # Define singular value soft thresholding (SVST) function
-SVST = (X,beta) -> begin
+function SVST(X::AbstractMatrix, beta::Real)
     U,s,V = svd(X) # see below
-    sthresh = max.(s .- beta, 0)
-    return U * Diagonal(sthresh) * V'
+    sthresh = @. max(s - beta, 0)
+    index = findall(>(0), sthresh)
+    return (@view U[:,index]) * Diagonal(sthresh[index]) * (@view V[:,index])'
 end;
 
 #=
-### Q. Which svd is that?
+### Q. Which SVD is that?
 * A compact
 * B economy
 * C full
-* D none of these
+* D SUV
+* E none of these
 
-U,s,V = svd(Y)
-@show size(s), size(U), size(V)
+- `U,s,V = svd(Y)`
+- `@show size(s), size(U), size(V)`
 =#
 
 
@@ -433,7 +439,7 @@ xticks!(psf, [1, rtrue, rfista, minimum(size(Y))])
 prompt()
 
 #=
-* Optional exercise: think about why ``σ_1(Y) < σ_1(\hat{X}) < σ_1(Xtrue)``
+* Optional exercise: think about why ``σ_1(Y) ≪ σ_1(\hat{X}) < σ_1(X_{\mathrm{true}})``
 * Optional: try ADMM too
 =#
 
@@ -456,7 +462,7 @@ else # instructor version
 end;
 
 # Apply FISTA for Schatten p=1/2
-niter = 150
+niter = 100
 reg_fs = 120
 xh_fs = fista_schatten(Y, M, reg_fs, niter)
 
@@ -476,13 +482,33 @@ xticks!(pss, [1, rank_schatten_fista, minimum(size(Y))])
 #
 prompt()
 
-# error image for nuclear norm
-p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X", clim=(-80,80))
-## savefig("schatten_complete_fs300_nn_err.pdf")
+# red-black-blue colormap
+RGB255(args...) = RGB((args ./ 255)...)
+color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)])
 
-# error image for schatten p=1/2
-p4 = jimc(xh_fs - Xtrue; title = "FISTA Schatten p=1/2 'Norm': Xh-X", clim=(-80,80))
-## savefig("schatten_complete_fs150_sp_err.pdf")
+# Error image for nuclear norm
+p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X",
+ clim=(-80,80), color)
+## savefig(p3, "schatten_complete_fs300_nn_err.pdf")
 
+# Error image for schatten p=1/2
+p4 = jimc(xh_fs - Xtrue; title = "FISTA Schatten p=1/2 'Norm': Xh-X",
+ clim=(-80,80), color)
+## savefig(p4, "schatten_complete_fs150_sp_err.pdf")
+
+# Cost function plot
+if false # set to true for HW
+   costfun2 = (X,β) -> 0.5 * norm(M .* (X - Y))^2 + β * norm(svdvals(X), 1/2)
+   tmp = niter -> costfun2( fista_schatten(Y, M, reg_fs, niter), reg_fs )
+   niter2 = 100
+   cost_fista2 = tmp.(0:niter)
+   p5 = scatter(0:niter, cost_fista2,
+    title="cost vs. iteration for FISTA Schatten",
+    xlabel="iteration",
+    ylabel="cost function value",
+    label="FISTA Schatten",
+   )
+## savefig(p5, "schatten_complete_fs100_cost.pdf")
+end
 
 include("../../../inc/reproduce.jl")
