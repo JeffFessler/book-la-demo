@@ -454,11 +454,13 @@ if true # replace these place-holder functions with your work
     shrink_p_1_2(v, reg::Real) = v
     lr_schatten(Y, reg::Real) = Y
     fista_schatten(Y, M, reg::Real, niter::Int) = Y
+    name = "placeholder " # change to "for Schatten p=1/2"
 else # instructor version
     mydir = ENV["hw551test"] # change path
     include(mydir * "shrink_p_1_2.jl") # 1D shrinker for |x|^(1/2), previous HW
     include(mydir * "lr_schatten.jl")
     include(mydir * "fista_schatten.jl")
+    name = "for Schatten p=1/2"
 end;
 
 # Apply FISTA for Schatten p=1/2
@@ -466,7 +468,7 @@ niter = 100
 reg_fs = 120
 xh_fs = fista_schatten(Y, M, reg_fs, niter)
 
-p2 = jime(xh_fs; title="FISTA for Schatten p=1/2, $niter iterations")
+p2 = jime(xh_fs; title="FISTA $name, $niter iterations")
 ## savefig("schatten_complete_fs150_sp.pdf")
 
 
@@ -476,7 +478,7 @@ rank_schatten_fista = rank(Diagonal(ss))
 rank_schatten_fista, rankeff(ss)
 
 pss = deepcopy(ps)
-scatter!(pss, ss, color=:cyan, label="Xh (FISTA for Schatten)")
+scatter!(pss, ss, color=:cyan, label="Xh (FISTA $name)")
 xticks!(pss, [1, rank_schatten_fista, minimum(size(Y))])
 
 #
@@ -484,7 +486,7 @@ prompt()
 
 # red-black-blue colormap
 RGB255(args...) = RGB((args ./ 255)...)
-color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)])
+color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)]);
 
 # Error image for nuclear norm
 p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X",
@@ -492,7 +494,7 @@ p3 = jimc(xh_nn_fista - Xtrue; title = "FISTA Nuclear Norm: Xh-X",
 ## savefig(p3, "schatten_complete_fs300_nn_err.pdf")
 
 # Error image for schatten p=1/2
-p4 = jimc(xh_fs - Xtrue; title = "FISTA Schatten p=1/2 'Norm': Xh-X",
+p4 = jimc(xh_fs - Xtrue; title = "FISTA $name: Xh-X",
  clim=(-80,80), color)
 ## savefig(p4, "schatten_complete_fs150_sp_err.pdf")
 
@@ -503,10 +505,10 @@ if false # set to true for HW
    niter2 = 100
    cost_fista2 = tmp.(0:niter)
    p5 = scatter(0:niter, cost_fista2,
-    title="cost vs. iteration for FISTA Schatten",
-    xlabel="iteration",
-    ylabel="cost function value",
-    label="FISTA Schatten",
+    title = "cost vs. iteration for $name",
+    xlabel = "iteration",
+    ylabel = "cost function value",
+    label = "FISTA $name",
    )
 ## savefig(p5, "schatten_complete_fs100_cost.pdf")
 end
