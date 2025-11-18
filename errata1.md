@@ -52,6 +52,8 @@ p306 "irreducibly diagonally dominant" should have been
 
 p354 Eqn. (9.44) is missing the "3" in "3/32" in the numerator
 
+p356 In Q9.24 N=2 (clearly)
+
 p399 Eqn. (12.26): the first σ₊ should be σ₋ instead.
 
 p408 Ref. [65] by Lobos should be dated Jan. 2024
