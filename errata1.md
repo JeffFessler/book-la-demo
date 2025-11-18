@@ -10,6 +10,10 @@ for finding many of these errors.
 Other contributors:
 Laura Balzano, Amaya Murguia, Jacob Root.
 
+p42 The remark about left division `\(A,I)` is outdated.
+For `inv`,
+Julia 1.10 uses `lu` that calls `LAPACK.getrf!` for LU decomposition.
+
 p72
 If …(V’)… represents counter-clockwise…, then …(V)… must represent clockwise…
 Here, counter-clockwise and clockwise are swapped.
