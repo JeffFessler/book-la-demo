@@ -30,7 +30,6 @@ if false
         "LinearAlgebra"
         "MIRTjim"
         "Plots"
-        "Random"
     ])
 end
 
@@ -43,7 +42,6 @@ using LaTeXStrings
 using LinearAlgebra: diag, norm, I, svdvals
 using MIRTjim: prompt, jim
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
-using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
     markersize = 6, tickfontsize=12, labelfontsize = 16, legendfontsize=14)
 
@@ -53,6 +51,7 @@ default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
 
 isinteractive() && prompt(:prompt);
 
+## Simulate data
 M = 100 # number of data points
 P = 99 # highest polynomial degree
 t = range(-1, 1, M)
@@ -60,7 +59,7 @@ t = range(-1, 1, M)
 fun(t) = atan(2*t) # nonlinear function
 y = fun.(t)
 train = 1:(M÷2)
-test = (M÷2+1):M
+test = (M÷2+1):M;
 
 #=
 ## Legendre polynomial basis
@@ -69,7 +68,9 @@ Build
 [Legendre polynomial basis](https://en.wikipedia.org/wiki/Legendre_polynomials)
 using
 Bonnet's recursion formula:
-``(n+1) P_{n+1}(x) = (2n+1) x P_n(x) - n P_{n-1}(x)``
+```math
+(n+1) P_{n+1}(x) = (2n+1) x P_n(x) - n P_{n-1}(x)
+```
 =#
 L = ones(M, P)
 L[:,2] .= t
@@ -79,10 +80,9 @@ for k in 3:P
 end
 pl = plot(t, L[:,1:5], title="First 5 Legendre polynomials", marker=:dot)
 
-# check recursion for k=3, corresponding to n=1 in Bonnet's recursion
+# Check recursion for k=3, corresponding to n=1 in Bonnet's recursion
 p2(x) = (1/2) * (3x^2 - 1)
-plot(t, p2.(t))
-plot!(t, L[:,3])
+@assert p2.(t) ≈ L[:,3]
 
 # Check basis function normalization (continuous vs discrete)
 p = 0:(P-1)
@@ -95,7 +95,7 @@ plot!(p, normp, marker=:dot, color=:blue, label="analytical")
 
 # Normalize basis functions
 # using empirical norms
-L = L ./ norme' / sqrt(M/2)
+L = L ./ norme' / sqrt(M/2);
 
 #=
 ## Scree plot
@@ -114,7 +114,7 @@ Examine orthogonality of the basis functions
 
 The Legendre polynomials are orthogonal in ``L₂[-1,1]``,
 but the following correlation figure
-shows they are not orthogonal when sampled.
+shows that they are not orthogonal when sampled.
 =#
 pc = jim(p, p, L'L, "correlation")
 
@@ -156,6 +156,7 @@ for k in (2, 10, 99)
    xhat = A[train,:] \ y[train]
    plot!(t, A * xhat, label="k=$k")
 end
+pfit
 
 #
 include("../../../inc/reproduce.jl")
