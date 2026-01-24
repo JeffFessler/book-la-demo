@@ -40,7 +40,7 @@ end
 
 using InteractiveUtils: versioninfo
 using LaTeXStrings
-using LinearAlgebra: diag, norm, I, svdvals # Diagonal
+using LinearAlgebra: diag, norm, I, svdvals
 using MIRTjim: prompt, jim
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
@@ -75,7 +75,6 @@ L = ones(M, P)
 L[:,2] .= t
 for k in 3:P
     n = k - 2 # caution: SIAM article had an error here
-    # L[:, k] = (2k-1)/k * t .* L[:, k-1] - (k-1)/k * L[:, k-2] # SIAM version
     L[:, k] = ((2n+1) * t .* L[:, k-1] - n * L[:, k-2]) / (n + 1)
 end
 pl = plot(t, L[:,1:5], title="First 5 Legendre polynomials", marker=:dot)
