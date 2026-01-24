@@ -79,13 +79,12 @@ Read in data with missing pixels set to zero
 if !@isdefined(Y)
     tmp = homedir() * "/web/course/551/julia/demo/professorxray.txt" # jf
     if !isfile(tmp)
-        url = "https://web.eecs.umich.edu/~fessler/course/551/julia/demo/professorxray.txt"
+        url = "https://github.com/JeffFessler/book-la-demo/raw/refs/heads/main/data/professorxray.txt"
         tmp = download(url)
     end
     Y = collect(readdlm(tmp)')
     py = jim(Y, "Y: Corrupted image matrix of Professor X-Ray\n (missing pixels set to 0)")
 end
-
 
 # Create binary mask ``Ω`` (true=observed, false=unobserved)
 Ω = Y .!= 0
