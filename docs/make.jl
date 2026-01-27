@@ -82,7 +82,7 @@ Documenter.makedocs(;
         "Home" => "index.md",
         "01 Tutorials" => demos("01"),
         "02 Matrix" => demos("02"),
-#       "03 Eig/SVD" => demos("03"),
+        "03 Eig/SVD" => demos("03"),
         "04 Subspaces" => demos("04"),
         "05 LS" => demos("05"),
         "06 Norm" => demos("06"),
