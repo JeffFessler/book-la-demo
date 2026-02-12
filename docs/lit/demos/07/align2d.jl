@@ -2,7 +2,7 @@
 # [2D image alignment by rank-1 method](@id align2d)
 
 This example illustrates 2D image alignment
-via a simple 2D translation
+(estimating a simple 2D translation between an image pair)
 using a rank-1 approximation
 to the normalized cross power spectrum,
 following the method of
@@ -29,6 +29,7 @@ if false
         "MIRTjim"
         "Plots"
         "Random"
+        "Statistics"
         "Unitful"
     ])
 end
@@ -41,7 +42,7 @@ using InteractiveUtils: versioninfo
 using ImagePhantoms: SheppLoganEmis, spectrum, phantom
 using ImagePhantoms: ellipse, ellipse_parameters
 using LaTeXStrings
-using LinearAlgebra: svd
+using LinearAlgebra: norm, svd
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
@@ -60,19 +61,22 @@ isinteractive() && prompt(:prompt);
 # ## Generate data
 
 FOV = 256mm # physical units
-Nx, Ny = 128, 128
+Nx, Ny = 128, 126
 Δx = FOV / Nx # pixel size
 Δy = FOV / Ny
 x = ((-Nx÷2):(Nx÷2-1)) * Δx
 y = ((-Ny÷2):(Ny÷2-1)) * Δy
 νx = ((-Nx÷2):(Nx÷2-1)) / Nx / Δx
-νy = ((-Ny÷2):(Ny÷2-1)) / Ny / Δy
+νy = ((-Ny÷2):(Ny÷2-1)) / Ny / Δy;
 
-param1 = ellipse_parameters(SheppLoganEmis(), fovs=(FOV,FOV), disjoint=true)
-param1 = param1[1:1]
-shift = (1.7, 2.7) .* oneunit(Δx) # true non-integer shifts
+# Ellipse parameters for 1st image:
+param1 = ellipse_parameters(SheppLoganEmis(), fovs=(FOV,FOV))
+shift = (1.7, 9.2) .* oneunit(Δx) # true non-integer shift
 
-param2 = [((p[1:2] .+ shift)..., p[3:end]...) for p in param1]
+# Ellipse parameters for 2nd image:
+param2 = [((p[1:2] .+ shift)..., p[3:end]...) for p in param1];
+
+# Phantom images:
 obj1 = ellipse(param1)
 obj2 = ellipse(param2)
 image1 = phantom(x, y, obj1)
@@ -87,10 +91,22 @@ pim = jim(
 prompt()
 
 
-# Analytical spectra
-data1 = spectrum(νx, νy, obj1)
-data2 = spectrum(νx, νy, obj2)
-ncps = @. data1 * conj(data2) / (abs(data1 * data2))# + eps())
+# Analytical spectra of these images (cf MRI)
+spec1 = spectrum(νx, νy, obj1)
+spec2 = spectrum(νx, νy, obj2)
+
+# Add noise
+seed!(0)
+snr2sigma(db, y) = 10^(-db/20) * norm(y) / sqrt(length(y))
+σnoise = snr2sigma(40, spec1)
+addnoise(y) = y + σnoise * randn(ComplexF32, size(y))
+data1 = addnoise(spec1)
+data2 = addnoise(spec2);
+
+# Normalized cross power spectrum
+ncps = @. data1 * conj(data2) / (abs(data1 * data2));
+
+# Show spectra and noisy phase difference
 fun = data -> log10.(abs.(data) / maximum(abs, data1))
 psp = jim(
  jim(νx, νy, fun(data1), "|spectrum1|"),
@@ -102,20 +118,28 @@ psp = jim(
 prompt()
 
 
+# ## SVD
 U, s, V = svd(ncps)
-scatter(s, xlabel=L"k", ylabel=L"σ_k")
+psig = scatter(s, xlabel=L"k", ylabel=L"σ_k", title="Scree plot")
 
+#
+prompt()
+
+# Phase of principal components
 u = U[:,1]
-v = V[:,1]
+v = conj(V[:,1]) # need conjugate here because of σ u v'
 puv = plot(
- plot(νx, angle.(u), xlabel=L"νx"),
- plot(νy, angle.(v), xlabel=L"νy"),
+ plot(νx, angle.(u), xlabel=L"ν_x"),
+ plot(νy, angle.(v), xlabel=L"ν_y"),
 )
 
 #=
 We could unwrap the phase and then fit a line
+
 Instead we just take finite differences
 and use `median` to eliminate the phase jumps.
+
+The estimated shift is remarkably close to the true shift.
 =#
 
 Δν = 1/FOV
@@ -124,19 +148,8 @@ myshift = (
  median(diff(angle.(v))) ./ (2π * Δν),
 )
 
-@show shift
-@show myshift
+# Error
+myshift .- shift
 
-gui(); throw()
-
-
-
-# Noisy data
-seed!(0)
-y = x0 + 2*randn(size(x0)); # noisy samples
-
-
-## savefig(ps, "todo.pdf")
-
-
+#
 include("../../../inc/reproduce.jl")
