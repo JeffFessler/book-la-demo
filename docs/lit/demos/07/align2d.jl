@@ -123,7 +123,7 @@ prompt()
 By the shift property of the 2D Fourier transform,
 the normalized cross power spectrum (NCPS) is
 ```math
-e^{ı 2π (ν_x d_x + ν_y d_y)
+e^{ı 2π (ν_x d_x + ν_y d_y)}
 =
 e^{ı 2π ν_x d_x}
 e^{ı 2π ν_y d_y}
