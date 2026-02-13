@@ -93,7 +93,7 @@ prompt()
 
 # Analytical spectra of these images (cf MRI)
 spec1 = spectrum(νx, νy, obj1)
-spec2 = spectrum(νx, νy, obj2)
+spec2 = spectrum(νx, νy, obj2);
 
 # Add noise
 seed!(0)
@@ -118,7 +118,29 @@ psp = jim(
 prompt()
 
 
-# ## SVD
+#=
+## SVD
+By the shift property of the 2D Fourier transform,
+the normalized cross power spectrum (NCPS) is
+```math
+e^{ı 2π (ν_x d_x + ν_y d_y)
+=
+e^{ı 2π ν_x d_x}
+e^{ı 2π ν_y d_y}
+```
+where
+``(d_x, d_y)``
+is the 2D translation.
+
+So the 2D NCPS
+(in the absence of noise)
+is an outer product
+of 1D vectors,
+each of which has the phase
+associated with the translation
+in one direction.
+
+=#
 U, s, V = svd(ncps)
 psig = scatter(s, xlabel=L"k", ylabel=L"σ_k", title="Scree plot")
 
@@ -135,11 +157,11 @@ puv = plot(
 
 #=
 We could unwrap the phase and then fit a line
+as suggested in the original paper.
 
 Instead we just take finite differences
-and use `median` to eliminate the phase jumps.
-
-The estimated shift is remarkably close to the true shift.
+and use `median`
+to eliminate the influence of the phase jumps.
 =#
 
 Δν = 1/FOV
@@ -148,7 +170,7 @@ myshift = (
  median(diff(angle.(v))) ./ (2π * Δν),
 )
 
-# Error
+# Error: the estimated shift is remarkably close to the true shift.
 myshift .- shift
 
 #
