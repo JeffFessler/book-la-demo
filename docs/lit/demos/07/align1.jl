@@ -1,8 +1,8 @@
 #=
-# [2D image alignment by rank-1 method](@id align2d)
+# [Image alignment by rank-1 method](@id align1)
 
-This example illustrates 2D image alignment
-(estimating a simple 2D translation between an image pair)
+This example illustrates 2D and 3D image alignment
+(estimating a simple translation between an image pair)
 using a rank-1 approximation
 to the normalized cross power spectrum,
 following the method of
@@ -39,15 +39,17 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using InteractiveUtils: versioninfo
+using ImageGeoms: ImageGeom, axesf
 using ImagePhantoms: SheppLoganEmis, spectrum, phantom
 using ImagePhantoms: ellipse, ellipse_parameters
+using ImagePhantoms: ellipsoid, ellipsoid_parameters
 using LaTeXStrings
 using LinearAlgebra: norm, svd
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
 using Statistics: median
-using Unitful: mm # use of physical units (mm here)
+using Unitful: cm # use of physical units (cm here)
 default(); default(label="", markerstrokecolor=:auto,
     guidefontsize=14, legendfontsize=14, tickfontsize=12)
 
@@ -60,7 +62,7 @@ isinteractive() && prompt(:prompt);
 
 # ## Generate data
 
-FOV = 256mm # physical units
+FOV = 256cm # physical units
 Nx, Ny = 128, 126
 Δx = FOV / Nx # pixel size
 Δy = FOV / Ny
@@ -99,9 +101,9 @@ spec2 = spectrum(νx, νy, obj2);
 seed!(0)
 snr2sigma(db, y) = 10^(-db/20) * norm(y) / sqrt(length(y))
 σnoise = snr2sigma(40, spec1)
-addnoise(y) = y + σnoise * randn(ComplexF32, size(y))
-data1 = addnoise(spec1)
-data2 = addnoise(spec2);
+addnoise(y, σ) = y + σ * randn(ComplexF32, size(y))
+data1 = addnoise(spec1, σnoise)
+data2 = addnoise(spec2, σnoise);
 
 # Normalized cross power spectrum
 ncps = @. data1 * conj(data2) / (abs(data1 * data2));
@@ -166,12 +168,113 @@ to eliminate the influence of the phase jumps.
 
 Δν = 1/FOV
 myshift = (
- median(diff(angle.(u))) ./ (2π * Δν),
- median(diff(angle.(v))) ./ (2π * Δν),
+ median(diff(angle.(u))) / (2π * Δν),
+ median(diff(angle.(v))) / (2π * Δν),
 )
 
 # Error: the estimated shift is remarkably close to the true shift.
 myshift .- shift
+
+
+#=
+## 3D case
+
+Here is an illustration
+of an extension of the method
+to 3D image registration.
+=#
+
+# Ellipsoid parameters for 1st image volume:
+fovs = (24cm, 24cm, 20cm)
+param1 = ellipsoid_parameters( ; fovs)
+ob1 = ellipsoid(param1); # Vector of Ellipsoid objects
+
+# Ellipsoid parameters for 2nd image volume:
+shift3 = (1.1, 2.2, 3.3) .* oneunit.(fovs)
+param2 = [((p[1:3] .+ shift3)..., p[4:end]...) for p in param1];
+ob2 = ellipsoid(param2);
+
+# Visualize
+dims = (128, 130, 30)
+ig = ImageGeom( ; dims, deltas = fovs ./ dims )
+oversample = 3
+image1 = phantom(axes(ig)..., ob1, oversample)
+image2 = phantom(axes(ig)..., ob2, oversample)
+clim = (0.95, 1.05)
+plot(
+ jim(axes(ig)[1:2]..., image2; title = "3D Shepp-Logan phantom slices", clim),
+ jim(axes(ig)[1:2]..., image2-image1; title = "Difference", clim),
+)
+
+#
+prompt()
+
+# Spectra
+spectrum1 = spectrum(axesf(ig)..., ob1)
+spectrum2 = spectrum(axesf(ig)..., ob2);
+
+σnoise = snr2sigma(40, spectrum1)
+data1 = addnoise(spectrum1, σnoise)
+data2 = addnoise(spectrum2, σnoise);
+
+# Normalized cross power spectrum
+ncps = @. data1 * conj(data2) / (abs(data1 * data2));
+
+# Show spectra and noisy phase difference
+fun = data -> log10.(abs.(data / maximum(abs, data1)))
+iz = dims[3]÷2 .+ (0:1)
+psp = jim(
+ jim(axesf(ig)[1:2]..., fun(data1)[:,:,iz], "|spectrum1|"),
+ jim(axesf(ig)[1:2]..., angle.(ncps[:,:,iz]), color = :hsv, title="phase difference"),
+)
+
+#
+prompt()
+
+#=
+## SVD for 3 different foldings of the 3D NCPS
+
+This could be done (more elegantly?)
+with rank-1 tensor method
+but we use SVD of folded NCPS for simplicity.
+=#
+fold1 = reshape(ncps, dims[1], :)
+U, s, V = svd(fold1)
+u1 = U[:,1]
+psig1 = scatter(s, xlabel=L"k", ylabel=L"σ_k", title="Scree plot")
+pa1 = plot(angle.(u1));
+
+fold2 = reshape(permutedims(ncps, [2 1 3]), dims[2], :)
+U, s, V = svd(fold2)
+u2 = U[:,1]
+psig2 = scatter(s, xlabel=L"k", ylabel=L"σ_k", title="Scree plot")
+pa2 = plot(angle.(u2));
+
+fold3 = reshape(permutedims(ncps, [3 1 2]), dims[3], :)
+U, s, V = svd(fold3)
+u3 = U[:,1]
+psig3 = scatter(s, xlabel=L"k", ylabel=L"σ_k", title="Scree plot")
+pa3 = plot(angle.(u3));
+
+p3 = plot(
+ psig1, psig2, psig3,
+ pa1, pa2, pa3,
+ layout = (2, 3),
+)
+
+#
+prompt
+
+# Estimate translation
+Δν = map(i -> diff(axesf(ig)[i])[1], 1:3)
+myshift3 = (
+ median(diff(angle.(u1))) / (2π * Δν[1]),
+ median(diff(angle.(u2))) / (2π * Δν[2]),
+ median(diff(angle.(u3))) / (2π * Δν[3]),
+)
+
+# Error is small:
+myshift3 .- shift3
 
 #
 include("../../../inc/reproduce.jl")
