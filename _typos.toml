@@ -6,6 +6,7 @@ extend-ignore-identifiers-re = [
     "meaned",
     "ivalid",
     "iy",
+    "iz",
     "reord",
     "siz",
 ]
