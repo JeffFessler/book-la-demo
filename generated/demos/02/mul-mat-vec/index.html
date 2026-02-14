@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Matrix-vector product · Demos</title><meta name="title" content="Matrix-vector product · Demos"/><meta property="og:title" content="Matrix-vector product · Demos"/><meta property="twitter:title" content="Matrix-vector product · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/02/mul-mat-vec/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/02/mul-mat-vec/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/02/mul-mat-vec/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../dot/">Vector dot product</a></li><li><a class="tocitem" href="../gauss2d/">2d heatmap</a></li><li class="is-active"><a class="tocitem" href>Matrix-vector product</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Overview-of-matrix-vector-multiplication"><span>Overview of matrix-vector multiplication</span></a></li><li><a class="tocitem" href="#Built-in-*"><span>Built-in <code>*</code></span></a></li><li><a class="tocitem" href="#Double-loop-over-m,n"><span>Double loop over <code>m,n</code></span></a></li><li><a class="tocitem" href="#Double-loop-over-n,m"><span>Double loop over <code>n,m</code></span></a></li><li><a class="tocitem" href="#Row-versions"><span>Row versions</span></a></li><li><a class="tocitem" href="#Col-versions"><span>Col versions</span></a></li><li><a class="tocitem" href="#Test-and-time-each-version"><span>Test and time each version</span></a></li></ul></li><li><a class="tocitem" href="../outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../../07/align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../../07/lr-cv/">Low-Rank Selection via Cross Validation</a></li><li><a class="tocitem" href="../../07/lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../../07/pca/">PCA</a></li><li><a class="tocitem" href="../../07/photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../../07/rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../../07/source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">02 Matrix</a></li><li class="is-active"><a href>Matrix-vector product</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Matrix-vector product</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/02/mul-mat-vec.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="mul-mat-vec"><a class="docs-heading-anchor" href="#mul-mat-vec">Matrix-vector product</a><a id="mul-mat-vec-1"></a><a class="docs-heading-anchor-permalink" href="#mul-mat-vec" title="Permalink"></a></h1><p>This example illustrates different ways of computing matrix-vector products using the Julia language.</p><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/02/mul-mat-vec.jl"><code>mul-mat-vec.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/02/mul-mat-vec.ipynb"><code>mul-mat-vec.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/02/mul-mat-vec.ipynb"><code>mul-mat-vec.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Add the Julia packages used in this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;BenchmarkTools&quot;
+        &quot;InteractiveUtils&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using BenchmarkTools: @benchmark
+using InteractiveUtils: versioninfo</code></pre><h2 id="Overview-of-matrix-vector-multiplication"><a class="docs-heading-anchor" href="#Overview-of-matrix-vector-multiplication">Overview of matrix-vector multiplication</a><a id="Overview-of-matrix-vector-multiplication-1"></a><a class="docs-heading-anchor-permalink" href="#Overview-of-matrix-vector-multiplication" title="Permalink"></a></h2><p>The product between a matrix and a compatible vector is such a basic method in linear algebra that, of course, Julia has a function <code>*</code> built-in for it.</p><p>In practice one should simply call that method via <code>A * x</code> or possibly <code>*(A, x)</code>.</p><p>This demo explores other ways of coding the product, to explore techniques for writing efficient code.</p><p>We write each method as a function because the most reliable way to benchmark different methods is to use functions.</p><h2 id="Built-in-*"><a class="docs-heading-anchor" href="#Built-in-*">Built-in <code>*</code></a><a id="Built-in-*-1"></a><a class="docs-heading-anchor-permalink" href="#Built-in-*" title="Permalink"></a></h2><p>Conventional high-level matrix-vector multiply function:</p><pre><code class="language-julia hljs">function mul0(A::Matrix, x::Vector)
+    @boundscheck size(A,2) == length(x) || error(&quot;DimensionMismatch(A,x)&quot;)
+    return A * x
+end;</code></pre><h2 id="Double-loop-over-m,n"><a class="docs-heading-anchor" href="#Double-loop-over-m,n">Double loop over <code>m,n</code></a><a id="Double-loop-over-m,n-1"></a><a class="docs-heading-anchor-permalink" href="#Double-loop-over-m,n" title="Permalink"></a></h2><p>This is the textbook version.</p><pre><code class="language-julia hljs">function mul_mn(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        inprod = zero(eltype(x)) # accumulator
+        for n in 1:N
+            inprod += A[m,n] * x[n]
+        end
+        y[m] = inprod
+    end
+    return y
+end;</code></pre><p>Using <code>@inbounds</code></p><pre><code class="language-julia hljs">function mul_mn_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = similar(x, M)
+    for m in 1:M
+        inprod = zero(x[1]) # accumulator
+        for n in 1:N
+            @inbounds inprod += A[m,n] * x[n]
+        end
+        @inbounds y[m] = inprod
+    end
+    return y
+end;</code></pre><h2 id="Double-loop-over-n,m"><a class="docs-heading-anchor" href="#Double-loop-over-n,m">Double loop over <code>n,m</code></a><a id="Double-loop-over-n,m-1"></a><a class="docs-heading-anchor-permalink" href="#Double-loop-over-n,m" title="Permalink"></a></h2><p>We expect this way to be faster because of cache access over <code>m</code>.</p><pre><code class="language-julia hljs">function mul_nm(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        for m in 1:M
+            y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;</code></pre><p>With @inbounds</p><pre><code class="language-julia hljs">function mul_nm_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        for m in 1:M
+            @inbounds y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;</code></pre><p>With <code>@inbounds</code> and <code>@simd</code></p><pre><code class="language-julia hljs">function mul_nm_inbounds_simd(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @simd for m in 1:M
+            @inbounds y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;</code></pre><p>And with <code>@views</code></p><pre><code class="language-julia hljs">function mul_nm_inbounds_simd_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @simd for m in 1:M
+            @inbounds @views y[m] += A[m,n] * x[n]
+        end
+    end
+    return y
+end;</code></pre><h2 id="Row-versions"><a class="docs-heading-anchor" href="#Row-versions">Row versions</a><a id="Row-versions-1"></a><a class="docs-heading-anchor-permalink" href="#Row-versions" title="Permalink"></a></h2><p>Loop over <code>m</code>.</p><pre><code class="language-julia hljs">function mul_row(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;</code></pre><p>with <code>@inbounds</code></p><pre><code class="language-julia hljs">function mul_row_inbounds(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = similar(x, M)
+    for m in 1:M
+        @inbounds y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;</code></pre><p>with <code>@views</code></p><pre><code class="language-julia hljs">function mul_row_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = similar(x, M)
+    for m in 1:M
+        @views y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;</code></pre><p>with both</p><pre><code class="language-julia hljs">function mul_row_inbounds_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    @assert N == length(x)
+    y = similar(x, M)
+    for m in 1:M
+        @inbounds @views y[m] = transpose(A[m,:]) * x
+    end
+    return y
+end;</code></pre><h2 id="Col-versions"><a class="docs-heading-anchor" href="#Col-versions">Col versions</a><a id="Col-versions-1"></a><a class="docs-heading-anchor-permalink" href="#Col-versions" title="Permalink"></a></h2><p>Loop over <code>n</code>:</p><pre><code class="language-julia hljs">function mul_col(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        y += A[:,n] * x[n]
+    end
+    return y
+end;</code></pre><p>with broadcast via <code>@.</code> to coalesce operations:</p><pre><code class="language-julia hljs">function mul_col_dot(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @. y += A[:,n] * x[n]
+    end
+    return y
+end;</code></pre><p>and with <code>@views</code></p><pre><code class="language-julia hljs">function mul_col_dot_views(A::Matrix, x::Vector)
+    (M,N) = size(A)
+    y = zeros(eltype(x), M)
+    for n in 1:N
+        @views @. y += A[:,n] * x[n]
+    end
+    return y
+end;</code></pre><h2 id="Test-and-time-each-version"><a class="docs-heading-anchor" href="#Test-and-time-each-version">Test and time each version</a><a id="Test-and-time-each-version-1"></a><a class="docs-heading-anchor-permalink" href="#Test-and-time-each-version" title="Permalink"></a></h2><p>The results will depend on the computer used, of course.</p><pre><code class="language-julia hljs">M = 2^11
+N = M - 4 # non-square to stress test
+A = randn(Float32, M, N)
+x = randn(Float32, N);
+
+flist = (mul0,
+    mul_mn, mul_mn_inbounds,
+    mul_nm, mul_nm_inbounds, mul_nm_inbounds_simd, mul_nm_inbounds_simd_views,
+    mul_row, mul_row_inbounds, mul_row_views, mul_row_inbounds_views,
+    mul_col, mul_col_dot, mul_col_dot_views,
+);
+
+for f in flist # warm-up and test each version
+    @assert A * x ≈ f(A, x)
+end;
+
+out = Vector{String}(undef, length(flist))
+for (i, f) in enumerate(flist) # benchmark timing for each
+    b = @benchmark $f($A,$x)
+    tim = round(minimum(b.times)/10^6, digits=1) # in ms
+    tim = lpad(tim, 4)
+    name = rpad(f, 27)
+	alloc = lpad(b.allocs, 5)
+	mem = round(b.memory/2^10, digits=1)
+    tmp = &quot;$name : $tim ms $alloc alloc $mem KiB&quot;
+    out[i] = tmp
+    isinteractive() &amp;&amp; println(tmp)
+end
+out</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">14-element Vector{String}:
+ &quot;mul0                        :  0.1 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_mn                      : 21.8 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_mn_inbounds             : 32.4 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_nm                      :  0.4 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_nm_inbounds             :  0.2 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_nm_inbounds_simd        :  0.2 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_nm_inbounds_simd_views  :  0.2 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_row                     : 32.7 ms  6147 alloc 16536.1 KiB&quot;
+ &quot;mul_row_inbounds            : 32.7 ms  6147 alloc 16536.1 KiB&quot;
+ &quot;mul_row_views               : 30.7 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_row_inbounds_views      : 30.6 ms     3 alloc 8.1 KiB&quot;
+ &quot;mul_col                     :  3.8 ms 18399 alloc 49495.2 KiB&quot;
+ &quot;mul_col_dot                 :  1.4 ms  6135 alloc 16503.8 KiB&quot;
+ &quot;mul_col_dot_views           :  0.2 ms     3 alloc 8.1 KiB&quot;</code></pre><p>The following results were for a 2017 iMac with 4.2GHz quad-core Intel Core i7 with macOS Mojave 10.14.6 and Julia 1.6.2.</p><p>As expected, simple <code>A*x</code> is the fastest, but one can come quite close to that using proper double loop order with <code>@inbounds</code> or using &quot;dots&quot; and <code>@views</code> to coalesce. Without <code>@views</code> the vector versions have huge memory overhead!</p><pre><code class="language-julia hljs">[
+&quot;mul0                       :  0.9 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_mn                     : 22.5 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_mn_inbounds            : 22.0 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_nm                     :  3.1 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_nm_inbounds            :  1.5 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_nm_inbounds_simd       :  1.5 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_nm_inbounds_simd_views :  1.5 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_row                    : 32.8 ms  2049 alloc 33040.1 KiB&quot;
+&quot;mul_row_inbounds           : 32.7 ms  2049 alloc 33040.1 KiB&quot;
+&quot;mul_row_views              : 22.4 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_row_inbounds_views     : 22.4 ms     1 alloc    16.1 KiB&quot;
+&quot;mul_col                    : 16.0 ms  6133 alloc 98894.6 KiB&quot;
+&quot;mul_col_dot                :  7.0 ms  2045 alloc 32975.6 KiB&quot;
+&quot;mul_col_dot_views          :  1.5 ms     1 alloc    16.1 KiB&quot;
+];</code></pre><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × AMD EPYC 7763 64-Core Processor&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.16.1
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.5
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.0
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../gauss2d/">« 2d heatmap</a><a class="docs-footer-nextpage" href="../outer/">Vector outer product »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 16:45">Saturday 14 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

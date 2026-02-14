@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Low-rank matrix completion: ADMM · Demos</title><meta name="title" content="Low-rank matrix completion: ADMM · Demos"/><meta property="og:title" content="Low-rank matrix completion: ADMM · Demos"/><meta property="twitter:title" content="Low-rank matrix completion: ADMM · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/10/lrmc3/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/10/lrmc3/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/10/lrmc3/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../../07/align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../../07/lr-cv/">Low-Rank Selection via Cross Validation</a></li><li><a class="tocitem" href="../../07/lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../../07/pca/">PCA</a></li><li><a class="tocitem" href="../../07/photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../../07/rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../../07/source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li class="is-active"><a class="tocitem" href>Low-rank matrix completion: ADMM</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#TOP-SECRET"><span><code>TOP SECRET</code></span></a></li><li><a class="tocitem" href="#Low-rank-approximation"><span>Low-rank approximation</span></a></li><li><a class="tocitem" href="#Low-rank-matrix-completion"><span>Low-rank matrix completion</span></a></li><li><a class="tocitem" href="#Iterative-Soft-Thresholding-Algorithm-(ISTA)"><span>Iterative Soft-Thresholding Algorithm (ISTA)</span></a></li><li><a class="tocitem" href="#Fast-Iterative-Soft-Thresholding-Algorithm-(FISTA)"><span>Fast Iterative Soft-Thresholding Algorithm (FISTA)</span></a></li><li><a class="tocitem" href="#Alternating-directions-method-of-multipliers-(ADMM)"><span>Alternating directions method of multipliers (ADMM)</span></a></li><li><a class="tocitem" href="#Proximal-optimized-gradient-method-(POGM)"><span>Proximal optimized gradient method (POGM)</span></a></li></ul></li><li><a class="tocitem" href="../nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">10 Complete</a></li><li class="is-active"><a href>Low-rank matrix completion: ADMM</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Low-rank matrix completion: ADMM</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/10/lrmc3.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="lrmc3"><a class="docs-heading-anchor" href="#lrmc3">Low-rank matrix completion: ADMM</a><a id="lrmc3-1"></a><a class="docs-heading-anchor-permalink" href="#lrmc3" title="Permalink"></a></h1><p>This example illustrates low-rank matrix completion using the Julia language.</p><p>History:</p><ul><li>2017-11-07 Greg Ongie, University of Michigan, original version</li><li>2017-11-12 Jeff Fessler, minor modifications</li><li>2021-08-23 Julia 1.6.2</li><li>2023-04-11 Literate version for Julia 1.8</li></ul><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/10/lrmc3.jl"><code>lrmc3.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/10/lrmc3.ipynb"><code>lrmc3.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/10/lrmc3.ipynb"><code>lrmc3.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Add the Julia packages used in this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;DelimitedFiles&quot;
+        &quot;Downloads&quot;
+        &quot;InteractiveUtils&quot;
+        &quot;LaTeXStrings&quot;
+        &quot;LinearAlgebra&quot;
+        &quot;MIRT&quot;
+        &quot;MIRTjim&quot;
+        &quot;Plots&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using DelimitedFiles: readdlm
+using Downloads: download
+using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: svd, svdvals, Diagonal, norm
+using MIRT: pogm_restart
+using MIRTjim: jim, prompt
+using Plots: plot, scatter, scatter!, savefig, default
+default(); default(markerstrokecolor=:auto, label = &quot;&quot;)</code></pre><p>The following line is helpful when running this jl-file as a script; this way it will prompt user to hit a key after each image is displayed.</p><pre><code class="language-julia hljs">isinteractive() &amp;&amp; prompt(:prompt);</code></pre><h2 id="TOP-SECRET"><a class="docs-heading-anchor" href="#TOP-SECRET"><code>TOP SECRET</code></a><a id="TOP-SECRET-1"></a><a class="docs-heading-anchor-permalink" href="#TOP-SECRET" title="Permalink"></a></h2><p>On 2017-11-06 10:34:12 GMT, Agent 556 obtained a photo of the illegal arms dealer, code name <strong>Professor X-Ray</strong>. However, Agent 556 spilled soup on their lapel-camera, shorting out several CCD sensors. The image matrix has several missing entries; we were only able to recover 25% of data!</p><p>Agent 551: Your mission, should you choose to accept it, is to recover the missing entries and uncover the true identity of <strong>Professor X-Ray</strong>.</p><p>Read in data with missing pixels set to zero</p><pre><code class="language-julia hljs">if !@isdefined(Y)
+    tmp = homedir() * &quot;/web/course/551/julia/demo/professorxray.txt&quot; # jf
+    if !isfile(tmp)
+        url = &quot;https://github.com/JeffFessler/book-la-demo/raw/refs/heads/main/data/professorxray.txt&quot;
+        tmp = download(url)
+    end
+    Y = collect(readdlm(tmp)&#39;)
+    py = jim(Y, &quot;Y: Corrupted image matrix of Professor X-Ray\n (missing pixels set to 0)&quot;)
+end</code></pre><img src="b10d6079.svg" alt="Example block output"/><p>Create binary mask <span>$Ω$</span> (true=observed, false=unobserved)</p><pre><code class="language-julia hljs">Ω = Y .!= 0
+percent_nonzero = sum(Ω) / length(Ω) # count proportion of missing entries</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.25</code></pre><p>Show mask</p><pre><code class="language-julia hljs">pm = jim(Ω, &quot;Ω: Locations of observed entries&quot;)</code></pre><img src="b6721c43.svg" alt="Example block output"/><h2 id="Low-rank-approximation"><a class="docs-heading-anchor" href="#Low-rank-approximation">Low-rank approximation</a><a id="Low-rank-approximation-1"></a><a class="docs-heading-anchor-permalink" href="#Low-rank-approximation" title="Permalink"></a></h2><p>A simple low-rank approximation works poorly for this much missing data</p><pre><code class="language-julia hljs">r = 20
+U,s,V = svd(Y)
+Xr = U[:,1:r] * Diagonal(s[1:r]) * V[:,1:r]&#39;
+pr = jim(Xr, &quot;Low-rank approximation for r=$r&quot;)</code></pre><img src="173a250d.svg" alt="Example block output"/><h2 id="Low-rank-matrix-completion"><a class="docs-heading-anchor" href="#Low-rank-matrix-completion">Low-rank matrix completion</a><a id="Low-rank-matrix-completion-1"></a><a class="docs-heading-anchor-permalink" href="#Low-rank-matrix-completion" title="Permalink"></a></h2><p>Instead, we will try to uncover the identity of <strong>Professor X-Ray</strong> using low-rank matrix completion.</p><p>The optimization problem we will solve is:</p><p class="math-container">\[\min_{\mathbf X}
+\frac{1}{2} ‖ P_Ω(\mathbf X) - P_Ω(\mathbf Y) ‖_2^2
++ β ‖ \mathbf X ‖_*
+\quad\quad\text{(NN-min)}\]</p><p>where <span>$\mathbf Y$</span> is the zero-filled input data matrix, and <span>$P_Ω$</span> is the operator that extracts a vector of entries belonging to the index set <span>$Ω$</span>.</p><p>Define cost function for optimization problem:</p><pre><code class="language-julia hljs">nucnorm = (X) -&gt; sum(svdvals(X))
+costfun = (X, beta) -&gt; 0.5 * norm(X[Ω] - Y[Ω])^2 + beta * nucnorm(X);</code></pre><p>Define singular value soft thresholding (SVST) function</p><pre><code class="language-julia hljs">function SVST(X, beta)
+    U,s,V = svd(X)
+    sthresh = @. max(s - beta, 0)
+    return U * Diagonal(sthresh) * V&#39;
+end;</code></pre><h2 id="Iterative-Soft-Thresholding-Algorithm-(ISTA)"><a class="docs-heading-anchor" href="#Iterative-Soft-Thresholding-Algorithm-(ISTA)">Iterative Soft-Thresholding Algorithm (ISTA)</a><a id="Iterative-Soft-Thresholding-Algorithm-(ISTA)-1"></a><a class="docs-heading-anchor-permalink" href="#Iterative-Soft-Thresholding-Algorithm-(ISTA)" title="Permalink"></a></h2><p>ISTA is an extension of gradient descent to convex cost functions that look like <span>$\min_x f(x) + g(x)$</span> where <span>$f(x)$</span> is smooth and <span>$g(x)$</span> is non-smooth. Also known as a <a href="https://en.wikipedia.org/wiki/Proximal_gradient_methods_for_learning">proximal gradient method</a>.</p><p><strong>ISTA algorithm for solving (NN-min):</strong></p><ul><li><p>initialize <span>$\mathbf X_0 = \mathbf Y$</span> (zero-fill missing entries)</p></li><li><p><code>for</code> <span>$k=0,1,2,…$</span></p><ul><li><p><span>$[\hat{\mathbf X}_k]_{i,j} = \begin{cases}[\mathbf X_k]_{i,j} &amp; (i,j) ∉ Ω \\ [\mathbf Y]_{i,j} &amp; (i,j) ∈ Ω \end{cases}$</span> (Put back in known entries)</p></li><li><p><span>$\mathbf X_{k+1} = \text{SVST}(\hat{\mathbf X}_k,β)$</span> (Singular value soft-thresholding)</p></li></ul></li><li><p><code>end</code></p></li></ul><p>Apply ISTA:</p><pre><code class="language-julia hljs">niter = 400
+beta = 0.01 # chosen by trial-and-error here
+function lrmc_ista(Y)
+    X = copy(Y)
+    Xold = copy(X)
+    cost_ista = zeros(niter+1)
+    cost_ista[1] = costfun(X,beta)
+    for k in 1:niter
+        X[Ω] = Y[Ω]
+        X = SVST(X,beta)
+        cost_ista[k+1] = costfun(X,beta)
+    end
+    return X, cost_ista
+end;
+
+if !@isdefined(Xista)
+    Xista, cost_ista = lrmc_ista(Y)
+    pj_ista = jim(Xista, &quot;ISTA result at $niter iterations&quot;)
+end</code></pre><img src="c2d7b5a3.svg" alt="Example block output"/><p>What went wrong? Let&#39;s investigate. First, let&#39;s see if the above solution is actually low-rank.</p><pre><code class="language-julia hljs">s_ista = svdvals(Xista)
+s0 = svdvals(Y)
+plot(title = &quot;singular values&quot;,
+    xtick = [1, sum(s .&gt; 20*eps()), minimum(size(Y))])
+scatter!(s0, color=:black, label=&quot;Y (initialization)&quot;)
+scatter!(s_ista, color=:red, label=&quot;X (ISTA)&quot;)</code></pre><img src="32c22e7b.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>Now let&#39;s check the cost function descent:</p><pre><code class="language-julia hljs">scatter(cost_ista, color=:red,
+    title = &quot;cost vs. iteration&quot;,
+    xlabel = &quot;iteration&quot;,
+    ylabel = &quot;cost function value&quot;,
+    label = &quot;ISTA&quot;,
+)</code></pre><img src="589024c2.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Fast-Iterative-Soft-Thresholding-Algorithm-(FISTA)"><a class="docs-heading-anchor" href="#Fast-Iterative-Soft-Thresholding-Algorithm-(FISTA)">Fast Iterative Soft-Thresholding Algorithm (FISTA)</a><a id="Fast-Iterative-Soft-Thresholding-Algorithm-(FISTA)-1"></a><a class="docs-heading-anchor-permalink" href="#Fast-Iterative-Soft-Thresholding-Algorithm-(FISTA)" title="Permalink"></a></h2><p>Modification of ISTA that includes Nesterov acceleration for faster convergence.</p><p>Reference:</p><ul><li>Beck, A. and Teboulle, M., 2009. <a href="https://doi.org/10.1137/080716542">A fast iterative shrinkage-thresholding algorithm for linear inverse problems.</a> SIAM J. on Imaging Sciences, 2(1), pp.183-202.</li></ul><p><strong>FISTA algorithm for solving (NN-min)</strong></p><ul><li><p>initialize matrices <span>$\mathbf Z_0 = \mathbf X_0 = \mathbf Y$</span></p></li><li><p><code>for</code> <span>$k=0,1,2,…$</span></p><ul><li><p><span>$[\hat{\mathbf Z}_k]_{i,j} = \begin{cases}[\mathbf Z_k]_{i,j} &amp; (i,j) ∉ Ω \\ [\mathbf Y]_{i,j} &amp; (i,j) ∈ Ω \end{cases}$</span> (Put back in known entries)</p></li><li><p><span>$\mathbf X_{k+1} = \text{SVST}(\hat{\mathbf Z}_k,\beta)$</span></p></li><li><p><span>$t_{k+1} = \frac{1 + \sqrt{1+4t_k^2}}{2}$</span> (Nesterov step-size)</p></li><li><p><span>$\mathbf Z_{k+1} = \mathbf X_{k+1} + \frac{t_k-1}{t_{k+1}}(\mathbf X_{k+1}-\mathbf X_{k})$</span> (Momentum update)</p></li></ul></li><li><p><code>end</code></p></li></ul><p>Run FISTA:</p><pre><code class="language-julia hljs">niter = 200
+function lrmc_fista(Y)
+    X = copy(Y)
+    Z = copy(X)
+    Xold = copy(X)
+    told = 1
+    cost_fista = zeros(niter+1)
+    cost_fista[1] = costfun(X,beta)
+    for k in 1:niter
+        Z[Ω] = Y[Ω]
+        X = SVST(Z,beta)
+        t = (1 + sqrt(1+4*told^2))/2
+        Z = X + ((told-1)/t)*(X-Xold)
+        Xold = X
+        told = t
+        cost_fista[k+1] = costfun(X,beta) # comment out to speed-up
+    end
+    return X, cost_fista
+end;
+
+if !@isdefined(Xfista)
+    Xfista, cost_fista = lrmc_fista(Y)
+    pj_fista = jim(Xfista, &quot;FISTA result at $niter iterations&quot;)
+end</code></pre><img src="25612c20.svg" alt="Example block output"/><pre><code class="language-julia hljs">plot(title = &quot;cost vs. iteration&quot;,
+    xlabel=&quot;iteration&quot;, ylabel = &quot;cost function value&quot;)
+scatter!(cost_ista, label=&quot;ISTA&quot;, color=:red)
+scatter!(cost_fista, label=&quot;FISTA&quot;, color=:blue)</code></pre><img src="42a3aea5.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>See if the FISTA result is &quot;low rank&quot;</p><pre><code class="language-julia hljs">s_fista = svdvals(Xfista)
+effective_rank = count(&gt;(0.01*s_fista[1]), s_fista)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">19</code></pre><pre><code class="language-julia hljs">ps = plot(title=&quot;singular values&quot;,
+    xtick = [1, effective_rank, count(&gt;(20*eps()), s_fista), minimum(size(Y))])
+scatter!(s0, label=&quot;Y (initial)&quot;, color=:black)
+scatter!(s_fista, label=&quot;X (FISTA)&quot;, color=:blue)</code></pre><img src="e738ac56.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>Exercise: think about why <span>$σ_1(X) &gt; σ_1(Y)$</span> !</p><h2 id="Alternating-directions-method-of-multipliers-(ADMM)"><a class="docs-heading-anchor" href="#Alternating-directions-method-of-multipliers-(ADMM)">Alternating directions method of multipliers (ADMM)</a><a id="Alternating-directions-method-of-multipliers-(ADMM)-1"></a><a class="docs-heading-anchor-permalink" href="#Alternating-directions-method-of-multipliers-(ADMM)" title="Permalink"></a></h2><p>ADMM is another approach that uses SVST as a sub-routine, closely related to proximal gradient descent.</p><p>It is faster than FISTA, but the algorithm requires a tuning parameter <span>$μ$</span>. (Here we use <span>$μ = β$</span>).</p><p>References:</p><ul><li>Cai, J.F., Candès, E.J. and Shen, Z., 2010. <a href="https://doi.org/10.1137/080738970">A singular value thresholding algorithm for matrix completion.</a> SIAM J. Optimization, 20(4), pp. 1956-1982.</li><li>Boyd, S., Parikh, N., Chu, E., Peleato, B. and Eckstein, J., 2011. <a href="https://doi.org/10.1561/2200000016">Distributed optimization and statistical learning via the alternating direction method of multipliers.</a> Foundations and Trends in Machine Learning, 3(1), pp. 1-122.</li></ul><p>Run alternating directions method of multipliers (ADMM) algorithm:</p><pre><code class="language-julia hljs">niter = 50</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">50</code></pre><p>Choice of parameter <span>$μ$</span> can greatly affect convergence rate</p><pre><code class="language-julia hljs">function lrmc_admm(Y; mu::Real = beta)
+    X = copy(Y)
+    Z = zeros(size(X))
+    L = zeros(size(X))
+    cost_admm = zeros(niter+1)
+    cost_admm[1] = costfun(X,beta)
+    for k in 1:niter
+        Z = SVST(X + L, beta / mu)
+        X = (Y + mu * (Z - L)) ./ (mu .+ Ω)
+        L = L + X - Z
+        cost_admm[k+1] = costfun(X,beta) # comment out to speed-up
+    end
+    return X, cost_admm
+end;
+
+if !@isdefined(Xadmm)
+    Xadmm, cost_admm = lrmc_admm(Y)
+    pj_admm = jim(Xadmm, &quot;ADMM result at $niter iterations&quot;)
+end</code></pre><img src="145b32db.svg" alt="Example block output"/><pre><code class="language-julia hljs">pc = plot(title = &quot;cost vs. iteration&quot;,
+    xtick = [0, 50, 200, 400],
+    xlabel = &quot;iteration&quot;, ylabel = &quot;cost function value&quot;)
+scatter!(0:400, cost_ista, label=&quot;ISTA&quot;, color=:red)
+scatter!(0:200, cost_fista, label=&quot;FISTA&quot;, color=:blue)
+scatter!(0:niter, cost_admm, label=&quot;ADMM&quot;, color=:magenta)</code></pre><img src="45468a10.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>All singular values</p><pre><code class="language-julia hljs">s_admm = svdvals(Xadmm)
+scatter!(ps, s_admm, label=&quot;X (ADMM)&quot;, color=:magenta, marker=:square)</code></pre><img src="1b7cf2c8.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>For a suitable choice of <span>$μ$</span>, ADMM converges faster than FISTA.</p><h2 id="Proximal-optimized-gradient-method-(POGM)"><a class="docs-heading-anchor" href="#Proximal-optimized-gradient-method-(POGM)">Proximal optimized gradient method (POGM)</a><a id="Proximal-optimized-gradient-method-(POGM)-1"></a><a class="docs-heading-anchor-permalink" href="#Proximal-optimized-gradient-method-(POGM)" title="Permalink"></a></h2><p>The <a href="https://doi.org/10.1137/16m108104x">proximal optimized gradient method (POGM)</a> with <a href="https://doi.org/10.1007/s10957-018-1287-4">adaptive restart</a> is faster than FISTA with very similar computation per iteration. Unlike ADMM, POGM does not require any algorithm tuning parameter <span>$μ$</span>, making it easier to use in many practical composite optimization problems.</p><pre><code class="language-julia hljs">if !@isdefined(Xpogm)
+    Fcost = X -&gt; costfun(X, beta)
+    f_grad = X -&gt; Ω .* (X - Y) # gradient of smooth term
+    f_L = 1 # Lipschitz constant of f_grad
+    g_prox = (X, c) -&gt; SVST(X, c * beta)
+    fun = (iter, xk, yk, is_restart) -&gt; (xk, Fcost(xk), is_restart)
+    niter = 150
+    Xpogm, out = pogm_restart(Y, Fcost, f_grad, f_L; g_prox, fun, niter)
+    cost_pogm = [o[2] for o in out]
+    pj_pogm = jim(Xpogm, &quot;POGM result at $niter iterations&quot;)
+end</code></pre><img src="08b2bb6c.svg" alt="Example block output"/><pre><code class="language-julia hljs">scatter!(pc, 0:niter, cost_pogm, label=&quot;POGM&quot;, color=:green)</code></pre><img src="eb471d01.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × AMD EPYC 7763 64-Core Processor&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.16.1
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.5
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.0
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../lrmc-m/">« Low-rank matrix completion: AltMin, ISTA, FISTA</a><a class="docs-footer-nextpage" href="../nmf/">Non-negative matrix factorization »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 16:45">Saturday 14 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
