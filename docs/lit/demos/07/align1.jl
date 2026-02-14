@@ -48,7 +48,7 @@ using LinearAlgebra: norm, svd
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
-using Unitful: cm # use of physical units (cm here)
+using Unitful: cm, @u_str # use of physical units (cm here)
 default(); default(label="", markerstrokecolor=:auto,
     guidefontsize=14, legendfontsize=14, tickfontsize=12)
 
@@ -72,10 +72,10 @@ y = ((-Ny÷2):(Ny÷2-1)) * Δy
 
 # Ellipse parameters for 1st image:
 param1 = ellipse_parameters(SheppLoganEmis(), fovs=(FOV,FOV))
-shift = (1.7, 9.2) .* oneunit(Δx) # true non-integer shift
+shift2 = (1.7, 9.2) .* oneunit(Δx) # true non-integer shift
 
 # Ellipse parameters for 2nd image:
-param2 = [((p[1:2] .+ shift)..., p[3:end]...) for p in param1];
+param2 = [((p[1:2] .+ shift2)..., p[3:end]...) for p in param1];
 
 # Phantom images:
 obj1 = ellipse(param1)
@@ -172,9 +172,12 @@ function phase_slope(x::AbstractVector, Δν::Number; weights = 1)
 end;
 
 myshift2 = phase_slope.((u,v), 1/FOV)
+_round(x) = round(u"cm", x; digits=4)
+_round.(myshift2)
 
 # Error: the estimated shift is remarkably close to the true shift.
-error2 = myshift2 .- shift
+error2 = myshift2 .- shift2
+_round.(error2)
 
 
 #=
@@ -267,16 +270,18 @@ p3 = plot(
 )
 
 #
-prompt
+prompt()
 
 #=
 Estimate translation
 =#
 Δν = map(i -> diff(axesf(ig)[i])[1], 1:3)
 myshift3 = phase_slope.((u1,u2,u3), Δν)
+_round.(myshift3)
 
 # Error is small:
 error3 = myshift3 .- shift3
+_round.(error3)
 
 #
 include("../../../inc/reproduce.jl")
