@@ -48,7 +48,6 @@ using LinearAlgebra: norm, svd
 using MIRTjim: jim, prompt
 using Plots: default, gui, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
-using Statistics: median
 using Unitful: cm # use of physical units (cm here)
 default(); default(label="", markerstrokecolor=:auto,
     guidefontsize=14, legendfontsize=14, tickfontsize=12)
@@ -161,19 +160,21 @@ puv = plot(
 We could unwrap the phase and then fit a line
 as suggested in the original paper.
 
-Instead we just take finite differences
-and use `median`
-to eliminate the influence of the phase jumps.
+Instead,
+we use a phase slope estimate
+described in
+[Feiweier 2013 US Patent 8497681B2](https://patents.google.com/patent/US8497681B2)
+that avoids any need for phase unwrapping.
 =#
+function phase_slope(x::AbstractVector, Δν::Number; weights = 1)
+   tmp = x[2:end] .* conj(x[1:end-1])
+   return angle(sum(weights .* tmp)) / (2π * Δν)
+end;
 
-Δν = 1/FOV
-myshift = (
- median(diff(angle.(u))) / (2π * Δν),
- median(diff(angle.(v))) / (2π * Δν),
-)
+myshift2 = phase_slope.((u,v), 1/FOV)
 
 # Error: the estimated shift is remarkably close to the true shift.
-myshift .- shift
+error2 = myshift2 .- shift
 
 
 #=
@@ -234,9 +235,12 @@ prompt()
 #=
 ## SVD for 3 different foldings of the 3D NCPS
 
-This could be done (more elegantly?)
-with rank-1 tensor method
-but we use SVD of folded NCPS for simplicity.
+This follows the folded NCPS method of
+[Hoge et al., ICIP 2003](https://doi.org/10.1109/ICIP.2003.1246778),
+described therein
+in terms of the dominant singular vectors
+of a high-order SVD
+of the tensor data.
 =#
 fold1 = reshape(ncps, dims[1], :)
 U, s, V = svd(fold1)
@@ -265,16 +269,14 @@ p3 = plot(
 #
 prompt
 
-# Estimate translation
+#=
+Estimate translation
+=#
 Δν = map(i -> diff(axesf(ig)[i])[1], 1:3)
-myshift3 = (
- median(diff(angle.(u1))) / (2π * Δν[1]),
- median(diff(angle.(u2))) / (2π * Δν[2]),
- median(diff(angle.(u3))) / (2π * Δν[3]),
-)
+myshift3 = phase_slope.((u1,u2,u3), Δν)
 
 # Error is small:
-myshift3 .- shift3
+error3 = myshift3 .- shift3
 
 #
 include("../../../inc/reproduce.jl")
