@@ -23,9 +23,10 @@ if false
         "LaTeXStrings"
         "LinearAlgebra"
         "MIRTjim"
+        "Optim"
         "Plots"
         "Random"
-        "StatsBase"
+        "Statistics"
     ])
 end
 
@@ -37,17 +38,19 @@ using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: dot, eigvals
 using MIRTjim: prompt
+using Optim: optimize
+import Optim # Options
 using Plots: default, gui, savefig
-using Plots: plot, plot!, scatter, scatter!
+using Plots: histogram!, plot, plot!, scatter, scatter!
 using Random: seed!
-using StatsBase: mean
+using Statistics: mean
 default(); default(markersize=6, linewidth=2, markerstrokecolor=:auto, label="",
  tickfontsize=12, labelfontsize=18, legendfontsize=18, titlefontsize=18)
 
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each figure is displayed.
 
-isinteractive() ? prompt(:prompt) : prompt(:draw)
+isinteractive() ? prompt(:prompt) : prompt(:draw);
 
 
 #=
@@ -69,13 +72,13 @@ if !@isdefined(yy)
         v1 = [v1; rand(nex,n1)] # (2+nex, n1)
     end
     M = n0 + n1 # how many samples
-    yy = [-ones(n0); ones(n1)] # (M) labels
-    vv = [[v0 v1]; ones(1,n0+n1)] # (npar, M) training data
+    yy = [-ones(Int, n0); ones(Int, n1)] # (M) labels
+    vv = [[v0 v1]; ones(1,M)] # (npar, M) training data - with bias/offset
     npar = 3 + nex # unknown parameters
 end;
 
 
-# scatter plot and initial decision boundary
+# Scatter plot and initial decision boundary
 if !@isdefined(ps)
     x0 = [-1; 3; rand(nex); 5]
     v1p = range(-1,1,101) * 4
@@ -91,21 +94,21 @@ if !@isdefined(ps)
     scatter!(v1[1,:], v1[2,:], color=:blue, marker=:square, alpha=0.7)
     ## savefig(ps, "demo_fgm1_ogm1_s0.pdf")
 end
-plot(ps)
+ps
 
 #
 prompt()
 
 
 #=
-# Cost function
+## Cost function
 
 Logistic regression with Tikhonov regularization:
 ```math
-f(x) = 1_M' h.(A x) + β/2 ‖ x ‖_2^2
+f(x) = 1_M' h.(A x) + (β/2) ‖ x ‖_2^2
 ```
 where
-``h(z) = log(1 + e^{-z})``
+``h(z) = \log(1 + e^{-z})``
 is the logistic loss function.
 
 Its gradient is
@@ -113,15 +116,15 @@ Its gradient is
 and its Lipschitz constant
 is ``‖A‖_2^2 / 4 + β``.
 =#
-if !@isdefined(kost)
-    pot = (t) -> log(1 + exp(-t)) # logistic
-    dpot = (t) -> -1 / (exp(t) + 1)
+if !@isdefined(cost)
+    pot(t) = log(1 + exp(-t)) # logistic
+    dpot(t) = -1 / (exp(t) + 1)
     tmp = vv * vv' # (npar, npar) covariance
     tmp = eigvals(tmp)
     @show maximum(tmp) / minimum(tmp)
     pLip = maximum(tmp) / 4 # 1/4 comes from logistic curvature
 
-    reg = 2^0
+    reg = 2^0 # todo: use cross validation to select
     Lip = pLip + reg # Lipschitz constant
 
     A = yy .* vv'
@@ -131,12 +134,13 @@ if !@isdefined(kost)
         @show size(tmp)
     end
 
-    kost = x -> sum(pot, A * x, dims=1) .+ reg/2 * sum(abs2, x, dims=1)
+    cost(x::AbstractVector) = sum(pot, A * x) + reg/2 * sum(abs2, x)
+    cost(x::AbstractMatrix) = cost.(eachcol(x)) ## to handle arrays
 end;
 
 
 #=
-# GD
+## GD
 Iterate GD
 =#
 tol = 1e-6
@@ -167,13 +171,13 @@ if !@isdefined(xgs)
     xgs = gd(x0, gfun, niter_gd)
     pgs = plot(xgs', xlabel="Iteration", title = "GD")
 end
-plot(pgs)
+pgs
 
 #
 prompt()
 
 #=
-# Nesterov FGM
+## Nesterov FGM
 =#
 do_restart = true;
 
@@ -218,7 +222,7 @@ if !@isdefined(xns)
     xns, re_nest = fgm(x0, gfun, Lip, niter_n1)
     pns = plot(xns', xlabel = "Iteration", title = "FGM")
 end
-plot(pns)
+pns
 
 #
 prompt()
@@ -275,22 +279,38 @@ if !@isdefined(x1s)
     x1s, re_ogm1 = ogm(x0, gfun, Lip, niter_o1)
     po1 = plot(x1s', xlabel = "Iteration", title = "OGM")
 end
-plot(po1)
+po1
 
 #
 prompt()
 
 
-# impartial version of x ͚
-xh_tmp = [xgs[:,end] xns[:,end] x1s[:,end]]
-xh = vec(mean(xh_tmp[:,2:3], dims=2)); # GD too slow to include
+#=
+## L-BFGS optimizer
+=#
+opt = Optim.Options(
+ store_trace = true,
+ show_warnings = false,
+ extended_trace = true, # for trace of x
+)
+outq = optimize(cost, gfun, x0, opt; inplace=false)
+xqs = hcat(Optim.x_trace(outq)...)
+xq = outq.minimizer
+xh = xqs[:,end] # final estimate
 
-# plot cost
+
+# Impartial version of x ͚
+xh_tmp = [xgs[:,end] xns[:,end] x1s[:,end] xqs[:,end]]
+xh = vec(mean(xh_tmp[:,2:end], dims=2)); # GD too slow to include
+
+# Plot cost
+ifun = (x) -> 0:(size(x,2)-1);
 extra = do_restart ? " (restart)" : ""
 pc = plot(xaxis=("iteration", (0,10)), yaxis=("Cost function",))
-plot!(0:niter_gd, vec(kost(xgs)) .- kost(xh), label = "GD" * extra)
-plot!(0:niter_n1, vec(kost(xns)) .- kost(xh), label = "FGM" * extra)
-plot!(0:niter_o1, vec(kost(x1s)) .- kost(xh), label = "OGM1" * extra)
+plot!(0:niter_gd, cost(xgs) .- cost(xh), label = "GD" * extra)
+plot!(0:niter_n1, cost(xns) .- cost(xh), label = "FGM" * extra)
+plot!(0:niter_o1, cost(x1s) .- cost(xh), label = "OGM1" * extra)
+plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN")
 
 #
 prompt()
@@ -303,19 +323,18 @@ if true
     plot!(psh, v1p, v2p, color = :magenta, label="final")
 ## savefig(psh, "demo-fgm1-fgm1a.pdf")
 end
-plot(psh)
+psh
 
 #
 prompt()
 
 
 #=
-# Plot iterate convergence
+## Plot iterate convergence
 =#
 
 efun1 = (x) -> vec(sqrt.(sum(abs2, x .- xh, dims=1)))
 efun = (x) -> do_restart ? log10.(efun1(x)) : efun1(x)
-ifun = (x) -> 0:(size(x,2)-1);
 
 pic = plot(
  xaxis = ("Iteration", (0, 40+10*nex), 0:20:80),
@@ -327,6 +346,7 @@ pic = plot(
 plot!(ifun(xgs), efun(xgs), color=:green, label = "GD")
 plot!(ifun(xns), efun(xns), color=:blue, label = "Nesterov FGM" * extra)
 plot!(ifun(x1s), efun(x1s), color=:red, label = "OGM1" * extra)
+plot!(ifun(xqs), efun(xqs), label = "QN", marker = :o)
 if do_restart
     scatter!(re_nest, efun(xns[:, re_nest .+ 1]), color=:blue)
     scatter!(re_ogm1, efun(x1s[:, re_ogm1 .+ 1]), color=:red)
@@ -339,6 +359,24 @@ prompt()
 ## savefig demo_fgm1_ogm1c # restart
 ## savefig demo_fgm1_ogm1b # no restart
 
-## todo: compare with LBFGS
 
+#=
+## Plot 1D separation
+=#
+
+inprod0 = [v0; ones(1,n0)]' * xh
+inprod1 = [v1; ones(1,n1)]' * xh
+
+accuracy0 = round(count(<(0), inprod0) / n0 * 100, digits=1)
+accuracy1 = round(count(>(0), inprod1) / n1 * 100, digits=1)
+
+plot(xaxis=("⟨x,v⟩",))
+bins = -12:12
+histogram!(inprod0, alpha=0.5; bins, color=:green, linecolor = :green,
+ label="class 0: $accuracy0%")
+histogram!(inprod1, alpha=0.5; bins, color=:blue, linecolor = :blue,
+ label="class 1: $accuracy1%")
+
+#
+prompt()
 include("../../../inc/reproduce.jl")

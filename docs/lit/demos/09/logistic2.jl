@@ -51,7 +51,7 @@ default(); default(markersize=6, linewidth=2, markerstrokecolor=:auto, label="",
 # The following line is helpful when running this file as a script;
 # this way it will prompt user to hit a key after each figure is displayed.
 
-isinteractive() ? prompt(:prompt) : prompt(:draw)
+isinteractive() ? prompt(:prompt) : prompt(:draw);
 
 
 #=
@@ -79,7 +79,7 @@ if !@isdefined(yy)
 end;
 
 
-# scatter plot and initial decision boundary
+# Scatter plot and initial decision boundary
 if !@isdefined(ps)
     x0 = [-1; 3; rand(nex); 5]
     v1p = range(-1,1,101) * 4
@@ -94,7 +94,7 @@ if !@isdefined(ps)
     scatter!(v0[1,:], v0[2,:], color=:green, alpha=0.7)
     scatter!(v1[1,:], v1[2,:], color=:blue, marker=:square, alpha=0.7)
 end
-plot(ps)
+ps
 
 #
 prompt()
@@ -105,10 +105,10 @@ prompt()
 
 Logistic regression with Tikhonov regularization:
 ```math
-f(x) = 1_M' h.(A x) + β/2 ‖ x ‖_2^2
+f(x) = 1_M' h.(A x) + (β/2) ‖ x ‖_2^2
 ```
 where
-``h(z) = log(1 + e^{-z})``
+``h(z) = \log(1 + e^{-z})``
 is the logistic loss function.
 
 Its gradient is
@@ -150,8 +150,6 @@ opt = Optim.Options(
 outq = optimize(cost, gfun, x0, opt; inplace=false)
 xqs = hcat(Optim.x_trace(outq)...)
 xq = outq.minimizer
-
-
 xh = xqs[:,end] # final estimate
 
 # Plot cost
@@ -169,7 +167,7 @@ if true
     v2p = @. (-xh[end] - xh[1] * v1p) / xh[2]
     plot!(psh, v1p, v2p, color = :magenta, label="final")
 end
-plot(psh)
+psh
 
 #
 prompt()
@@ -182,12 +180,12 @@ prompt()
 efun1 = (x) -> vec(sqrt.(sum(abs2, x .- xh, dims=1)))
 efun = (x) -> log10.(efun1(x))
 pic = plot(
-xaxis = ("Iteration", (0, 16), 0:2:16),
+ xaxis = ("Iteration", (0, 16), 0:2:16),
  yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-9, 3), -9:3),
  legend = :topright,
 )
 plot!(ifun(xqs), efun(xqs), label = "QN", marker = :o)
-plot(pic)
+pic
 
 #
 prompt()
