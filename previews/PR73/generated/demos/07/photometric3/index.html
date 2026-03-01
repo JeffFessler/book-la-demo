@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Photometric stereo · Demos</title><meta name="title" content="Photometric stereo · Demos"/><meta property="og:title" content="Photometric stereo · Demos"/><meta property="twitter:title" content="Photometric stereo · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/photometric3/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/photometric3/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/photometric3/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../lr-cv/">Low-Rank Selection via Cross Validation</a></li><li><a class="tocitem" href="../lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../pca/">PCA</a></li><li class="is-active"><a class="tocitem" href>Photometric stereo</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Ground-truth-surface-normals"><span>Ground-truth surface normals</span></a></li><li><a class="tocitem" href="#Lighting-directions"><span>Lighting directions</span></a></li><li><a class="tocitem" href="#Synthesize-images"><span>Synthesize images</span></a></li><li><a class="tocitem" href="#Low-rank-structure"><span>Low-rank structure</span></a></li><li><a class="tocitem" href="#Rank-3-approximation"><span>Rank-3 approximation</span></a></li><li><a class="tocitem" href="#Estimate-lighting-directions"><span>Estimate lighting directions</span></a></li><li><a class="tocitem" href="#Estimate-surface-normals."><span>Estimate surface normals.</span></a></li><li><a class="tocitem" href="#Exercise"><span>Exercise</span></a></li></ul></li><li><a class="tocitem" href="../rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/logistic2/">Logistic regression - QN</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">07 Low-Rank</a></li><li class="is-active"><a href>Photometric stereo</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Photometric stereo</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/photometric3.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="photometric3"><a class="docs-heading-anchor" href="#photometric3">Photometric stereo</a><a id="photometric3-1"></a><a class="docs-heading-anchor-permalink" href="#photometric3" title="Permalink"></a></h1><p>This example illustrates <a href="https://en.wikipedia.org/wiki/Photometric_stereo">photometric stereo</a> for <a href="https://en.wikipedia.org/wiki/Lambertian_reflectance">Lambertian surfaces</a> using the Julia language.</p><p>This method determines the surface normals of an object from 3 or more pictures of the object taken with different lighting directions.</p><p>This demo follows the &quot;uncalibrated&quot; approach of <a href="https://doi.org/10.1364/JOSAA.11.003079">Hayakawa, JOSA, 1994</a> that treats the lighting directions as being unknown, unlike the original least-squares approach of <a href="https://doi.org/10.1117/12.7972479">Woodham, 1980</a>.</p><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/photometric3.jl"><code>photometric3.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/07/photometric3.ipynb"><code>photometric3.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/07/photometric3.ipynb"><code>photometric3.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Add the Julia packages used in this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;Downloads&quot;
+        &quot;InteractiveUtils&quot;
+        &quot;LinearAlgebra&quot;
+        &quot;LaTeXStrings&quot;
+        &quot;MIRTjim&quot;
+        &quot;NPZ&quot;
+        &quot;Plots&quot;
+        &quot;Printf&quot;
+        &quot;Random&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using Downloads: download
+using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: Diagonal, svd, svdvals, rank, norm, pinv
+using MIRTjim: jim, prompt
+using NPZ: npzread
+using Plots: gui, plot, scatter, scatter!, ylims!, cgrad, default, RGB, savefig
+using Plots.PlotMeasures: px
+using Printf: @sprintf
+using Random: seed!
+default(); default(label=&quot;&quot;, markerstrokecolor=:auto)</code></pre><p>The following line is helpful when running this jl-file as a script; this way it will prompt user to hit a key after each image is displayed.</p><pre><code class="language-julia hljs">isinteractive() &amp;&amp; prompt(:prompt);</code></pre><h2 id="Ground-truth-surface-normals"><a class="docs-heading-anchor" href="#Ground-truth-surface-normals">Ground-truth surface normals</a><a id="Ground-truth-surface-normals-1"></a><a class="docs-heading-anchor-permalink" href="#Ground-truth-surface-normals" title="Permalink"></a></h2><p>Load ground truth surface normal vectors of &quot;bunny&quot; data used in <a href="https://doi.org/10.1109/CVPR.2012.6247691">2012 CVPR paper by Ikehata et al.</a>.</p><pre><code class="language-julia hljs">if !@isdefined(gt_normal_bunny)
+    url = &quot;https://github.com/yasumat/RobustPhotometricStereo/raw/master/data/bunny/gt_normal.npy&quot;
+    tmp = npzread(download(url))
+    i1, i2 = 32:256-25, 33:212 # crop to reduce compute
+    tmp = permutedims(tmp, [2, 1, 3]) # &quot;transpose&quot;
+    gt_normal_bunny = tmp[i1, i2, :] # crop
+end;</code></pre><p>Create hemisphere to augment the bunny data.</p><pre><code class="language-julia hljs">function hemi_normal(x, y ; # surface normal of a hemi-ellipsoid
+    xh = 20f0, yh = xh, zh = xh,
+)
+    tmp = (x/xh)^2 + (y/yh)^2
+    if tmp &lt; 1
+        z = zh * sqrt(1 - tmp)
+        tmp = [x/xh^2, y/yh^2, z/zh^2]
+        return tmp / norm(tmp)
+    end
+    return [0, 0, 0]
+end;
+
+if true
+    rh = 20
+    x = -rh:rh
+    y = x
+    tmp = hemi_normal.(x, y&#39;; xh=rh)
+    tmp = reduce(hcat, tmp)
+    tmp = reshape(tmp&#39;, 2rh+1, 2rh+1, 3)
+end;</code></pre><p>Define ground truth normals as combination of bunny normals and hemisphere normals.</p><pre><code class="language-julia hljs">if !@isdefined(gt_normal)
+    gt_normal = copy(gt_normal_bunny)
+    gt_normal[176 .+ x, 25 .+ y, :] = tmp
+    nx, ny = size(gt_normal)[1:2]
+    shape2 = x -&gt; reshape(x, prod(size(x)[1:2]), :)
+    shape3 = x -&gt; reshape(x, nx, ny, :)
+end;</code></pre><p>The three images are the x, y, and z components</p><pre><code class="language-julia hljs">pn_gt = jim(gt_normal; title=&quot;Ground-truth normals&quot;, nrow=1,
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+#  xaxis=L&quot;x&quot;, yaxis=L&quot;y&quot;,
+    size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
+# savefig(pn_gt, &quot;photometric3_gt.pdf&quot;)</code></pre><img src="b40ec39f.svg" alt="Example block output"/><p>Surface normals are meaningful only where the object is present, so we determine an object &quot;mask&quot;.</p><pre><code class="language-julia hljs">mask = dropdims(sum(abs, gt_normal, dims=3), dims=3) .&gt; eps(Float32)
+pm = jim(mask, &quot;Mask&quot;; cticks=0:1)</code></pre><img src="0f1bae41.svg" alt="Example block output"/><p>Verify that the surface normals are unit norm (within the mask).</p><pre><code class="language-julia hljs">@assert maximum(abs, sum(abs2, gt_normal, dims=3)[vec(mask)] .- 1) &lt; 1e-12</code></pre><p>View angle of surface normal w.r.t. z-axis</p><pre><code class="language-julia hljs">if true
+    tmp = sqrt.(sum(abs2, gt_normal[:,:,1:2]; dims=3))
+    tmp = rad2deg.(atan.(tmp, gt_normal[:,:,3]))
+    pza = jim(tmp; title=&quot;Angle of surface normal w.r.t. z axis&quot;,
+        ctitle=&quot;degrees&quot;, cticks=0:30:90)
+end</code></pre><img src="95960ad0.svg" alt="Example block output"/><h2 id="Lighting-directions"><a class="docs-heading-anchor" href="#Lighting-directions">Lighting directions</a><a id="Lighting-directions-1"></a><a class="docs-heading-anchor-permalink" href="#Lighting-directions" title="Permalink"></a></h2><p>Define lighting directions for simulated object views.</p><pre><code class="language-julia hljs">function light_vector( ;
+    θ = rand() * 2π,
+    r = 1/sqrt(2),
+    xoffset = 0.2,
+    yoffset = 0.2,
+    x = r * cos(θ) + xoffset,
+    y = r * sin(θ) + yoffset,
+)
+    z = sqrt(1 - x^2 - y^2)
+    return [x, y, z]
+end;</code></pre><p>Deliberately asymmetric directions to aid testing</p><pre><code class="language-julia hljs">if !@isdefined(Ltrue)
+    nlight = 12 # number of lighting directions
+    Ltrue = [light_vector(; θ=il/nlight*1.7π, r=0.5-0.1*il/nlight) for il in 1:nlight]
+    Ltrue = reduce(hcat, Ltrue) # (3, nlight)
+    @assert maximum(abs, sum(abs2, Ltrue; dims=1) .- 1) &lt; 9eps()
+    @show extrema(Ltrue[3,:])
+end;</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">extrema(Ltrue[3, :]) = (0.6437950455988092, 0.9894696470170959)</code></pre><p>Plot lighting directions</p><pre><code class="language-julia hljs">tmp = range(0, 2π, 361)
+plot(cos.(tmp), sin.(tmp); aspect_ratio=1, color=:black,
+    xaxis = (L&quot;x&quot;, (-1,1)),
+    yaxis = (L&quot;y&quot;, (-1,1)),
+    title = &quot;Lighting directions&quot;,
+)
+pl_gt = scatter!(Ltrue[1,:], Ltrue[2,:]; label = &quot;True&quot;, color=:red)</code></pre><img src="6414a930.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Synthesize-images"><a class="docs-heading-anchor" href="#Synthesize-images">Synthesize images</a><a id="Synthesize-images-1"></a><a class="docs-heading-anchor-permalink" href="#Synthesize-images" title="Permalink"></a></h2><p>Synthesize image data using Lambertian reflectance model.</p><p>For the Lambertian model, each pixel value is proportional to the inner product of the lighting direction with the corresponding surface normal.</p><p>If that inner product is zero for some pixels, then the image contains &quot;shadows&quot; at those pixels. <a href="https://doi.org/10.1007/978-3-642-19318-7_55">Wu et al., ACCV, 2011</a> describe the <code>max(⋅,0)</code> operation below as &quot;attached shadows.&quot;</p><pre><code class="language-julia hljs">if !@isdefined(images)
+    images_ideal = shape2(gt_normal) * Ltrue # hypothetical Lambertian
+    images_ideal ./= maximum(images_ideal) # normalize
+    svdval_ideal = svdvals(images_ideal)
+    images = max.(images_ideal, 0) # &quot;shadows&quot; if lighting is ≥ 90° from normal
+    svdval_images = svdvals(images)
+    images = shape3(images)
+end;</code></pre><p>Note the different shadings in the different images. Obviously the bunny cannot &quot;jump around&quot; during the imaging...</p><pre><code class="language-julia hljs">pd = jim(images; title=&quot;Images for $nlight different lighting directions&quot;,
+#  xticks = false, yticks = false, tickfontsize=12, # book
+    caxis=(&quot;Intensity&quot;, (0,1), 0:1),
+)
+
+# savefig(pd, &quot;photometric3_data.pdf&quot;)</code></pre><img src="fd1f3da8.svg" alt="Example block output"/><h2 id="Low-rank-structure"><a class="docs-heading-anchor" href="#Low-rank-structure">Low-rank structure</a><a id="Low-rank-structure-1"></a><a class="docs-heading-anchor-permalink" href="#Low-rank-structure" title="Permalink"></a></h2><p>Examine the singular values. Ideally (i.e., ignoring shadows), there would be (at most) 3 nonzero singular values, because <code>images_ideal</code> is the product of (<code>npixel</code> × 3) object normal matrix with a (3 × <code>nlight</code>) lighting direction matrix, so its rank is at most 3.</p><p>With self-shadow effects, e.g., <a href="https://doi.org/10.1109/TPAMI.2003.1233898">Barsky &amp; Petrou, 2003, T-PAMI</a>, there are 3 dominant singular values and additional small but non-negligible values. The <code>images</code> matrix rank is not exactly 3 because of the shadow effects.</p><pre><code class="language-julia hljs">if !@isdefined(ps)
+    ps1 = scatter(svdval_ideal, label=&quot;Ideal&quot;, color=:blue,
+       xaxis=(L&quot;k&quot;, (1,nlight), [1,3,4,nlight]),
+       yaxis=(L&quot;σ_k&quot;,), marker=:x, widen=true,
+       title=&quot;Singular values&quot;)
+    scatter!(ps1, svdval_images, label=&quot;Realistic&quot;, color=:red)
+
+    good = all(&gt;(0), images, dims=3)
+    images_good = shape2(images)[vec(good),:]
+    svdval_good = svdvals(images_good)
+    scatter!(ps1, svdval_good, label=&quot;Good pixels&quot;, color=:green)
+    ps4 = deepcopy(ps1)
+    ylims!(ps4, (0,5); title=&quot;zoom&quot;)
+    ps = plot(ps1, ps4)
+end</code></pre><img src="4e80106e.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(ps, &quot;photometric3_svdvals.pdf&quot;)</code></pre><h2 id="Rank-3-approximation"><a class="docs-heading-anchor" href="#Rank-3-approximation">Rank-3 approximation</a><a id="Rank-3-approximation-1"></a><a class="docs-heading-anchor-permalink" href="#Rank-3-approximation" title="Permalink"></a></h2><p>To make a low-rank approximation, collect image data into a <code>npixel × nlight</code> matrix and use a SVD.</p><p>Estimate the lighting directions using <em>only</em> the pixels with no shadows.</p><pre><code class="language-julia hljs">tmp = svd(images_good)
+light1 = tmp.Vt[1:3,:] # right singular vectors
+normal1 = tmp.U[:,1:3] * Diagonal(tmp.S[1:3])
+@assert norm(images_good - normal1 * light1) / norm(images_good) &lt; 9eps()</code></pre><h2 id="Estimate-lighting-directions"><a class="docs-heading-anchor" href="#Estimate-lighting-directions">Estimate lighting directions</a><a id="Estimate-lighting-directions-1"></a><a class="docs-heading-anchor-permalink" href="#Estimate-lighting-directions" title="Permalink"></a></h2><p>Apply method of <a href="https://doi.org/10.1364/JOSAA.11.003079">Hayakawa, JOSA, 1994</a> to resolve non-uniqueness issue, under the simplifying assumption (satisfied here) that the light intensity is the same for all lighting directions.</p><p>That method does not explicitly exploit the fact that <span>$A&#39;A$</span> is positive semi-definite. Challenge: develop method that does use that property.</p><pre><code class="language-julia hljs">Abig = reduce(vcat, map(c -&gt; kron(c&#39;, c&#39;), eachcol(light1)))
+tmp = Abig \ ones(nlight)
+B = reshape(tmp, 3, 3) # B = A&#39;A
+@assert B ≈ B&#39; # (symmetry check)
+A = sqrt(B)
+@assert A&#39;A ≈ B
+light2 = A * light1
+@assert maximum(abs, sum(abs2, light2, dims=1) .- 1) &lt; 30eps()
+
+normal2 = normal1 * inv(A)
+@assert norm(images_good - normal2 * light2) / norm(images_good) &lt; 10eps()
+@assert maximum(abs, norm.(eachrow(normal2)) .- 1) &lt; 9e-6 # already unit norm!</code></pre><p>As described in <a href="https://doi.org/10.1364/JOSAA.11.003079">Hayakawa, JOSA, 1994</a>, the estimated lighting and surface normals are in an arbitrary 3D coordinate system. To display them in a useful way, we use the Procrustes method to align the coordinate system with that of the original lighting.</p><pre><code class="language-julia hljs">if true
+    tmp = Ltrue[:,1:3] * light2[:,1:3]&#39; # use just the first 3 sources
+    tmp = svd(tmp)
+    tmp = tmp.U * tmp.Vt
+    light3 = tmp * light2
+    normal3 = normal2 * tmp&#39;
+    @assert norm(images_good - normal3 * light3) / norm(images_good) &lt; 10eps()
+end</code></pre><p>Plot estimated lighting directions (after coordinate system alignment)</p><pre><code class="language-julia hljs">tmp = deepcopy(pl_gt)
+pl = scatter!(tmp, light3[1,:], light3[2,:],
+    marker = :x, label = &quot;Estimated&quot;, color=:blue)</code></pre><img src="c2c59568.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Estimate-surface-normals."><a class="docs-heading-anchor" href="#Estimate-surface-normals.">Estimate surface normals.</a><a id="Estimate-surface-normals.-1"></a><a class="docs-heading-anchor-permalink" href="#Estimate-surface-normals." title="Permalink"></a></h2><p>Having estimated the lighting directions, return to estimate the surface normals for <em>all</em> pixels, not just the &quot;good&quot; pixels.</p><pre><code class="language-julia hljs">normal3 = shape3(shape2(images) * pinv(light3));</code></pre><p>Examine the estimated surface normals. The accuracy is very good, except in the shadow regions.</p><pre><code class="language-julia hljs">pn_hat = jim(normal3; nrow=1, title=&quot;Estimated normals&quot;,
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+#  xaxis=L&quot;x&quot;, yaxis=L&quot;y&quot;,
+    size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
+# savefig(pn_hat, &quot;photometric3_hat.pdf&quot;)
+RGB255(args...) = RGB((args ./ 255)...)
+color = cgrad([RGB255(230, 80, 65), :black, RGB255(23, 120, 232)])
+pn_d = jim(normal3 - gt_normal; nrow=1, title=&quot;Difference&quot;, color,
+    xticks = false, yticks = false, labelfontsize = 16, tickfontsize=12,
+    left_margin = 20px, right_margin = 30px,
+    xaxis=L&quot;x&quot;, yaxis=L&quot;y&quot;, size=(600,200), clim=(-1,1), colorbar_ticks=-1:1,
+)
+pn = jim(
+ pn_gt,
+ pn_hat,
+ pn_d,
+ layout=(3,1),
+ size=(550, 600),
+)
+
+# savefig(pn, &quot;photometric3_pn1.pdf&quot;)</code></pre><img src="32a1cd30.svg" alt="Example block output"/><p>This demo illustrates the utility of the SVD and low-rank matrix approximation.</p><p>More advanced methods handle shadows by allowing sparse errors, e.g.,</p><ul><li><a href="https://doi.org/10.1007/978-3-642-19318-7_55">Wu et al., ACCV 2011</a></li><li><a href="https://doi.org/10.1109/CVPR.2012.6247691">Ikehata et al., CVPR 2012</a>,</li></ul><p>or handle more general lighting conditions, e.g.,</p><ul><li><a href="https://doi.org/10.1109/CVPR.2001.990985">Basri &amp; Jacobs, CVPR 2001</a>.</li></ul><h2 id="Exercise"><a class="docs-heading-anchor" href="#Exercise">Exercise</a><a id="Exercise-1"></a><a class="docs-heading-anchor-permalink" href="#Exercise" title="Permalink"></a></h2><p>Apply the method described above to the bunny data used in <a href="https://doi.org/10.1109/CVPR.2012.6247691">Ikehata et al., CVPR 2012</a>. This is a set of 50 images under various lighting directions.</p><p>As a starting point, here we load that data.</p><pre><code class="language-julia hljs">if !@isdefined(images_bunny)
+    url0 = &quot;https://github.com/yasumat/RobustPhotometricStereo/raw/master/data/bunny/bunny_lambert/image000.npy&quot;
+
+    index_bunny = 0:5:45 # just load 10 of the 50
+    nlight_bunny = length(index_bunny)
+    tmp = download(url0)
+    x = npzread(tmp)
+
+    dim = size(x)[1:2]
+    images_bunny = zeros(Float32, dim..., nlight_bunny)
+    images_bunny[:,:,1] = x[:,:,1]&#39;
+
+    for (iz, index) in enumerate(index_bunny[2:end])
+        id3 = @sprintf(&quot;%03d&quot;, index)
+        @show id3
+        url1 = replace(url0, &quot;000&quot; =&gt; id3)
+        xtmp = npzread(download(url1))
+        images_bunny[:,:,iz+1] = xtmp[:,:,1]&#39;
+    end
+    images_bunny ./= maximum(images_bunny) # normalize
+end
+pb = jim(images_bunny; title=&quot;Images for different lighting directions&quot;)</code></pre><img src="01ee8170.svg" alt="Example block output"/><p>For reference, here are the ground truth lighting directions.</p><pre><code class="language-julia hljs">if !@isdefined(gt_lights)
+    url = &quot;https://github.com/yasumat/RobustPhotometricStereo/raw/master/data/bunny/lights.npy&quot;
+    gt_lights = npzread(download(url))
+    gt_lights = gt_lights&#39;[:,index_bunny .+ 1]
+end
+pl_gtb = scatter(eachrow(gt_lights)...,
+   xaxis = (L&quot;x&quot;, (-0.8, 0.8), (-1:1)*0.8),
+   yaxis = (L&quot;y&quot;, (-0.8, 0.8), (-1:1)*0.8),
+   zaxis = (L&quot;z&quot;, (0.4, 1.0), [0.4, 0.69, 0.96]),
+   title = &quot;True lighting directions&quot;,
+)</code></pre><img src="c457365e.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>If needed, here is the url for the mask:</p><ul><li>https://raw.githubusercontent.com/yasumat/RobustPhotometricStereo/master/data/bunny/mask.png</li></ul><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, icelake-server)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.17.0
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.6
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.1
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../pca/">« PCA</a><a class="docs-footer-nextpage" href="../rank1/">Rank-1 approximation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Sunday 1 March 2026 06:35">Sunday 1 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Classification with MLP · Demos</title><meta name="title" content="Classification with MLP · Demos"/><meta property="og:title" content="Classification with MLP · Demos"/><meta property="twitter:title" content="Classification with MLP · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/11/ring3/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/11/ring3/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/11/ring3/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../../07/align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../../07/lr-cv/">Low-Rank Selection via Cross Validation</a></li><li><a class="tocitem" href="../../07/lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../../07/pca/">PCA</a></li><li><a class="tocitem" href="../../07/photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../../07/rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../../07/source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/logistic2/">Logistic regression - QN</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li class="is-active"><a class="tocitem" href>Classification with MLP</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Generate-(synthetic)-data"><span>Generate (synthetic) data</span></a></li><li><a class="tocitem" href="#Hand-crafted-classifier"><span>Hand-crafted classifier</span></a></li><li><a class="tocitem" href="#Train-simple-MLP-model"><span>Train simple MLP model</span></a></li><li><a class="tocitem" href="#Train-while-validating"><span>Train while validating</span></a></li></ul></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">11 Neural nets</a></li><li class="is-active"><a href>Classification with MLP</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Classification with MLP</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/11/ring3.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="ring3"><a class="docs-heading-anchor" href="#ring3">Classification with MLP</a><a id="ring3-1"></a><a class="docs-heading-anchor-permalink" href="#ring3" title="Permalink"></a></h1><p>This demo illustrates basic artificial NN training for a simple synthetic classification example with cross-entropy loss using Julia&#39;s <code>Flux</code> library.</p><ul><li>Jeff Fessler, University of Michigan</li><li>2018-10-18 Julia 1.0.1 original</li><li>2024-02-26 Julia 1.10.1 update</li></ul><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/11/ring3.jl"><code>ring3.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/11/ring3.ipynb"><code>ring3.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/11/ring3.ipynb"><code>ring3.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Packages needed here.</p><pre><code class="language-julia hljs">import Flux # Julia package for deep learning
+using Flux: Dense, Chain, relu, params, Adam, throttle, mse
+using Flux.Losses: logitcrossentropy
+using OneHotArrays: onehotbatch
+using InteractiveUtils: versioninfo
+using LaTeXStrings # pretty plot labels
+using MIRTjim: jim, prompt
+using Random: seed!, randperm
+using Plots: Plot, plot, plot!, scatter!, default, gui, savefig
+using Plots.PlotMeasures: px
+
+default(markersize=5, markerstrokecolor=:auto, label=&quot;&quot;,
+ legendfontsize=16, labelfontsize=16, tickfontsize=14)</code></pre><p>The following line is helpful when running this file as a script; this way it will prompt user to hit a key after each figure is displayed.</p><pre><code class="language-julia hljs">isinteractive() ? jim(:prompt, true) : prompt(:draw);</code></pre><h2 id="Generate-(synthetic)-data"><a class="docs-heading-anchor" href="#Generate-(synthetic)-data">Generate (synthetic) data</a><a id="Generate-(synthetic)-data-1"></a><a class="docs-heading-anchor-permalink" href="#Generate-(synthetic)-data" title="Permalink"></a></h2><p>This data is suitable for a &quot;hand crafted&quot; classifier.</p><p>(The <code>Xvm</code> versions are vectors of matrices.)</p><p>Functions to simulate data that cannot be linearly separated</p><pre><code class="language-julia hljs">function sim_ring(
+    n::Int, # number of points
+    r::Real, # radius of center of annulus center
+    σ::Real, # spread (annulus width)
+)
+    T = promote_type(eltype(r), eltype(σ))
+    rad = r .+ σ * randn(T, n)
+    ang = T(2π) * rand(T, n)
+    return Matrix([rad .* cos.(ang)  rad .* sin.(ang)]&#39;) # (2,n)
+end;
+
+K = 3 # classes
+nsim = (40, 80, 120) # how many in each class
+rsim = (0, 3, 6) # mean radii of each class
+dsim = (1.5, 4.5) # ideal decision boundaries
+function simdata(;
+    n = nsim,
+    r = rsim,
+    σ = Float32.((0.7, 0.5, 0.5)),
+)
+    Xvm = [sim_ring(n[k], r[k], σ[k]) for k in 1:K] # [K][n]
+    Yvm = [fill(k, 1, n[k]) for k in 1:K] # [K][n]
+    return (Xvm, Yvm)
+end;</code></pre><p>Scatter plot function</p><pre><code class="language-julia hljs">function plot_data!(p, Xvm;
+    colors = (:blue, :red, :orange),
+    marks = (:circle, :star, :uptri),
+)
+    for k in 1:K
+        scatter!(p, Xvm[k][1,:], Xvm[k][2,:],
+           marker=marks[k], color=colors[k], label=&quot;class $k&quot;)
+    end
+    tmp = range(0, 2π, 101)
+    for d in dsim
+        plot!(p, d * cos.(tmp), d * sin.(tmp), color=:gray)
+    end
+    return p
+end
+
+function plot_data(Xvm; kwargs...)
+    p = plot(
+     xaxis = (L&quot;x_1&quot;, (-1,1).*8, -9:3:9),
+     yaxis = (L&quot;x_2&quot;, (-1,1).*8, -9:3:9),
+     aspect_ratio = 1, size = (500,500);
+     kwargs...,
+    )
+    plot_data!(p, Xvm)
+end;</code></pre><p>Training data</p><pre><code class="language-julia hljs">seed!(0)
+ntrain = nsim
+(Xvm_train, Yvm_train) = simdata(; n=ntrain)
+p0 = plot_data(Xvm_train)
+# savefig(p0, &quot;ring3-data.pdf&quot;)</code></pre><img src="eb8b6268.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>Validation and testing data</p><pre><code class="language-julia hljs">(Xvm_valid, Yvm_valid) = simdata()
+(Xvm_test, Yvm_test) = simdata()
+
+p1 = plot_data(Xvm_valid; title=&quot;Validation&quot;)
+p2 = plot_data(Xvm_test; title=&quot;Test&quot;)
+
+p0t = plot!(deepcopy(p0); title=&quot;Train&quot;)
+p3 = plot(p0t, p1, p2;
+ leftmargin = 30px, bottommargin = 35px,
+ size = (1600,500), layout=(1,3),
+)</code></pre><img src="42500c31.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Hand-crafted-classifier"><a class="docs-heading-anchor" href="#Hand-crafted-classifier">Hand-crafted classifier</a><a id="Hand-crafted-classifier-1"></a><a class="docs-heading-anchor-permalink" href="#Hand-crafted-classifier" title="Permalink"></a></h2><p>This data is not linearly separable, but a simple nonlinearity makes it so.</p><pre><code class="language-julia hljs">lift1 = x -&gt; [x; sqrt(sum(abs2, x))] # lift 1 feature vector
+lifter = xx -&gt; mapslices(lift1, xx, dims=1) # apply to each data column
+Xvm_train_lift = lifter.(Xvm_train)
+Xm_train_lift = hcat(Xvm_train_lift...)
+pl_train = plot(Xm_train_lift[3,:], marker=:circle, yticks=(1:5)*1.5,
+ xticks = cumsum([1; collect(ntrain)]),
+)</code></pre><img src="e6e833dc.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>So the levels 1.5 and 4.5 should work to separate classes. Try on the test data.</p><pre><code class="language-julia hljs">Xm_test_lift = hcat(lifter.(Xvm_test)...)
+lift_classifier = x -&gt; x &lt; dsim[1] ? 1 : x &gt; dsim[2] ? 3 : 2
+class_test_lift = lift_classifier.(Xm_test_lift[3,:])
+test_lift_errors = count(class_test_lift .!= hcat(Yvm_test...)&#39;)
+@show test_lift_errors, size(Xm_test_lift, 2)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(2, 240)</code></pre><p>Permute the training data (just to be cautious)</p><pre><code class="language-julia hljs">Xm_train = hcat(Xvm_train...)
+Ym_train = hcat(Yvm_train...)
+perm = randperm(size(Xm_train,2))
+Xm_train = Xm_train[:,perm] # (2, sum(nsim))
+Ym_train = Ym_train[:,perm] # (1, sum(nsim))
+Xm_valid = hcat(Xvm_valid...)
+Ym_valid = hcat(Yvm_valid...)
+Xm_test = hcat(Xvm_test...)
+Ym_test = hcat(Yvm_test...);</code></pre><h2 id="Train-simple-MLP-model"><a class="docs-heading-anchor" href="#Train-simple-MLP-model">Train simple MLP model</a><a id="Train-simple-MLP-model-1"></a><a class="docs-heading-anchor-permalink" href="#Train-simple-MLP-model" title="Permalink"></a></h2><p>A [multilayer perceptron model] (https://en.wikipedia.org/wiki/Multilayer_perceptron) (MLP) consists of multiple fully connected layers.</p><p>Train a basic NN model with 1 hidden layer; here using MSE loss just for illustration.</p><pre><code class="language-julia hljs">if !@isdefined(state1)
+    nhidden = 10 # neurons in hidden layer
+    model = Chain(Dense(2, nhidden, relu), Dense(nhidden, 1))
+    loss3ms(model, x, y) = mse(model(x), y) # admittedly silly choice
+    iters = 2000
+    dataset = Base.Iterators.repeated((Xm_train, Ym_train), iters)
+    state1 = Flux.setup(Adam(), model)
+    Flux.train!(loss3ms, model, dataset, state1)
+end;
+
+scalar = y -&gt; y[1]
+model1 = x -&gt; scalar(model(x))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">#23 (generic function with 1 method)</code></pre><p>Plot results after training</p><pre><code class="language-julia hljs">function display_decision_boundaries(
+    model;
+    x1range = range(-1f0,1f0,101)*8,
+    x2range = x1range,
+    kwargs...,
+)
+    D = [model1([x1;x2]) for x1 in x1range, x2 in x2range]
+    D = round.(D)
+    jim(x1range, x2range, D; color=:cividis,
+     xaxis = (L&quot;x_1&quot;, (-1,1).*8, -9:3:9),
+     yaxis = (L&quot;x_2&quot;, (-1,1).*8, -9:3:9),
+     aspect_ratio = 1, size = (500,500),
+    kwargs...)
+end;
+
+function display_decision_boundaries(model, Xvm; kwargs...)
+    p = display_decision_boundaries(model; kwargs...)
+    plot_data!(p, Xvm)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">display_decision_boundaries (generic function with 2 methods)</code></pre><p>Examine classification accuracy</p><pre><code class="language-julia hljs">classacc(model, x, y::Number) = round(model1(x)) == y
+classacc(model, x, y::AbstractArray) = classacc(model, x, y[1])
+function classacc(Xm, Ym)
+    tmp = zip(eachcol(Xm), eachcol(Ym))
+    tmp = count(xy -&gt; classacc(model, xy...), tmp)
+    tmp = tmp / size(Ym,2) * 100
+    return round(tmp, digits=3)
+end
+
+lossXYtrain = loss3ms(model, Xm_train, Ym_train)
+p4 = display_decision_boundaries(model, Xvm_train;
+ title = &quot;Train: RMSE Loss = $(round(sqrt(lossXYtrain),digits=4)), &quot; *
+ &quot;Class=$(classacc(Xm_train, Ym_train)) %&quot;);
+lossXYtest = loss3ms(model, Xm_test, Ym_test)
+p5 = display_decision_boundaries(model, Xvm_test;
+     title = &quot;Test: RMSE Loss = $(round(sqrt(lossXYtest),digits=4)), &quot; *
+    &quot;Class=$(classacc(Xm_test, Ym_test)) %&quot;);
+plot(p4, p5; size=(1000,500))</code></pre><img src="0707776c.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Train-while-validating"><a class="docs-heading-anchor" href="#Train-while-validating">Train while validating</a><a id="Train-while-validating-1"></a><a class="docs-heading-anchor-permalink" href="#Train-while-validating" title="Permalink"></a></h2><p>This time using cross-entropy loss, which makes more sense for a classification problem.</p><p>Create a basic NN model with 1 hidden layer. This version evaluates performance every epoch for both the training data and validation data.</p><pre><code class="language-julia hljs">if !@isdefined(model2) # || true
+    layer2 = Dense(2, nhidden, relu)
+    layer3 = Dense(nhidden, K)
+    model2 = Chain(layer2, layer3)
+    onehot1 = y -&gt; reshape(onehotbatch(y, 1:K), K, :)
+    loss3ce(model, x, y) = logitcrossentropy(model(x), onehot1(y))
+
+    nouter = 80 # of outer iterations, for showing loss
+    losstrain = zeros(nouter+1)
+    lossvalid = zeros(nouter+1)
+
+    iters = 100 # inner iterations
+    losstrain[1] = loss3ce(model2, Xm_train, Ym_train)
+    lossvalid[1] = loss3ce(model2, Xm_valid, Ym_valid)
+
+    model2s = similar(Vector{Any}, nouter) # to checkpoint every outer iteration
+    for io in 1:nouter
+        # @show io
+        idataset = Base.Iterators.repeated((Xm_train, Ym_train), iters)
+        istate = Flux.setup(Adam(), model2)
+        Flux.train!(loss3ce, model2, idataset, istate)
+        losstrain[io+1] = loss3ce(model2, Xm_train, Ym_train)
+        lossvalid[io+1] = loss3ce(model2, Xm_valid, Ym_valid)
+        if (io ≤ 6) &amp;&amp; false # set to true to make images
+            display_decision_boundaries(model2, Xvm_train)
+            plot!(title=&quot;$(io*iters) epochs&quot;)
+            gui(); sleep(0.3)
+        end
+        model2s[io] = deepcopy(model2)
+    end
+end;</code></pre><p>Show loss vs epoch</p><pre><code class="language-julia hljs">ivalid = findfirst(&gt;(0), diff(lossvalid))
+plot(xlabel=&quot;epoch/$(iters)&quot;, yaxis=(&quot;CE loss&quot;, (0,1.05*maximum(losstrain))))
+plot!(0:nouter, lossvalid, label=&quot;validation&quot;, marker=:+, color=:violet)
+plot!(0:nouter, losstrain, label=&quot;training&quot;, marker=:o, color=:green)
+plot!(xticks = [0, ivalid, nouter])</code></pre><img src="86115f5b.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+model2v = model2s[ivalid]; # model at validation epoch
+lossf = (Xm,Ym) -&gt; round(loss3ce(model2v, Xm, Ym), digits=4)
+loss_train = lossf(Xm_train, Ym_train)
+loss_valid = lossf(Xm_valid, Ym_valid)
+loss_test = lossf(Xm_test, Ym_test);
+
+p1 = display_decision_boundaries(model2v, Xvm_train;
+ title=&quot;Train:\nCE Loss = $loss_train\n&quot; *
+    &quot;Class=$(classacc(Xm_train, Ym_train)) %&quot;,
+)
+p2 = display_decision_boundaries(model2v, Xvm_valid;
+ title=&quot;Valid:\nCE Loss = $loss_valid\n&quot; *
+    &quot;Class=$(classacc(Xm_valid, Ym_valid)) %&quot;,
+)
+p3 = display_decision_boundaries(model2v, Xvm_test;
+ title=&quot;Test:\nCE Loss = $loss_test\n&quot; *
+    &quot;Class=$(classacc(Xm_valid, Ym_valid)) %&quot;,
+)
+p123 = plot(p1, p2, p3; size=(1500,500), layout=(1,3))</code></pre><img src="38815732.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>Show response of (trained) first hidden layer, at validation step</p><pre><code class="language-julia hljs">x1range = range(-1f0,1f0,31) * 6
+x2range = range(-1f0,1f0,33) * 6
+tmp = model2v.layers[1]
+layer2data = [tmp([x1;x2])[n] for x1 = x1range, x2 = x2range, n in 1:nhidden]
+
+pl = Array{Plot}(undef, nhidden)
+for n in 1:nhidden
+    ptmp = jim(x1range, x2range, layer2data[:,:,n], color=:cividis,
+        xtick=-6:6:6, ytick=-6:6:6,
+    )
+    if n == 7
+        plot!(ptmp, xlabel=L&quot;x_1&quot;, ylabel=L&quot;x_2&quot;)
+    end
+    pl[n] = ptmp
+end
+plot(pl[1:9]...)</code></pre><img src="3288bc72.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, icelake-server)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.17.0
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.6
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.1
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../10/nmf/">« Non-negative matrix factorization</a><a class="docs-footer-nextpage" href="../../12/complete1/">RMT and matrix completion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Sunday 1 March 2026 06:34">Sunday 1 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

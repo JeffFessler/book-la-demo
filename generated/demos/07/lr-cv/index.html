@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Low-Rank Selection via Cross Validation · Demos</title><meta name="title" content="Low-Rank Selection via Cross Validation · Demos"/><meta property="og:title" content="Low-Rank Selection via Cross Validation · Demos"/><meta property="twitter:title" content="Low-Rank Selection via Cross Validation · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-cv/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-cv/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-cv/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../align1/">Image alignment by rank-1 method</a></li><li class="is-active"><a class="tocitem" href>Low-Rank Selection via Cross Validation</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Generate-data"><span>Generate data</span></a></li><li><a class="tocitem" href="#Low-rank-approximation-with-various-ranks"><span>Low-rank approximation with various ranks</span></a></li><li><a class="tocitem" href="#Apply-elementary-CV-to-same-noisy-data"><span>Apply elementary CV to same noisy data</span></a></li></ul></li><li><a class="tocitem" href="../lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../pca/">PCA</a></li><li><a class="tocitem" href="../photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">07 Low-Rank</a></li><li class="is-active"><a href>Low-Rank Selection via Cross Validation</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Low-Rank Selection via Cross Validation</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/lr-cv.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="lr-cv"><a class="docs-heading-anchor" href="#lr-cv">Low-Rank Selection via Cross Validation</a><a id="lr-cv-1"></a><a class="docs-heading-anchor-permalink" href="#lr-cv" title="Permalink"></a></h1><p>This example illustrates low-rank matrix approximation using cross-validation methods for rank parameter selection, using the Julia language. As discussed by <a href="https://doi.org/10.1214/08-AOAS227">Owen &amp; Perry, 2009</a>, separate row or column hold-out is ineffective, whereas <a href="https://doi.org/10.1214/08-AOAS227">Bi-Cross-Validation (BCV)</a> is more effective.</p><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/lr-cv.jl"><code>lr-cv.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/07/lr-cv.ipynb"><code>lr-cv.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/07/lr-cv.ipynb"><code>lr-cv.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Add the Julia packages used in this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;InteractiveUtils&quot;
+        &quot;LaTeXStrings&quot;
+        &quot;LinearAlgebra&quot;
+        &quot;MIRTjim&quot;
+        &quot;Plots&quot;
+        &quot;Random&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: svd, svdvals, Diagonal, norm, pinv
+using MIRTjim: prompt
+using Plots: default, gui, plot, plot!, scatter!, savefig
+using Random: seed!, randperm
+using Statistics: mean
+default(); default(label=&quot;&quot;, markerstrokecolor=:auto, markersize=7,
+    labelfontsize=20, tickfontsize=16, legendfontsize=17, widen=true)</code></pre><p>The following line is helpful when running this jl-file as a script; this way it will prompt user to hit a key after each image is displayed.</p><pre><code class="language-julia hljs">isinteractive() &amp;&amp; prompt(:prompt);</code></pre><h2 id="Generate-data"><a class="docs-heading-anchor" href="#Generate-data">Generate data</a><a id="Generate-data-1"></a><a class="docs-heading-anchor-permalink" href="#Generate-data" title="Permalink"></a></h2><p>Noiseless low-rank matrix and noisy data matrix</p><pre><code class="language-julia hljs">M, N = 100, 50 # problem size
+seed!(0)
+Ktrue = 5 # true rank (planted model)
+X = svd(randn(M,Ktrue)).U * Diagonal(1:Ktrue) * svd(randn(Ktrue,N)).Vt
+sig0 = 0.03 # noise standard deviation
+Y = X + sig0 * randn(size(X)) # noisy
+sy = svdvals(Y)
+sx = svdvals(X)
+sx[1:Ktrue]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5-element Vector{Float64}:
+ 5.0
+ 4.000000000000003
+ 3.0
+ 2.0
+ 0.9999999999999997</code></pre><pre><code class="language-julia hljs">sy[1:Ktrue]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5-element Vector{Float64}:
+ 5.023759688280403
+ 4.051459702189543
+ 3.0061483656272916
+ 1.9979253120833067
+ 1.1124738202874183</code></pre><h3 id="Plot-singular-values"><a class="docs-heading-anchor" href="#Plot-singular-values">Plot singular values</a><a id="Plot-singular-values-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-singular-values" title="Permalink"></a></h3><pre><code class="language-julia hljs">ps = plot(xaxis = (L&quot;k&quot;, (1,N), [1, Ktrue, N]), yaxis = (L&quot;σ&quot;, (0,5.5), 0:5))
+scatter!(1:N, sy, color=:red, marker=:hexagon,
+ label=L&quot;\sigma_k(Y) \ \mathrm{noisy}&quot;)
+scatter!(1:N, sx, color=:blue, label=L&quot;\sigma_k(X) \ \mathrm{noiseless}&quot;)</code></pre><img src="447222b1.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(ps, &quot;lr_sure1s.pdf&quot;)</code></pre><h2 id="Low-rank-approximation-with-various-ranks"><a class="docs-heading-anchor" href="#Low-rank-approximation-with-various-ranks">Low-rank approximation with various ranks</a><a id="Low-rank-approximation-with-various-ranks-1"></a><a class="docs-heading-anchor-permalink" href="#Low-rank-approximation-with-various-ranks" title="Permalink"></a></h2><pre><code class="language-julia hljs">(U, sy, V) = svd(Y)
+nrmse_K = zeros(N)
+nrmsd_K = zeros(N)
+nrmsd = (D) -&gt; norm(D) / norm(Y) * 100
+nrmse = (D) -&gt; norm(D) / norm(X) * 100
+for K in 1:N
+    Xh = U[:,1:K] * Diagonal(sy[1:K]) * V[:,1:K]&#39;
+    nrmsd_K[K] = nrmsd(Xh - Y)
+    nrmse_K[K] = nrmse(Xh - X)
+end
+nrmsd_K = [nrmsd(0 .- Y); nrmsd_K]
+nrmse_K = [nrmse(0 .- X); nrmse_K]
+klist = 0:N;</code></pre><h3 id="Plot-normalized-root-mean-squared-error/difference-versus-rank-K"><a class="docs-heading-anchor" href="#Plot-normalized-root-mean-squared-error/difference-versus-rank-K">Plot normalized root mean-squared error/difference versus rank K</a><a id="Plot-normalized-root-mean-squared-error/difference-versus-rank-K-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-normalized-root-mean-squared-error/difference-versus-rank-K" title="Permalink"></a></h3><pre><code class="language-julia hljs">pk = plot( # legend=:outertop,
+    xaxis = (L&quot;K&quot;, (1,N), [0, 2, Ktrue, N]),
+    yaxis = (&quot;&#39;Error&#39; [%]&quot;, (0, 100), 0:20:100),
+)
+scatter!(klist, nrmse_K, color=:blue,
+    label=L&quot;\mathrm{NRMSE\ } ‖ \! \hat{X}_K - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+)
+scatter!(klist, nrmsd_K, color=:red, marker=:diamond,
+    label=L&quot;\mathrm{NRMSD\ } ‖ \! \hat{X}_K - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+)</code></pre><img src="19317542.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(pk, &quot;lr_sure1a.pdf&quot;)</code></pre><h3 id="Bi-cross-validation-code"><a class="docs-heading-anchor" href="#Bi-cross-validation-code">Bi-cross-validation code</a><a id="Bi-cross-validation-code-1"></a><a class="docs-heading-anchor-permalink" href="#Bi-cross-validation-code" title="Permalink"></a></h3><pre><code class="language-julia hljs">&quot;&quot;&quot;
+    bcv(Y::AbstractMatrix{&lt;:Number}, ranks=1:10)
+Compute bi-cross-validation per
+https://doi.org/10.1214/08-AOAS227
+&quot;&quot;&quot;
+function bcv(Y::AbstractMatrix{&lt;:Number}, ranks=1:10, fold::Int=2)
+    M, N = size(Y)
+    any(&gt;(min(M,N)), ranks) &amp;&amp; throw(&quot;bad ranks&quot;)
+    any(&lt;(0), ranks) &amp;&amp; throw(&quot;bad ranks&quot;)
+    H1 = M÷fold # hold-out rows
+    H2 = N÷fold # hold-out columns
+    perm1 = randperm(M)
+    hold1 = perm1[1:H1]
+    keep1 = perm1[(H1+1):M]
+    perm2 = randperm(N)
+    hold2 = perm2[1:H2]
+    keep2 = perm2[(H2+1):N]
+    A = Y[hold1,hold2]
+    B = Y[hold1,keep2]
+    C = Y[keep1,hold2]
+    D = Y[keep1,keep2]
+    U,s,V = svd(D)
+    error = zeros(length(ranks))
+    for (i, r) in enumerate(ranks)
+        Dr_pinv = V[:,1:r] * Diagonal(pinv.(s[1:r])) * U[:,1:r]&#39;
+        error[i] = norm(A - B * Dr_pinv * C)
+    end
+    return error / norm(A) * 100
+end;</code></pre><h3 id="Apply-BCV-to-synthetic-data"><a class="docs-heading-anchor" href="#Apply-BCV-to-synthetic-data">Apply BCV to synthetic data</a><a id="Apply-BCV-to-synthetic-data-1"></a><a class="docs-heading-anchor-permalink" href="#Apply-BCV-to-synthetic-data" title="Permalink"></a></h3><p>In this example, (2×2)-fold BCV is minimized at the correct rank of 5.</p><pre><code class="language-julia hljs">fold = 2
+ranks = 0:min(M,N)÷fold
+cv = bcv(Y, ranks, fold)
+scatter!(pk, ranks, cv, color=:green, marker=:star,
+    label=L&quot;\mathrm{BCV}&quot;,
+)
+i_bcv = argmin(cv)
+scatter!([ranks[i_bcv]], [cv[i_bcv]], color=:black, marker=:star, markersize=4,)</code></pre><img src="06e802cb.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(psk, &quot;lr_bcv1.pdf&quot;)</code></pre><p>Compare with row or column hold-out CV</p><pre><code class="language-julia hljs">&quot;&quot;&quot;
+    function lr_cross_validation_by_column(Y, fold, n_components)
+&quot;&quot;&quot;
+function lr_cross_validation_by_column(
+    X::AbstractMatrix{&lt;:Number},
+    fold::Int,
+    n_components::AbstractVector{&lt;:Int},
+)
+
+    n_samples = size(X, 2) # Assuming columns are samples
+    fold_size = n_samples ÷ fold
+    errors = zeros(length(n_components), fold)
+
+    for fold_idx in 1:fold
+        test_indices = ((fold_idx - 1) * fold_size + 1):min(fold_idx * fold_size, n_samples)
+        train_indices = setdiff(1:n_samples, test_indices)
+
+        X_train = X[:, train_indices]
+        X_test = X[:, test_indices]
+
+        U, _, _ = svd(X_train) # &quot;PCA&quot; of training data
+
+        for (comp_idx, n_component) in enumerate(n_components)
+            Ur = U[:,1:n_component]
+            X_test_reconstructed = Ur * (Ur&#39; * X_test)
+            errors[comp_idx, fold_idx] = # calculate reconstruction error
+                norm(X_test - X_test_reconstructed) / norm(X_test)
+        end
+    end
+    return errors * 100
+end;</code></pre><h2 id="Apply-elementary-CV-to-same-noisy-data"><a class="docs-heading-anchor" href="#Apply-elementary-CV-to-same-noisy-data">Apply elementary CV to same noisy data</a><a id="Apply-elementary-CV-to-same-noisy-data-1"></a><a class="docs-heading-anchor-permalink" href="#Apply-elementary-CV-to-same-noisy-data" title="Permalink"></a></h2><p>Holding out rows or columns leads to highly over-estimated ranks, as predicted in the literature.</p><p>This is the approach recommended by GPT 4.1 (circa 2025-08), presumably because holding out individual data points is prevalent in machine learning.</p><pre><code class="language-julia hljs">fold = 5
+Kmax = min(M,N)÷fold
+n_components = 0:Kmax
+errors_by_col = lr_cross_validation_by_column(Y, fold, n_components)
+error_means_by_col = vec(mean(errors_by_col, dims=2))
+i_col = argmin(error_means_by_col) # best based on minimum mean error
+
+errors_by_row = lr_cross_validation_by_column(Y&#39;, fold, n_components)
+error_means_by_row = vec(mean(errors_by_row, dims=2));
+i_row = argmin(error_means_by_row) # best based on minimum mean error
+
+optimal_k_col = n_components[i_col]
+optimal_k_row = n_components[i_row]
+
+pcv = plot(
+ xlims=(0,10),
+ xticks=[0, 1, 5, 10],
+ ylims=(0,100),
+ widen = true,
+ xlabel = &quot;rank&quot;,
+ ylabel = &quot;NRMSD&quot;,
+)
+scatter!(n_components, error_means_by_col, label=&quot;by column&quot;)
+scatter!(n_components, error_means_by_row, label=&quot;by row&quot;, marker=:x)
+scatter!([n_components[i_col]], [error_means_by_col[i_col]],
+ color=:black, marker=:circle, markersize=4, )
+scatter!([n_components[i_row]], [error_means_by_row[i_row]],
+ color=:black, marker=:x, markersize=4, )</code></pre><img src="d1c58e01.svg" alt="Example block output"/><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × AMD EPYC 7763 64-Core Processor&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.16.1
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.5
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.0
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../align1/">« Image alignment by rank-1 method</a><a class="docs-footer-nextpage" href="../lr-sure/">Low-Rank SURE »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 16:44">Saturday 14 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

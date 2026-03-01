@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Low-Rank SURE · Demos</title><meta name="title" content="Low-Rank SURE · Demos"/><meta property="og:title" content="Low-Rank SURE · Demos"/><meta property="twitter:title" content="Low-Rank SURE · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-sure/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-sure/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/07/lr-sure/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../lr-cv/">Low-Rank Selection via Cross Validation</a></li><li class="is-active"><a class="tocitem" href>Low-Rank SURE</a><ul class="internal"><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Generate-data"><span>Generate data</span></a></li><li><a class="tocitem" href="#Low-rank-approximation-with-various-ranks"><span>Low-rank approximation with various ranks</span></a></li><li><a class="tocitem" href="#Explore-(nuclear-norm)-regularized-version"><span>Explore (nuclear norm) regularized version</span></a></li><li><a class="tocitem" href="#Explore-SURE-for-selecting-β"><span>Explore SURE for selecting <span>$β$</span></span></a></li></ul></li><li><a class="tocitem" href="../pca/">PCA</a></li><li><a class="tocitem" href="../photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../../12/complete1/">RMT and matrix completion</a></li><li><a class="tocitem" href="../../12/gauss1/">Random matrix theory and rank-1 signal + noise</a></li><li><a class="tocitem" href="../../12/outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../../12/round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">07 Low-Rank</a></li><li class="is-active"><a href>Low-Rank SURE</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Low-Rank SURE</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/lr-sure.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="lr-sure"><a class="docs-heading-anchor" href="#lr-sure">Low-Rank SURE</a><a id="lr-sure-1"></a><a class="docs-heading-anchor-permalink" href="#lr-sure" title="Permalink"></a></h1><p>This example illustrates Stein&#39;s unbiased risk estimation (SURE) for parameter selection in low-rank matrix approximation, using the Julia language.</p><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/07/lr-sure.jl"><code>lr-sure.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/07/lr-sure.ipynb"><code>lr-sure.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/07/lr-sure.ipynb"><code>lr-sure.ipynb</code></a>.</p><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><p>Add the Julia packages used in this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;InteractiveUtils&quot;
+        &quot;LaTeXStrings&quot;
+        &quot;LinearAlgebra&quot;
+        &quot;MIRTjim&quot;
+        &quot;Plots&quot;
+        &quot;Random&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: svd, svdvals, Diagonal, norm
+using MIRTjim: prompt
+using Plots: default, gui, plot, plot!, scatter!, savefig
+using Random: seed!
+default(); default(label=&quot;&quot;, markerstrokecolor=:auto, markersize=7,
+    labelfontsize=20, tickfontsize=16, legendfontsize=17, widen=true)</code></pre><p>The following line is helpful when running this jl-file as a script; this way it will prompt user to hit a key after each image is displayed.</p><pre><code class="language-julia hljs">isinteractive() &amp;&amp; prompt(:prompt);</code></pre><h2 id="Generate-data"><a class="docs-heading-anchor" href="#Generate-data">Generate data</a><a id="Generate-data-1"></a><a class="docs-heading-anchor-permalink" href="#Generate-data" title="Permalink"></a></h2><p>Noiseless low-rank matrix and noisy data matrix</p><pre><code class="language-julia hljs">M, N = 100, 50 # problem size
+seed!(0)
+Ktrue = 5 # true rank (planted model)
+X = svd(randn(M,Ktrue)).U * Diagonal(1:Ktrue) * svd(randn(Ktrue,N)).Vt
+sig0 = 0.03 # noise standard deviation
+Y = X + sig0 * randn(size(X)) # noisy
+sy = svdvals(Y)
+sx = svdvals(X)
+sx[1:Ktrue]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5-element Vector{Float64}:
+ 5.0
+ 4.000000000000003
+ 3.0
+ 2.0
+ 0.9999999999999997</code></pre><pre><code class="language-julia hljs">sy[1:Ktrue]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5-element Vector{Float64}:
+ 5.023759688280403
+ 4.051459702189543
+ 3.0061483656272916
+ 1.9979253120833067
+ 1.1124738202874183</code></pre><h3 id="Plot-singular-values"><a class="docs-heading-anchor" href="#Plot-singular-values">Plot singular values</a><a id="Plot-singular-values-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-singular-values" title="Permalink"></a></h3><pre><code class="language-julia hljs">ps = plot(xaxis = (L&quot;k&quot;, (1,N), [1, Ktrue, N]), yaxis = (L&quot;σ&quot;, (0,5.5), 0:5))
+scatter!(1:N, sy, color=:red, marker=:hexagon,
+ label=L&quot;\sigma_k(Y) \ \mathrm{noisy}&quot;)
+scatter!(1:N, sx, color=:blue, label=L&quot;\sigma_k(X) \ \mathrm{noiseless}&quot;)</code></pre><img src="605b3330.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(ps, &quot;lr_sure1s.pdf&quot;)</code></pre><h2 id="Low-rank-approximation-with-various-ranks"><a class="docs-heading-anchor" href="#Low-rank-approximation-with-various-ranks">Low-rank approximation with various ranks</a><a id="Low-rank-approximation-with-various-ranks-1"></a><a class="docs-heading-anchor-permalink" href="#Low-rank-approximation-with-various-ranks" title="Permalink"></a></h2><pre><code class="language-julia hljs">(U, sy, V) = svd(Y)
+nrmse_K = zeros(N)
+nrmsd_K = zeros(N)
+nrmsd = (D) -&gt; norm(D) / norm(Y) * 100
+nrmse = (D) -&gt; norm(D) / norm(X) * 100
+for K in 1:N
+    Xh = U[:,1:K] * Diagonal(sy[1:K]) * V[:,1:K]&#39;
+    nrmsd_K[K] = nrmsd(Xh - Y)
+    nrmse_K[K] = nrmse(Xh - X)
+end
+nrmsd_K = [nrmsd(0 .- Y); nrmsd_K]
+nrmse_K = [nrmse(0 .- X); nrmse_K]
+klist = 0:N;</code></pre><h3 id="Plot-normalized-root-mean-squared-error/difference-versus-rank-K"><a class="docs-heading-anchor" href="#Plot-normalized-root-mean-squared-error/difference-versus-rank-K">Plot normalized root mean-squared error/difference versus rank K</a><a id="Plot-normalized-root-mean-squared-error/difference-versus-rank-K-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-normalized-root-mean-squared-error/difference-versus-rank-K" title="Permalink"></a></h3><pre><code class="language-julia hljs">pk = plot( # legend=:outertop,
+    xaxis = (L&quot;K&quot;, (1,N), [0, 2, Ktrue, N]),
+    yaxis = (&quot;&#39;Error&#39; [%]&quot;, (0, 100), 0:20:100),
+)
+scatter!(klist, nrmse_K, color=:blue,
+    label=L&quot;\mathrm{NRMSE\ } ‖ \! \hat{X}_K - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+)
+scatter!(klist, nrmsd_K, color=:red, marker=:diamond,
+    label=L&quot;\mathrm{NRMSD\ } ‖ \! \hat{X}_K - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+)</code></pre><img src="4cddf54b.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(pk, &quot;lr_sure1a.pdf&quot;)</code></pre><h2 id="Explore-(nuclear-norm)-regularized-version"><a class="docs-heading-anchor" href="#Explore-(nuclear-norm)-regularized-version">Explore (nuclear norm) regularized version</a><a id="Explore-(nuclear-norm)-regularized-version-1"></a><a class="docs-heading-anchor-permalink" href="#Explore-(nuclear-norm)-regularized-version" title="Permalink"></a></h2><pre><code class="language-julia hljs">soft = (s,β) -&gt; max.(s-β,0) # soft threshold function
+dsoft = (s,β) -&gt; Float32.(s .&gt; β) # &quot;derivative&quot; thereof
+reglist = [range(0, 0.5, 11); 0.75:0.25:6]
+Nr = length(reglist)
+nrmse_reg = zeros(Nr)
+nrmsd_reg = zeros(Nr)
+for ir in 1:Nr
+    reg = reglist[ir]
+    Xh = U * Diagonal(soft.(sy,reg)) * V&#39;
+    nrmsd_reg[ir] = nrmsd(Xh - Y)
+    nrmse_reg[ir] = nrmse(Xh - X)
+end;</code></pre><h3 id="Plot-NRMSE-and-NRMSD-versus-regularization-parameter"><a class="docs-heading-anchor" href="#Plot-NRMSE-and-NRMSD-versus-regularization-parameter">Plot NRMSE and NRMSD versus regularization parameter</a><a id="Plot-NRMSE-and-NRMSD-versus-regularization-parameter-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-NRMSE-and-NRMSD-versus-regularization-parameter" title="Permalink"></a></h3><pre><code class="language-julia hljs">pb = plot(legend=:topleft, xaxis = (L&quot;β&quot;, (0,6), 0:6),
+    yaxis = (&quot;&#39;Error&#39; [%]&quot;, (0, 100), 0:20:100))
+scatter!(reglist, nrmse_reg, color=:blue,
+    label=L&quot;\mathrm{NRMSE\ } ‖ \! \hat{X}_{\beta} - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+#  label=L&quot;\mathrm{NRMSE}&quot;, # book
+)
+scatter!(reglist, nrmsd_reg, color=:red, marker=:diamond,
+    label=L&quot;\mathrm{NRMSD\ } ‖ \! \hat{X}_{\beta} - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+#  label=L&quot;\mathrm{NRMSD}&quot;, # book
+)</code></pre><img src="5af01d58.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(pb, &quot;lr_sure1b.pdf&quot;)</code></pre><h2 id="Explore-SURE-for-selecting-β"><a class="docs-heading-anchor" href="#Explore-SURE-for-selecting-β">Explore SURE for selecting <span>$β$</span></a><a id="Explore-SURE-for-selecting-β-1"></a><a class="docs-heading-anchor-permalink" href="#Explore-SURE-for-selecting-β" title="Permalink"></a></h2><p class="math-container">\[\mathrm{SURE}(β) = ‖ \hat{X} - Y ‖^2 - MN \sigma_0^2
+ + 2 σ_0^2 \left( |M - N| \sum_{i=1}^{\min(M,N)} \frac{h(σ_iσ)}{σ_i}
+ + \sum_{i=1}^{\min(M,N)} \dot{h}_i(σ_i;β)
+ + 2 \sum_{i \neq j}^{\min(M,N)} \frac{σ_i h_i(σ_i;β)}{σ_i^2 - σ_j^2} \right)\]</p><ul><li><code>sy</code> singular values of Y</li><li><code>reg</code> regularization parameter</li><li><code>v0 = sigma_0^2</code> noise variance</li></ul><pre><code class="language-julia hljs">function sure(sy, reg, v0, M, N)
+    sh = soft.(sy, reg) # estimated singular values
+    big = sy.^2 .- (sy.^2)&#39;
+    big[big .== 0] .= Inf # trick to avoid divide by 0
+    big = (sy .* sh) ./ big # [sy[i] * sh[i] / big[i,j] for i in 1:N, j in 1:N]
+    big = sum(big)
+    norm(sh - sy)^2 - M*N*v0 + 2*v0*(abs(M-N)*sum(sh ./ sy) + sum(dsoft.(sy,reg)) + 2*big)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">sure (generic function with 1 method)</code></pre><h3 id="Evaluate-SURE-for-each-candidate-regularization-parameter"><a class="docs-heading-anchor" href="#Evaluate-SURE-for-each-candidate-regularization-parameter">Evaluate SURE for each candidate regularization parameter</a><a id="Evaluate-SURE-for-each-candidate-regularization-parameter-1"></a><a class="docs-heading-anchor-permalink" href="#Evaluate-SURE-for-each-candidate-regularization-parameter" title="Permalink"></a></h3><pre><code class="language-julia hljs">sure_reg = [sure(sy, reglist[ir], sig0^2, M, N) for ir in 1:Nr]
+reg_best = reglist[argmin(sure_reg)] # SURE pick for β</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.3</code></pre><h3 id="Plot-NRMSE-and-NRMSD-versus-regularization-parameter-2"><a class="docs-heading-anchor" href="#Plot-NRMSE-and-NRMSD-versus-regularization-parameter-2">Plot NRMSE and NRMSD versus regularization parameter</a><a class="docs-heading-anchor-permalink" href="#Plot-NRMSE-and-NRMSD-versus-regularization-parameter-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">psb = plot(legend=:bottomright, widen=true,
+    xaxis = (L&quot;β&quot;, (0,6), [reg_best, 5, 6]),
+    yaxis = (&quot;&#39;Error&#39; [%]&quot;, (0,100), 0:20:100),
+)
+scatter!(reglist, nrmse_reg, color=:blue,
+    label=L&quot;\mathrm{NRMSE\ } ‖ \! \hat{X}_\beta - X \ ‖_{\mathrm{F}} / ‖X \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+#  label=L&quot;\mathrm{NRMSE}&quot;, # book
+)
+scatter!(reglist, nrmsd_reg, color=:red, marker=:diamond,
+    label=L&quot;\mathrm{NRMSD\ } ‖ \! \hat{X}_\beta - Y \ ‖_{\mathrm{F}} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%&quot;,
+#  label=L&quot;\mathrm{NRMSD}&quot;, # book
+)
+scatter!(reglist, sqrt.(sure_reg)/norm(Y)*100, color=:green, marker=:star,
+    label=L&quot;(\mathrm{SURE}(\beta))^{1/2} / ‖Y \ ‖_{\mathrm{F}} \cdot 100\%&quot;)</code></pre><img src="9237754c.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(psb, &quot;lr_sure1c.pdf&quot;)</code></pre><h3 id="Examine-shrunk-singular-values-for-best-regularization-parameter"><a class="docs-heading-anchor" href="#Examine-shrunk-singular-values-for-best-regularization-parameter">Examine shrunk singular values for best regularization parameter</a><a id="Examine-shrunk-singular-values-for-best-regularization-parameter-1"></a><a class="docs-heading-anchor-permalink" href="#Examine-shrunk-singular-values-for-best-regularization-parameter" title="Permalink"></a></h3><pre><code class="language-julia hljs">sh = soft.(sy,reg_best)
+psk = plot(
+    xaxis = (L&quot;k&quot;, (1, N), [1, Ktrue, sum(sh .!= 0), N]),
+    yaxis = (L&quot;σ&quot;, (0, 5.5), 0:6),
+    legendfontsize = 20,
+)
+scatter!(1:N, sy, color=:red, marker=:hexagon, label=L&quot;\sigma(Y) \ \mathrm{noisy}&quot;)
+scatter!(1:N, sx, color=:blue, label=L&quot;\sigma(X) \ \mathrm{noiseless}&quot;)
+scatter!(1:N, sh, color=:green, marker=:star, label=L&quot;\hat{\sigma} \ \ \mathrm{SURE} \ \hat{\beta}&quot;)</code></pre><img src="1efac32f.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+# savefig(psk, &quot;lr_sure1t.pdf&quot;)</code></pre><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × AMD EPYC 7763 64-Core Processor&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.16.1
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.5
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.0
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../lr-cv/">« Low-Rank Selection via Cross Validation</a><a class="docs-footer-nextpage" href="../pca/">PCA »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Saturday 14 February 2026 16:45">Saturday 14 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Random matrix theory and rank-1 signal + noise · Demos</title><meta name="title" content="Random matrix theory and rank-1 signal + noise · Demos"/><meta property="og:title" content="Random matrix theory and rank-1 signal + noise · Demos"/><meta property="twitter:title" content="Random matrix theory and rank-1 signal + noise · Demos"/><meta name="description" content="Documentation for Demos."/><meta property="og:description" content="Documentation for Demos."/><meta property="twitter:description" content="Documentation for Demos."/><meta property="og:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/12/gauss1/"/><meta property="twitter:url" content="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/12/gauss1/"/><link rel="canonical" href="https://JeffFessler.github.io/book-la-demo/stable/generated/demos/12/gauss1/"/><script data-outdated-warner src="../../../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../../../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../../../assets/documenter.js"></script><script src="../../../../search_index.js"></script><script src="../../../../siteinfo.js"></script><script src="../../../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../../../assets/themeswap.js"></script><link href="../../../../assets/custom.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../../../"><img src="../../../../assets/logo.png" alt="Demos logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../../../">Demos</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../../../">Home</a></li><li><span class="tocitem">01 Tutorials</span><ul><li><a class="tocitem" href="../../01/1-intro/">Tutorial: Julia Overview</a></li><li><a class="tocitem" href="../../01/2-vector/">Tutorial: Vectors in Julia</a></li></ul></li><li><span class="tocitem">02 Matrix</span><ul><li><a class="tocitem" href="../../02/conv-mat/">Convolution matrix</a></li><li><a class="tocitem" href="../../02/dot/">Vector dot product</a></li><li><a class="tocitem" href="../../02/gauss2d/">2d heatmap</a></li><li><a class="tocitem" href="../../02/mul-mat-vec/">Matrix-vector product</a></li><li><a class="tocitem" href="../../02/outer/">Vector outer product</a></li></ul></li><li><span class="tocitem">03 Eig/SVD</span><ul><li><a class="tocitem" href="../../03/eig-locus/">Eigenvalue locus</a></li></ul></li><li><span class="tocitem">04 Subspaces</span><ul><li><a class="tocitem" href="../../04/svd-diff/">SVD of finite differences</a></li></ul></li><li><span class="tocitem">05 LS</span><ul><li><a class="tocitem" href="../../05/double-descent/">Double Descent in LS</a></li><li><a class="tocitem" href="../../05/frame-cycle/">Wavelet frame denoising</a></li><li><a class="tocitem" href="../../05/ls-cost1/">LS cost functions</a></li><li><a class="tocitem" href="../../05/ls-cv/">LS fitting with cross validation</a></li><li><a class="tocitem" href="../../05/ls-fit1/">LS fitting</a></li><li><a class="tocitem" href="../../05/ls-lift/">LS lifting</a></li><li><a class="tocitem" href="../../05/sat-regress/">Linear regression and SAT scores</a></li></ul></li><li><span class="tocitem">06 Norm</span><ul><li><a class="tocitem" href="../../06/procrustes/">Procrustes method</a></li><li><a class="tocitem" href="../../06/robust-regress/">Robust regression</a></li></ul></li><li><span class="tocitem">07 Low-Rank</span><ul><li><a class="tocitem" href="../../07/align1/">Image alignment by rank-1 method</a></li><li><a class="tocitem" href="../../07/lr-cv/">Low-Rank Selection via Cross Validation</a></li><li><a class="tocitem" href="../../07/lr-sure/">Low-Rank SURE</a></li><li><a class="tocitem" href="../../07/pca/">PCA</a></li><li><a class="tocitem" href="../../07/photometric3/">Photometric stereo</a></li><li><a class="tocitem" href="../../07/rank1/">Rank-1 approximation</a></li><li><a class="tocitem" href="../../07/source-local/">Source localization</a></li></ul></li><li><span class="tocitem">08 Special</span><ul><li><a class="tocitem" href="../../08/eigmap/">Laplacian eigenmaps</a></li><li><a class="tocitem" href="../../08/kron-sum-inv/">Kronecker sum of circulant</a></li><li><a class="tocitem" href="../../08/markov-chain/">Markov chain</a></li><li><a class="tocitem" href="../../08/spectral-cluster/">Spectral clustering</a></li><li><a class="tocitem" href="../../08/ssc/">Sparse spectral clustering (SSC)</a></li></ul></li><li><span class="tocitem">09 Optimize</span><ul><li><a class="tocitem" href="../../09/class01/">Binary classification</a></li><li><a class="tocitem" href="../../09/logistic1/">Logistic regression</a></li><li><a class="tocitem" href="../../09/logistic2/">Logistic regression - QN</a></li><li><a class="tocitem" href="../../09/precon1/">Preconditioning</a></li></ul></li><li><span class="tocitem">10 Complete</span><ul><li><a class="tocitem" href="../../10/foreback/">Video foreground/background separation</a></li><li><a class="tocitem" href="../../10/lrmc-m/">Low-rank matrix completion: AltMin, ISTA, FISTA</a></li><li><a class="tocitem" href="../../10/lrmc3/">Low-rank matrix completion: ADMM</a></li><li><a class="tocitem" href="../../10/nmf/">Non-negative matrix factorization</a></li></ul></li><li><span class="tocitem">11 Neural nets</span><ul><li><a class="tocitem" href="../../11/ring3/">Classification with MLP</a></li></ul></li><li><span class="tocitem">12 RMT</span><ul><li><a class="tocitem" href="../complete1/">RMT and matrix completion</a></li><li class="is-active"><a class="tocitem" href>Random matrix theory and rank-1 signal + noise</a><ul class="internal"><li><a class="tocitem" href="#Helper-functions"><span>Helper functions</span></a></li><li><a class="tocitem" href="#Results"><span>Results</span></a></li><li><a class="tocitem" href="#Marčenko–Pastur-distribution"><span>Marčenko–Pastur distribution</span></a></li><li><a class="tocitem" href="#Universality"><span>Universality</span></a></li><li><a class="tocitem" href="#Sparsity"><span>Sparsity</span></a></li></ul></li><li><a class="tocitem" href="../outlier1/">RMT and outliers</a></li><li><a class="tocitem" href="../round1/">Roundoff errors and rank</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">12 RMT</a></li><li class="is-active"><a href>Random matrix theory and rank-1 signal + noise</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Random matrix theory and rank-1 signal + noise</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/12/gauss1.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="rmt-gauss1"><a class="docs-heading-anchor" href="#rmt-gauss1">Random matrix theory and rank-1 signal + noise</a><a id="rmt-gauss1-1"></a><a class="docs-heading-anchor-permalink" href="#rmt-gauss1" title="Permalink"></a></h1><p>This example compares results from random matrix theory with empirical results for rank-1 matrices with additive white Gaussian noise using the Julia language. This demo illustrates the phase transition that occurs when the singular value is sufficiently large relative to the matrix aspect ratio <span>$c = M/N$</span>.</p><p>This page comes from a single Julia file: <a href="https://github.com/JeffFessler/book-la-demo/blob/main/docs/lit/demos/12/gauss1.jl"><code>gauss1.jl</code></a>.</p><p>You can access the source code for such Julia documentation using the &#39;Edit on GitHub&#39; link in the top right. You can view the corresponding notebook in <a href="https://nbviewer.org/">nbviewer</a> here: <a href="https://nbviewer.org/github/JeffFessler/book-la-demo/tree/gh-pages/generated/demos/12/gauss1.ipynb"><code>gauss1.ipynb</code></a>, or open it in <a href="https://mybinder.org/">binder</a> here: <a href="https://mybinder.org/v2/gh/JeffFessler/book-la-demo/gh-pages?filepath=generated/demos/12/gauss1.ipynb"><code>gauss1.ipynb</code></a>.</p><p>Add the Julia packages that are need for this demo. Change <code>false</code> to <code>true</code> in the following code block if you are using any of the following packages for the first time.</p><pre><code class="language-julia hljs">if false
+    import Pkg
+    Pkg.add([
+        &quot;InteractiveUtils&quot;
+        &quot;LaTeXStrings&quot;
+        &quot;LinearAlgebra&quot;
+        &quot;MIRTjim&quot;
+        &quot;Plots&quot;
+        &quot;Random&quot;
+        &quot;StatsBase&quot;
+    ])
+end</code></pre><p>Tell Julia to use the following packages for this example. Run <code>Pkg.add()</code> in the preceding code block first, if needed.</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+using LaTeXStrings
+using LinearAlgebra: dot, rank, svd, svdvals
+using MIRTjim: prompt, jim
+using Plots: default, gui, plot, plot!, scatter!, savefig, histogram
+using Plots.PlotMeasures: px
+using Random: seed!
+using StatsBase: mean, var
+default(markerstrokecolor=:auto, label=&quot;&quot;, widen=true, markersize = 6,
+ labelfontsize = 24, legendfontsize = 18, tickfontsize = 14, linewidth = 3,
+)
+seed!(0)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Random.TaskLocalRNG()</code></pre><p>The following line is helpful when running this file as a script; this way it will prompt user to hit a key after each image is displayed.</p><pre><code class="language-julia hljs">isinteractive() &amp;&amp; prompt(:prompt);</code></pre><h2 id="Helper-functions"><a class="docs-heading-anchor" href="#Helper-functions">Helper functions</a><a id="Helper-functions-1"></a><a class="docs-heading-anchor-permalink" href="#Helper-functions" title="Permalink"></a></h2><p>Generate random data for one trial:</p><pre><code class="language-julia hljs">function gen1(
+    θ::Real = 3,
+    M::Int = 100,
+    N::Int = 2M,
+    T::Type{&lt;:Real} = Float32,
+)
+    u = randn(T, M) / T(sqrt(M))
+    v = randn(T, N) / T(sqrt(N))
+    X = θ * u * v&#39; # theoretically rank-1 matrix
+    Z = randn(T, M, N) / T(sqrt(N)) # gaussian noise
+    Y = X + Z
+    return Y, u, v, θ
+end;</code></pre><p>SVD results for 1 trial:</p><pre><code class="language-julia hljs">function trial1(args...)
+    Y, u, v, θ = gen1(args...)
+    fac = svd(Y)
+    σ1 = fac.S[1]
+    u1 = fac.U[:,1]
+    v1 = fac.Vt[1,:]
+    return [σ1, abs2(dot(u1, u)), abs2(dot(v1, v))]
+end;</code></pre><p>Average <code>nrep</code> trials:</p><pre><code class="language-julia hljs">trial2(nrep::Int, args...) = mean((_) -&gt; trial1(args...), 1:nrep);</code></pre><p>SVD for each of multiple trials, for different SNRs and matrix sizes:</p><pre><code class="language-julia hljs">if !@isdefined(vgrid)
+
+    # Simulation parameters
+    T = Float32
+    Mlist = [30, 300]
+    θmax = 4
+    nθ = θmax * 4 + 1
+    nrep = 100
+    θlist = T.(range(0, θmax, nθ));
+    labels = map(n -&gt; latexstring(&quot;\$M = $n\$&quot;), Mlist)
+
+    c = 1 # square matrices for simplicity
+    c4 = c^0.25
+    tmp = ((θ, M) -&gt; trial2(nrep, θ, M, ceil(Int, M/c) #= N =#)).(θlist, Mlist&#39;)
+    σgrid = map(x -&gt; x[1], tmp)
+    ugrid = map(x -&gt; x[2], tmp)
+    vgrid = map(x -&gt; x[3], tmp)
+end;</code></pre><h2 id="Results"><a class="docs-heading-anchor" href="#Results">Results</a><a id="Results-1"></a><a class="docs-heading-anchor-permalink" href="#Results" title="Permalink"></a></h2><p>Compare theory predictions and empirical results. There is again notable agreement between theory and empirical results here.</p><p>σ1 plot</p><pre><code class="language-julia hljs">colors = [:orange, :red]
+θfine = range(0, θmax, 40θmax + 1)
+sbg(θ) = θ &gt; c4 ? sqrt((1 + θ^2) * (c + θ^2)) / θ : 1 + √(c)
+stheory = sbg.(θfine)
+bm = s -&gt; &quot;\\mathbf{\\mathit{$s}}&quot;
+ylabel = latexstring(&quot;\$σ_1($(bm(:Y)))\$ (Avg)&quot;)
+ps = plot(θfine, θfine, color=:black,
+    aspect_ratio = 1, linewidth = 2,
+    xaxis = (L&quot;θ&quot;, (0,θmax), 0:θmax),
+    yaxis = (ylabel, (1,θmax), 1:θmax),
+    annotate = (2.1, 3.6, latexstring(&quot;c = $c&quot;), :left),
+)
+plot!(θfine, stheory, color=:blue, label=&quot;theory&quot;)
+scatter!(θlist, σgrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, σgrid[:,2], marker=:circle, color=colors[2], label = labels[2])</code></pre><img src="bf8cc1cc.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>u1 plot</p><pre><code class="language-julia hljs">ubg(θ) = (θ &gt; c4) ? 1 - c * (1 + θ^2) / (θ^2 * (θ^2 + c)) : 0
+utheory = ubg.(θfine)
+ylabel = latexstring(&quot;\$|⟨\\hat{$(bm(:u))}, $(bm(:u))⟩|^2\$ (Avg)&quot;)
+pu = plot(θfine, utheory, color=:blue, label=&quot;theory&quot;,
+    left_margin = 10px, legend = :bottomright,
+    xaxis = (L&quot;θ&quot;, (0,θmax), 0:θmax),
+    yaxis = (ylabel, (0,1), 0:0.5:1),
+)
+scatter!(θlist, ugrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, ugrid[:,2], marker=:circle, color=colors[2], label = labels[2])</code></pre><img src="eefe796f.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>v1 plot</p><pre><code class="language-julia hljs">vbg(θ) = (θ &gt; c^0.25) ? 1 - (c + θ^2) / (θ^2 * (θ^2 + 1)) : 0
+vtheory = vbg.(θfine)
+ylabel = latexstring(&quot;\$|⟨\\hat{$(bm(:v))}, $(bm(:v))⟩|^2\$ (Avg)&quot;)
+pv = plot(θfine, vtheory, color=:blue, label=&quot;theory&quot;,
+    left_margin = 10px, legend = :bottomright,
+    xaxis = (L&quot;θ&quot;, (0,θmax), 0:θmax),
+    yaxis = (ylabel, (0,1), 0:0.5:1),
+)
+scatter!(θlist, vgrid[:,1], marker=:square, color=colors[1], label = labels[1])
+scatter!(θlist, vgrid[:,2], marker=:circle, color=colors[2], label = labels[2])</code></pre><img src="29fee3a3.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()
+
+
+if false
+    savefig(ps, &quot;gauss1-s.pdf&quot;)
+    savefig(pu, &quot;gauss1-u.pdf&quot;)
+    savefig(pv, &quot;gauss1-v.pdf&quot;)
+end</code></pre><h2 id="Marčenko–Pastur-distribution"><a class="docs-heading-anchor" href="#Marčenko–Pastur-distribution">Marčenko–Pastur distribution</a><a id="Marčenko–Pastur-distribution-1"></a><a class="docs-heading-anchor-permalink" href="#Marčenko–Pastur-distribution" title="Permalink"></a></h2><p>Examine the singular values of the noise-only matrix <span>$Z$</span>. having elements <span>$z_{ij} ∼ N(0, 1/N)$</span>. and compare to the asymptotic prediction by the <a href="https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution">Marčenko–Pastur distribution</a>. The agreement is remarkably good, even for a modest matrix size of 100 × 100.</p><p>Marčenko–Pastur pdf</p><pre><code class="language-julia hljs">function mp_predict(x::Real, c::Real)
+    σm = 1 - sqrt(c)
+    σp = 1 + sqrt(c)
+    return (σm &lt; x &lt; σp) ?
+        sqrt(4c - (x^2 - 1 - c)^2) / (π * c * x) : 0.
+end;
+
+
+function mp_plot(M::Int, N::Int, rando::Function, name::String;
+    ntrial = 150,
+    bins = range(0, 2, 101),
+)
+    c = M//N
+    pred = mp_predict.(bins, c)
+    pmax = ceil(maximum(pred), digits=1)
+    data = [svdvals(rando()) for _ in 1:ntrial]
+    data = reduce(hcat, data)
+    σm = 1 - sqrt(c)
+    σp = 1 + sqrt(c)
+    xticks = (c == 1) ? (0:2) : round.([0, σm, 1, σp, 2]; digits=2)
+    cstr = c == 1 ? L&quot;c = 1&quot; : latexstring(&quot;c = $(c.num)/$(c.den) $name&quot;)
+    histogram(vec(data); bins, linewidth=0,
+     xaxis = (L&quot;σ&quot;, (0, 2), xticks),
+     yaxis = (&quot;&quot;, (0, 2.0), [-1, 0, pmax]),
+     label = &quot;Empirical&quot;, normalize = :pdf,
+     left_margin = 10px,
+     annotate = (0.1, 1.5, cstr, :left),
+    )
+    return plot!(bins, pred, label=&quot;Predicted&quot;)
+end;
+
+M = 100
+Nlist = [1, 4, 9] * M
+fun1 = N -&gt; mp_plot(M, N, () -&gt; randn(M, N) / sqrt(N), &quot;&quot;)
+pp = fun1.(Nlist)
+p3 = plot(pp...; layout=(3,1), size=(600,800))
+
+# savefig(p3, &quot;gauss-mp.pdf&quot;)
+# savefig(pp[2], &quot;gauss-mp-c4.pdf&quot;)</code></pre><img src="43d41ad1.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h2 id="Universality"><a class="docs-heading-anchor" href="#Universality">Universality</a><a id="Universality-1"></a><a class="docs-heading-anchor-permalink" href="#Universality" title="Permalink"></a></h2><p>Repeat the previous experiment with a (zero-mean) Bernoulli distribution.</p><pre><code class="language-julia hljs">M = 100
+N = 4 * M
+randb = () -&gt; rand((-1,1), M, N) / sqrt(N) # Bernoulli, variance 1/N
+if false
+    tmp = randb()
+    @show mean(tmp) # check mean is 0
+    @show mean(abs2, tmp), 1/N # check variance is 1/N (exact!)
+end
+pb = mp_plot(M, N, randb, &quot;, \\mathrm{Bernoulli}&quot;)</code></pre><img src="a983fc38.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><p>Show a typical Bernoulli matrix realization</p><pre><code class="language-julia hljs">pb0 = jim(randb()&#39;, &quot;&#39;Bernoulli&#39; matrix&quot;; clim = (-1,1) .* 0.05,
+ size=(600,200), right_margin = 30px, cticks=(-1:1)*0.05)</code></pre><img src="fe93eec4.svg" alt="Example block output"/><h2 id="Sparsity"><a class="docs-heading-anchor" href="#Sparsity">Sparsity</a><a id="Sparsity-1"></a><a class="docs-heading-anchor-permalink" href="#Sparsity" title="Permalink"></a></h2><p>Universality can break down if the data is too sparse. Here we modify Bernoulli to be a categorical distribution with values <span>$(-a, 0, a)$</span> and probabilities <span>$((1-p)/2, p, (1-p)/2)$</span>, with <span>$a$</span> set so that the variance is <span>$1/N$</span>.</p><p>Here we set <span>$p$</span> so that most of the random matrix elements are zero. In this extremely sparse case, the Marčenko–Pastur distribution no longer applies.</p><pre><code class="language-julia hljs">M = 100
+N = 4 * M
+p = (1 - 8/N) # just a few non-zero per row
+
+rands = () -&gt; rand((-1,1), M, N) / sqrt(N * (1-p)) .* (rand(M,N) .&gt; p)
+if false
+    tmp = rands()
+    @show count(==(0), tmp) / (M*N), p
+    @show mean(tmp) # check mean is 0
+    @show mean(abs2, tmp), 1/N # check variance is 1/N (exact!)
+end</code></pre><p>Show a typical matrix realization to illustrate the sparsity</p><pre><code class="language-julia hljs">pb1 = jim(rands()&#39;, &quot;Very sparse &#39;Bernoulli&#39; matrix&quot;;
+ size=(600,200), right_margin = 20px)</code></pre><img src="c3f1e165.svg" alt="Example block output"/><p>Now make the plot</p><pre><code class="language-julia hljs">pss = mp_plot(M, N, rands, &quot;, \\mathrm{Sparse},  p = $p&quot;)</code></pre><img src="3e1c5d4b.svg" alt="Example block output"/><pre><code class="language-julia hljs">prompt()</code></pre><h3 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h3><p>This page was generated with the following version of Julia:</p><pre><code class="language-julia hljs">using InteractiveUtils: versioninfo
+io = IOBuffer(); versioninfo(io); split(String(take!(io)), &#39;\n&#39;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">12-element Vector{SubString{String}}:
+ &quot;Julia Version 1.12.5&quot;
+ &quot;Commit 5fe89b8ddc1 (2026-02-09 16:05 UTC)&quot;
+ &quot;Build Info:&quot;
+ &quot;  Official https://julialang.org release&quot;
+ &quot;Platform Info:&quot;
+ &quot;  OS: Linux (x86_64-linux-gnu)&quot;
+ &quot;  CPU: 4 × Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz&quot;
+ &quot;  WORD_SIZE: 64&quot;
+ &quot;  LLVM: libLLVM-18.1.7 (ORCJIT, icelake-server)&quot;
+ &quot;  GC: Built with stock GC&quot;
+ &quot;Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)&quot;
+ &quot;&quot;</code></pre><p>And with the following package versions</p><pre><code class="language-julia hljs">import Pkg; Pkg.status()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32"><span class="sgr1">Status</span></span> `~/work/book-la-demo/book-la-demo/docs/Project.toml`
+  <span class="sgr90">[6e4b80f9] </span>BenchmarkTools v1.6.3
+  <span class="sgr90">[aaaa29a8] </span>Clustering v0.15.8
+  <span class="sgr90">[35d6a980] </span>ColorSchemes v3.31.0
+  <span class="sgr90">[3da002f7] </span>ColorTypes v0.12.1
+  <span class="sgr90">[c3611d14] </span>ColorVectorSpace v0.11.0
+  <span class="sgr90">[717857b8] </span>DSP v0.8.4
+  <span class="sgr90">[72c85766] </span>Demos v0.1.0 `~/work/book-la-demo/book-la-demo`
+  <span class="sgr90">[e30172f5] </span>Documenter v1.17.0
+  <span class="sgr90">[4f61f5a4] </span>FFTViews v0.3.2
+  <span class="sgr90">[7a1cc6ca] </span>FFTW v1.10.0
+  <span class="sgr90">[587475ba] </span>Flux v0.16.9
+  <span class="sgr90">[a09fc81d] </span>ImageCore v0.10.5
+  <span class="sgr90">[9ee76f2b] </span>ImageGeoms v0.11.2
+  <span class="sgr90">[71a99df6] </span>ImagePhantoms v0.8.1
+  <span class="sgr90">[b964fa9f] </span>LaTeXStrings v1.4.0
+  <span class="sgr90">[7031d0ef] </span>LazyGrids v1.1.0
+  <span class="sgr90">[599c1a8e] </span>LinearMapsAA v0.12.0
+  <span class="sgr90">[98b081ad] </span>Literate v2.21.0
+  <span class="sgr90">[7035ae7a] </span>MIRT v0.18.3
+  <span class="sgr90">[170b2178] </span>MIRTjim v0.26.0
+  <span class="sgr90">[eb30cadb] </span>MLDatasets v0.7.20
+  <span class="sgr90">[efe261a4] </span>NFFT v0.14.3
+  <span class="sgr90">[6ef6ca0d] </span>NMF v1.0.3
+  <span class="sgr90">[15e1cf62] </span>NPZ v0.4.3
+  <span class="sgr90">[0b1bfda6] </span>OneHotArrays v0.2.10
+  <span class="sgr90">[429524aa] </span>Optim v2.0.1
+  <span class="sgr90">[91a5bcdd] </span>Plots v1.41.6
+  <span class="sgr90">[f27b6e38] </span>Polynomials v4.1.1
+  <span class="sgr90">[2913bbd2] </span>StatsBase v0.34.10
+  <span class="sgr90">[1986cc42] </span>Unitful v1.28.0
+  <span class="sgr90">[d6d074c3] </span>VideoIO v1.4.0
+  <span class="sgr90">[b77e0a4c] </span>InteractiveUtils v1.11.0
+  <span class="sgr90">[37e2e46d] </span>LinearAlgebra v1.12.0
+  <span class="sgr90">[44cfe95a] </span>Pkg v1.12.1
+  <span class="sgr90">[9a3f8284] </span>Random v1.11.0</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../complete1/">« RMT and matrix completion</a><a class="docs-footer-nextpage" href="../outlier1/">RMT and outliers »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Sunday 1 March 2026 06:34">Sunday 1 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
