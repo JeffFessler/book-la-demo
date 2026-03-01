@@ -124,7 +124,7 @@ if !@isdefined(cost)
     @show maximum(tmp) / minimum(tmp)
     pLip = maximum(tmp) / 4 # 1/4 comes from logistic curvature
 
-    reg = 2^0 # todo: choose via cross validation
+    reg = 0 # no regularization because N ≪ M here
     Lip = pLip + reg # Lipschitz constant
 
     A = yy .* vv'
@@ -156,8 +156,8 @@ xh = xqs[:,end] # final estimate
 
 # Plot cost
 ifun = xs -> 0:(size(xs,2)-1)
-pc = plot(xaxis=("iteration", (0,10)), yaxis=("Cost function",))
-plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN")
+pc = plot(xaxis=("iteration", (0,16), 0:4:16), yaxis=("Cost function",))
+plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN", marker=:o)
 
 #
 prompt()
@@ -182,11 +182,11 @@ prompt()
 efun1 = (x) -> vec(sqrt.(sum(abs2, x .- xh, dims=1)))
 efun = (x) -> log10.(efun1(x))
 pic = plot(
-xaxis = ("Iteration", (0, 10), 0:2:10),
- yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-8, 1), -8:1),
+xaxis = ("Iteration", (0, 16), 0:2:16),
+ yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-9, 3), -9:3),
  legend = :topright,
 )
-plot!(ifun(xqs), efun(xqs), label = "QN")
+plot!(ifun(xqs), efun(xqs), label = "QN", marker = :o)
 plot(pic)
 
 #
@@ -200,9 +200,15 @@ prompt()
 inprod0 = [v0; ones(1,n0)]' * xh
 inprod1 = [v1; ones(1,n1)]' * xh
 
+accuracy0 = round(count(<(0), inprod0) / n0 * 100, digits=1)
+accuracy1 = round(count(>(0), inprod1) / n1 * 100, digits=1)
+
 plot(xaxis=("⟨x,v⟩",))
-histogram!(inprod0, color=:green, label="class 0", alpha=0.5)
-histogram!(inprod1, color=:blue, label="class 1", alpha=0.5)
+bins = -15:15
+histogram!(inprod0, alpha=0.5; bins, color=:green, linecolor = :green,
+ label="class 0: $accuracy0%")
+histogram!(inprod1, alpha=0.5; bins, color=:blue, linecolor = :blue,
+ label="class 1: $accuracy1%")
 
 #
 prompt()
@@ -223,12 +229,12 @@ where
 ``h(z) = log(1 + e^{-z})``
 is the logistic loss function.
 
-# In
+In:
 - `data` `N × M` where `N` is number of features (including offset)
 - `label` vector of `M` labels ±1
 - `reg` regularization parameter
 
-# Out
+Out:
 - `xh` minimizer of ``f``
 """
 function logistic(data::AbstractMatrix, labels::AbstractVector, reg::Real)
