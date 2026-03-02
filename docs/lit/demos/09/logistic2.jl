@@ -1,8 +1,9 @@
 #=
-# [Logistic regression](@id logistic1)
+# [Logistic regression - QN](@id logistic2)
 
 Binary classification via
 [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
+using Quasi-Newton optimizer
 in Julia.
 =#
 
@@ -67,7 +68,7 @@ if !@isdefined(yy)
     v0 = mu0 .+ randn(2,n0) # class -1
     v1 = mu1 .+ randn(2,n1) # class 1
     nex = 0
-    if true # 2017-01-18
+    if false
         nex = 4 # extra dim (beyond the 2 shown) to make "larger scale"
         v0 = [v0; rand(nex,n0)] # (2+nex, n0)
         v1 = [v1; rand(nex,n1)] # (2+nex, n1)
@@ -94,7 +95,6 @@ if !@isdefined(ps)
     alpha = 0.7
     scatter!(v0[1,:], v0[2,:], color = :green; alpha)
     scatter!(v1[1,:], v1[2,:], color = :blue, marker = :square; alpha)
-    ## savefig(ps, "demo_fgm1_ogm1_s0.pdf")
 end
 ps
 
@@ -140,7 +140,7 @@ if !@isdefined(cost)
     @show maximum(tmp) / minimum(tmp)
     pLip = maximum(tmp) / 4 # 1/4 comes from logistic curvature
 
-    reg = 2^0 # todo: use cross validation to select
+    reg = 0 # no regularization because N ≪ M here
     Lip = pLip + reg # Lipschitz constant
 
     A = yy .* vv' # M × N matrix of features times labels
@@ -156,154 +156,7 @@ end;
 
 
 #=
-## GD
-Iterate GD
-=#
-tol = 1e-6
-tol_gd = tol
-tol_n1 = tol
-tol_o1 = tol
-
-function gd(x0, gfun::Function, niter::Int)
-    xg = copy(x0)
-    xgs = copy(xg)
-    for n in 1:niter
-        xold = xg
-        xg -= 1/Lip * gfun(xg)
-        if false && (norm(xg - xold, Inf) / norm(x0, Inf) < tol_gd)
-            @show n
-            break
-        end
-        any(isnan, xg) && throw("nan")
-        ## projected GD ??
-        ## xg = xg / norm(xg) # decision boundary unaffected by norm!
-        xgs = [xgs xg] # archive
-    end
-    return xgs
-end
-
-if !@isdefined(xgs)
-    niter_gd = 300
-    xgs = gd(x0, gfun, niter_gd)
-    pgs = plot(xgs', xlabel="Iteration", title = "GD")
-end
-pgs
-
-#
-prompt()
-
-
-#=
-## Nesterov FGM
-=#
-do_restart = true;
-
-function fgm(x0, grad, Lip::Real, niter::Int)
-    re_nest = Int[]
-    told = 1
-    x = copy(x0)
-    zold = copy(x0)
-    xns = copy(x)
-    for n in 1:niter
-        xold = copy(x)
-        grad = gfun(x)
-        znew = x - 1/Lip * grad
-        zdiff = znew - zold # dk - for restart
-
-        tnew = 1/2 * (1 + sqrt(1 + 4 * told^2))
-
-        x = znew + (told - 1) / tnew * (znew - zold)
-        zold = copy(znew)
-        told = tnew
-        if false && (norm(x - xold, Inf) / norm(x0, Inf) < tol_n1)
-            @show n
-            break
-        end
-        any(isnan, x) && throw("nan")
-
-        if do_restart && (dot(grad, zdiff) > 0) # dk new version
-            told = 1
-            x = copy(znew) # check
-            zold = copy(x)
-            @show "nest. restart", n
-            push!(re_nest, n)
-        end
-        xns = [xns x] # archive
-    end
-    return xns, re_nest
-end
-
-if !@isdefined(xns)
-    niter_n1 = 300
-    niter_n1 = 500 # nex
-    xns, re_nest = fgm(x0, gfun, Lip, niter_n1)
-    pns = plot(xns', xlabel = "Iteration", title = "FGM")
-end
-pns
-
-#
-prompt()
-
-
-#=
-## OGM
-Optimized gradient method
-=#
-function ogm(
-    x0,
-    gfun,
-    Lip::Real,
-    niter::Int,
-)
-    re_ogm1 = Int[]
-    told = 1
-    x = copy(x0)
-    zold = copy(x0)
-    x1s = copy(x)
-    for n in 1:niter
-        xold = x
-        grad = gfun(x)
-        znew = x - 1/Lip * grad
-
-        tnew = 1/2 * (1 + sqrt(1 + 4 * told^2))
-
-        x = znew + (told - 1) / tnew * (znew - zold) + told/tnew * (znew - xold)
-        zdiff = znew - zold # dk - for restart
-        zold = znew
-        told = tnew
-        if false && (norm(x - xold, Inf) / norm(x0, Inf) < tol_n1)
-            @show n
-            break
-        end
-        any(isnan, x) && throw("nan")
-
-        if do_restart && (dot(grad, zdiff) > 0) # dk new version
-            push!(re_ogm1, n)
-            told = 1
-            x = znew # check
-            zold = x # dk fixed from x0
-            @info "ogm1 restart $n"
-        end
-        x1s = [x1s x] # archive
-    end
-    return x1s, re_ogm1
-end
-
-
-if !@isdefined(x1s)
-    niter_o1 = 300
-    niter_o1 = 500 # nex
-    x1s, re_ogm1 = ogm(x0, gfun, Lip, niter_o1)
-    po1 = plot(x1s', xlabel = "Iteration", title = "OGM")
-end
-po1
-
-#
-prompt()
-
-
-#=
-## L-BFGS Quasi-Newton optimizer
+## L-BFGS optimizer
 =#
 opt = Optim.Options(
  store_trace = true,
@@ -315,19 +168,10 @@ xqs = hcat(Optim.x_trace(outq)...)
 xq = outq.minimizer
 xh = xqs[:,end] # final estimate
 
-
-# Impartial version of x ͚
-xh_tmp = [xgs[:,end] xns[:,end] x1s[:,end] xqs[:,end]]
-xh = vec(mean(xh_tmp[:,2:end], dims=2)); # GD too slow to include
-
 # Plot cost
 ifun(xs) = 0:(size(xs,2)-1)
-extra = do_restart ? " (restart)" : ""
-pc = plot(xaxis = ("iteration", (0,10)), yaxis = ("Cost function",))
-plot!(0:niter_gd, cost(xgs) .- cost(xh), label = "GD" * extra)
-plot!(0:niter_n1, cost(xns) .- cost(xh), label = "FGM" * extra)
-plot!(0:niter_o1, cost(x1s) .- cost(xh), label = "OGM1" * extra)
-plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN")
+pc = plot(xaxis = ("iteration", (0,16), 0:4:16), yaxis = ("Cost function",))
+plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN", marker = :o)
 
 #
 prompt()
@@ -338,7 +182,6 @@ if true
     psh = deepcopy(ps)
     v2p = @. (-xh[end] - xh[1] * v1p) / xh[2]
     plot!(psh, v1p, v2p, color = :magenta, label = "final")
-## savefig(psh, "demo-fgm1-fgm1a.pdf")
 end
 psh
 
@@ -351,30 +194,17 @@ prompt()
 =#
 
 efun1(x) = vec(sqrt.(sum(abs2, x .- xh, dims=1)))
-efun(x) = do_restart ? log10.(efun1(x)) : efun1(x)
-
+efun(x) = log10.(efun1(x))
 pic = plot(
- xaxis = ("Iteration", (0, 40+10*nex), 0:20:80),
- yaxis = do_restart ?
-  (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-3, 1), -3:1) :
-  (L"‖ \mathbf{x}_k - \mathbf{x}_* ‖", (0, 8), [-1, 0, 8]),
+ xaxis = ("Iteration", (0, 16), 0:2:16),
+ yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-9, 3), -9:3),
  legend = :topright,
 )
-plot!(ifun(xgs), efun(xgs), color = :green, label = "GD")
-plot!(ifun(xns), efun(xns), color = :blue, label = "Nesterov FGM" * extra)
-plot!(ifun(x1s), efun(x1s), color = :red, label = "OGM1" * extra)
 plot!(ifun(xqs), efun(xqs), label = "QN", marker = :o)
-if do_restart
-    scatter!(re_nest, efun(xns[:, re_nest .+ 1]), color = :blue)
-    scatter!(re_ogm1, efun(x1s[:, re_ogm1 .+ 1]), color = :red)
-end
 pic
 
 #
 prompt()
-
-## savefig demo_fgm1_ogm1c # restart
-## savefig demo_fgm1_ogm1b # no restart
 
 
 #=
@@ -388,7 +218,7 @@ accuracy0 = round(count(<(0), inprod0) / n0 * 100, digits=1)
 accuracy1 = round(count(>(0), inprod1) / n1 * 100, digits=1)
 
 plot(xaxis=("⟨x,v⟩",))
-bins = -12:12
+bins = -15:15
 alpha = 0.5
 histogram!(inprod0; alpha, bins, color = :green, linecolor = :green,
  label = "class 0: $accuracy0%")
@@ -397,4 +227,50 @@ histogram!(inprod1; alpha, bins, color = :blue, linecolor = :blue,
 
 #
 prompt()
+
+
+#=
+## Method
+Stand-alone function for (regularized) logistic regression
+=#
+
+"""
+   xh = logistic(data, label, reg)
+
+Perform regularized logistic regression for binary `label`s
+by minimizing
+``f(x) = 1_M' h.(A x) + β/2 ‖ x ‖_2^2``
+where
+``h(z) = log(1 + e^{-z})``
+is the logistic loss function.
+
+In:
+- `data` `N × M` where `N` is number of features (including offset)
+- `label` vector of `M` labels ±1
+- `reg` regularization parameter
+
+Out:
+- `xh` minimizer of ``f``
+"""
+function logistic(data::AbstractMatrix, labels::AbstractVector, reg::Real)
+    any(x -> ∉(x, (-1,1)), labels) && throw("labels must be ±1")
+    pot(t) = log(1 + exp(-t)) # logistic
+    dpot(t) = -1 / (exp(t) + 1) # derivative
+    tmp = data * data' # (N, N) covariance
+    tmp = eigvals(tmp)
+    pLip = maximum(tmp) / 4 # 1/4 comes from logistic curvature
+    Lip = pLip + reg # Lipschitz constant
+
+    A = labels .* data'
+    cost(x) = sum(pot, A * x) + reg/2 * sum(abs2, x)
+    gfun(x) = A' * dpot.(A * x) + reg * x # gradient
+
+    x0 = zeros(size(data,1))
+    outq = optimize(cost, gfun, x0; inplace=false)
+    return outq.minimizer
+end;
+
+xl = logistic(vv, yy, reg)
+@assert xl ≈ xh
+
 include("../../../inc/reproduce.jl")
