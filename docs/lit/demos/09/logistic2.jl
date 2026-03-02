@@ -1,7 +1,8 @@
 #=
 # [Logistic regression - QN](@id logistic2)
 
-Binary classification via logistic regression
+Binary classification via
+[logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 using Quasi-Newton optimizer
 in Julia.
 =#
@@ -74,7 +75,7 @@ if !@isdefined(yy)
     end
     M = n0 + n1 # how many samples
     yy = [-ones(Int, n0); ones(Int, n1)] # (M) labels
-    vv = [[v0 v1]; ones(1,M)] # (npar, M) training data - with bias/offset
+    vv = [[v0 v1]; ones(1,M)] # (npar, M) training data - with intercept
     npar = 3 + nex # unknown parameters
 end;
 
@@ -83,16 +84,17 @@ end;
 if !@isdefined(ps)
     x0 = [-1; 3; rand(nex); 5]
     v1p = range(-1,1,101) * 4
-    v2p_fun = x -> @. (-x[end] - x[1] * v1p) / x[2]
+    v2p_fun(x) = @. (-x[end] - x[1] * v1p) / x[2]
 
-    ps = plot(aspect_ratio = 1, size = (550, 500), legend=:topright,
+    ps = plot(aspect_ratio = 1, size = (550, 500), legend = :topright,
      xaxis = (L"v_1", (-4, 4), [-4 -1 0 1 4]),
      yaxis = (L"v_2", (-4, 4), [-4 -1 0 1 4]),
     )
     plot!(v1p, v2p_fun(x0), color=:red, label="initial")
     plot!(v1p, v1p, color=:yellow, label="ideal")
-    scatter!(v0[1,:], v0[2,:], color=:green, alpha=0.7)
-    scatter!(v1[1,:], v1[2,:], color=:blue, marker=:square, alpha=0.7)
+    alpha = 0.7
+    scatter!(v0[1,:], v0[2,:], color = :green; alpha)
+    scatter!(v1[1,:], v1[2,:], color = :blue, marker = :square; alpha)
 end
 ps
 
@@ -103,7 +105,8 @@ prompt()
 #=
 ## Cost function
 
-Logistic regression with Tikhonov regularization:
+Logistic regression with Tikhonov regularization
+involves minimizing the following cost function:
 ```math
 f(x) = 1_M' h.(A x) + (β/2) ‖ x ‖_2^2
 ```
@@ -111,10 +114,23 @@ where
 ``h(z) = \log(1 + e^{-z})``
 is the logistic loss function.
 
-Its gradient is
+Here ``A`` is ``M × N`` matrix
+with ``M`` samples of ``N`` features along each row
+(typically including the intercept ``1``).
+The ``m``th row of ``A``
+has already been multiplied
+by the ``m``th binary class label that is ±1.
+
+The cost function gradient is
 ``∇ f(x) = A' \dot{h}.(A x) + β x``,
-and its Lipschitz constant
-is ``‖A‖_2^2 / 4 + β``.
+and its Lipschitz constant is
+``‖A‖_2^2 / 4 + β``.
+
+After optimizing ``x``,
+the classifier is simply
+``\text{sign}(⟨v,x⟩)``
+where the feature vector ``v``
+typically includes the intercept ``1``.
 =#
 if !@isdefined(cost)
     pot(t) = log(1 + exp(-t)) # logistic
@@ -127,8 +143,8 @@ if !@isdefined(cost)
     reg = 0 # no regularization because N ≪ M here
     Lip = pLip + reg # Lipschitz constant
 
-    A = yy .* vv'
-    gfun = x -> A' * dpot.(A * x) + reg * x # gradient
+    A = yy .* vv' # M × N matrix of features times labels
+    gfun(x) = A' * dpot.(A * x) + reg * x # gradient
     if false
         tmp = gfun(x0)
         @show size(tmp)
@@ -153,9 +169,9 @@ xq = outq.minimizer
 xh = xqs[:,end] # final estimate
 
 # Plot cost
-ifun = xs -> 0:(size(xs,2)-1)
-pc = plot(xaxis=("iteration", (0,16), 0:4:16), yaxis=("Cost function",))
-plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN", marker=:o)
+ifun(xs) = 0:(size(xs,2)-1)
+pc = plot(xaxis = ("iteration", (0,16), 0:4:16), yaxis = ("Cost function",))
+plot!(ifun(xqs), cost(xqs) .- cost(xh), label = "QN", marker = :o)
 
 #
 prompt()
@@ -165,7 +181,7 @@ prompt()
 if true
     psh = deepcopy(ps)
     v2p = @. (-xh[end] - xh[1] * v1p) / xh[2]
-    plot!(psh, v1p, v2p, color = :magenta, label="final")
+    plot!(psh, v1p, v2p, color = :magenta, label = "final")
 end
 psh
 
@@ -177,8 +193,8 @@ prompt()
 ## Plot iterate convergence
 =#
 
-efun1 = (x) -> vec(sqrt.(sum(abs2, x .- xh, dims=1)))
-efun = (x) -> log10.(efun1(x))
+efun1(x) = vec(sqrt.(sum(abs2, x .- xh, dims=1)))
+efun(x) = log10.(efun1(x))
 pic = plot(
  xaxis = ("Iteration", (0, 16), 0:2:16),
  yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-9, 3), -9:3),
@@ -203,10 +219,11 @@ accuracy1 = round(count(>(0), inprod1) / n1 * 100, digits=1)
 
 plot(xaxis=("⟨x,v⟩",))
 bins = -15:15
-histogram!(inprod0, alpha=0.5; bins, color=:green, linecolor = :green,
- label="class 0: $accuracy0%")
-histogram!(inprod1, alpha=0.5; bins, color=:blue, linecolor = :blue,
- label="class 1: $accuracy1%")
+alpha = 0.5
+histogram!(inprod0; alpha, bins, color = :green, linecolor = :green,
+ label = "class 0: $accuracy0%")
+histogram!(inprod1; alpha, bins, color = :blue, linecolor = :blue,
+ label = "class 1: $accuracy1%")
 
 #
 prompt()
