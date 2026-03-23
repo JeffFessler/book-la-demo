@@ -20,6 +20,7 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "ADTypes"
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
@@ -35,6 +36,7 @@ end
 # Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using ADTypes: AutoForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: dot, eigvals
@@ -310,7 +312,8 @@ opt = Optim.Options(
  show_warnings = false,
  extended_trace = true, # for trace of x
 )
-outq = optimize(cost, gfun, x0, opt; inplace=false)
+outq = optimize(cost, gfun, x0, opt;
+    inplace = false, autodiff = AutoForwardDiff())
 xqs = hcat(Optim.x_trace(outq)...)
 xq = outq.minimizer
 xh = xqs[:,end] # final estimate

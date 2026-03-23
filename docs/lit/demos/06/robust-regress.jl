@@ -18,6 +18,7 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "ADTypes"
         "InteractiveUtils"
         "LaTeXStrings"
         "LinearAlgebra"
@@ -32,6 +33,7 @@ end
 # Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using ADTypes: AutoForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: norm
@@ -108,7 +110,7 @@ avoids over-fitting the outlier data points.
 p = 1.1 # close to ℓ₁
 cost = x -> norm(A * x - y, p)
 x0 = xls # initial guess
-outp = optimize(cost, x0)
+outp = optimize(cost, x0; autodiff = AutoForwardDiff())
 xlp = outp.minimizer
 
 plot!(p2, t0, Afun(t0)*xlp, color=:green, line=:dash,
@@ -120,7 +122,7 @@ Using 1-norm produces nearly the same results
 as using the p=1.1 norm.
 =#
 cost1 = x -> norm(A * x - y, 1) # ℓ₁
-out1 = optimize(cost1, x0)
+out1 = optimize(cost1, x0; autodiff = AutoForwardDiff())
 xl1 = out1.minimizer
 
 plot!(p2, t0, Afun(t0)*xl1, color=:orange, line=:dashdot,

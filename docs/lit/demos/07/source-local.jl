@@ -18,6 +18,7 @@ if you are using any of the following packages for the first time.
 if false
     import Pkg
     Pkg.add([
+        "ADTypes"
         "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
@@ -32,6 +33,7 @@ end
 # Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
+using ADTypes: AutoForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: svd, norm, Diagonal
@@ -147,7 +149,7 @@ This cost function was considered in
 
 Dfun(C) = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J]
 cost(C) = norm(Dfun(C) - Dn)^2
-outp = optimize(cost, Cn)
+outp = optimize(cost, Cn; autodiff = AutoForwardDiff())
 Cf = outp.minimizer
 pcf = scatter(Cf[1,:], -Cf[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates (noisy case - fitted)")
@@ -174,7 +176,7 @@ The fitted approach is closer to the noiseless coordinates.
 =#
 (Un,_,Vn) = svd(Ch * Cn')
 (Uf,_,Vf) = svd(Ch * Cf')
-round.( [
+diff1 = round.( [
  norm(Cn - Ch),
  norm(Ch - Un*Vn'*Cn),
  norm(Ch - Cf),
