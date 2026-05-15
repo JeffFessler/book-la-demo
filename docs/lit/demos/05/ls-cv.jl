@@ -93,7 +93,11 @@ prompt()
 ## Over-fitting to noisy data
 
 As the polynomial degree increases,
-the fit to the _noisy data_ improves.
+the fit to the _noisy data_ improves,
+as quantified by the
+[explained sum of squares (ESS)](https://en.wikipedia.org/wiki/Explained_sum_of_squares)
+``‖ A \hat{x} - b ‖_2^2.``
+
 In contrast,
 the error w.r.t. the latent function ``f``
 initially decreases,
@@ -112,7 +116,7 @@ end
 pf = scatter(degs, fits; color=:red,
  xaxis = ("degree", extrema(degs), [0,3,11]),
  yaxis = ("fits", (0,8), ),
- label = (L"‖ A_d \hat{x}_d - y ‖_2"),
+ label = (L"‖ A_d \hat{x}_d - y ‖_2 = \sqrt{\mathrm{ESS}}"),
 )
 scatter!(degs, accs;
  label = L"‖ A_d \hat{x}_d - f ‖_2", marker=:uptri, color=:blue)
@@ -206,7 +210,7 @@ to see the hyper-parameter
 (polynomial degree in this case)
 that makes
 ```math
-‖ A_d \hat{x}_d - y ‖_2 ≈ σ \sqrt{M}.
+\sqrt{\mathrm{ESS}} = ‖ A_d \hat{x}_d - y ‖_2 ≈ σ \sqrt{M}.
 ```
 This is called the
 [Discrepancy principle](https://www.sciencedirect.com/topics/engineering/discrepancy-principle)
