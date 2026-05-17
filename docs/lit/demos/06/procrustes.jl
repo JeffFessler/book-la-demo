@@ -72,7 +72,12 @@ residual = B - Q * A # small!
 
 
 # Rotation angle in degrees:
-acos(Q[1]) * (180/π) # very close to 30° as expected
+rad2deg(acos(Q[1])) # very close to 30° as expected
+
+
+# Compare residual norm to prediction
+predict =  norm(A)^2 + norm(B)^2 - 2*sum(s) # sum(s) = nuclear norm
+[norm(residual)^2 predict] # very close
 
 
 # ## Fitting function
@@ -149,4 +154,4 @@ Q_n, scale_n = procrustes(An, Bn)
 # Angle:
 rad2deg(acos(Q_n[1]))
 
-include("../../../inc/reproduce.jl")
+#src include("../../../inc/reproduce.jl")
