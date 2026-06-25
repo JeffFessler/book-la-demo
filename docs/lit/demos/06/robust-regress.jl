@@ -34,11 +34,13 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using ADTypes: AutoForwardDiff
+using ForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: norm
 using MIRTjim: prompt
-using Optim: optimize
+using Optim: optimize, LBFGS
+import Optim
 using Plots: default, plot, plot!, scatter, scatter!, savefig
 using Random: seed!
 default(); default(label="", markerstrokecolor=:auto, widen=true, linewidth=2,
@@ -110,7 +112,8 @@ avoids over-fitting the outlier data points.
 p = 1.1 # close to ℓ₁
 cost = x -> norm(A * x - y, p)
 x0 = xls # initial guess
-outp = optimize(cost, x0; autodiff = AutoForwardDiff())
+options = Optim.Options(store_trace = true)
+outp = optimize(cost, x0, LBFGS(), options; autodiff = AutoForwardDiff())
 xlp = outp.minimizer
 
 plot!(p2, t0, Afun(t0)*xlp, color=:green, line=:dash,
@@ -131,4 +134,18 @@ plot!(p2, t0, Afun(t0)*xl1, color=:orange, line=:dashdot,
 ## savefig(p2, "robust-regress.pdf")
 
 
-include("../../../inc/reproduce.jl")
+#=
+Convergence plots
+=#
+otrace = Optim.trace(outp)
+iters = map(t -> t.iteration, otrace)
+costs = map(t -> t.value, otrace)
+gnorm = map(t -> t.g_norm, otrace)
+
+pc = plot(
+ plot(iters, costs, title = "Cost function", marker=:circle, color=:cyan),
+ plot(iters, gnorm, title = "Gradient norm", marker=:circle, color=:green, yscale=:log10),
+ layout = (2,1),
+)
+
+#src include("../../../inc/reproduce.jl")
