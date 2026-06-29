@@ -37,7 +37,6 @@ end
 # Tell Julia to use the following packages.
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
-using ADTypes: AutoForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: dot, eigvals
@@ -159,14 +158,14 @@ end;
 
 #=
 ## L-BFGS optimizer
+Using analytical gradient function `gfun`
 =#
 opt = Optim.Options(
  store_trace = true,
  show_warnings = false,
  extended_trace = true, # for trace of x
 )
-outq = optimize(cost, gfun, x0, opt;
-    inplace = false, autodiff = AutoForwardDiff())
+outq = optimize(cost, gfun, x0, opt; inplace = false)
 xqs = hcat(Optim.x_trace(outq)...)
 xq = outq.minimizer
 xh = xqs[:,end] # final estimate
@@ -201,7 +200,7 @@ efun(x) = log10.(efun1(x))
 pic = plot(
  xaxis = ("Iteration", (0, 16), 0:2:16),
  yaxis = (L"\log_{10}(‖ \mathbf{x}_k - \mathbf{x}_* ‖)", (-9, 3), -9:3),
- legend = :topright,
+ legend = :topright, widen = true,
 )
 plot!(ifun(xqs), efun(xqs), label = "QN", marker = :o)
 pic
@@ -269,12 +268,9 @@ function logistic(data::AbstractMatrix, labels::AbstractVector, reg::Real)
     gfun(x) = A' * dpot.(A * x) + reg * x # gradient
 
     x0 = zeros(size(data,1))
-    outq = optimize(cost, gfun, x0;
-         inplace = false, autodiff = AutoForwardDiff())
+    outq = optimize(cost, gfun, x0; inplace = false)
     return outq.minimizer
 end;
 
 xl = logistic(vv, yy, reg)
 @assert xl ≈ xh
-
-include("../../../inc/reproduce.jl")

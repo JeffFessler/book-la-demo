@@ -19,6 +19,7 @@ if false
     import Pkg
     Pkg.add([
         "ADTypes"
+        "ForwardDiff"
         "InteractiveUtils"
         "LinearAlgebra"
         "MIRTjim"
@@ -34,11 +35,12 @@ end
 # Run `Pkg.add()` in the preceding code block first, if needed.
 
 using ADTypes: AutoForwardDiff
+import ForwardDiff
 using InteractiveUtils: versioninfo
 using LaTeXStrings
 using LinearAlgebra: svd, norm, Diagonal
 using MIRTjim: jim, prompt
-using Optim: optimize
+using Optim: optimize, LBFGS
 using Plots: default, scatter, savefig
 using Random: seed!
 using Statistics: mean
@@ -149,7 +151,7 @@ This cost function was considered in
 
 Dfun(C) = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J]
 cost(C) = norm(Dfun(C) - Dn)^2
-outp = optimize(cost, Cn; autodiff = AutoForwardDiff())
+outp = optimize(cost, Cn, LBFGS(); autodiff = AutoForwardDiff())
 Cf = outp.minimizer
 pcf = scatter(Cf[1,:], -Cf[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
  title="Location estimates (noisy case - fitted)")
@@ -218,6 +220,3 @@ scatter(Ch[1,:], Ch[2,:], aspect_ratio=1, title="Location estimates")
 
 #
 prompt()
-
-
-include("../../../inc/reproduce.jl")
