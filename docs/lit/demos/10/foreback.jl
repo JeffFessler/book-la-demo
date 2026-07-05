@@ -121,8 +121,9 @@ or equivalently
 where ``\mathbf{Y}`` is the original data matrix.
 =#
 
+norm_sqr(X) = sum(abs2, X)
 robust_pca_cost(Y, X, α::Real, β::Real) =
-    0.5 * norm( A * X - Y )^2 + α * nucnorm(Lpart(X)) + β * norm(Spart(X), 1);
+    0.5 * norm_sqr( A * X - Y ) + α * nucnorm(Lpart(X)) + β * norm(Spart(X), 1);
 
 
 # Proximal algorithm helpers:

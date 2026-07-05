@@ -150,7 +150,8 @@ This cost function was considered in
 =#
 
 Dfun(C) = [norm(C[:,j] - C[:,i]) for i in 1:J, j in 1:J]
-cost(C) = norm(Dfun(C) - Dn)^2
+norm_sqr(X) = sum(abs2, X)
+cost(C) = norm_sqr(Dfun(C) - Dn)
 outp = optimize(cost, Cn, LBFGS(); autodiff = AutoForwardDiff())
 Cf = outp.minimizer
 pcf = scatter(Cf[1,:], -Cf[2,:], xtick=-4:4, ytick=-3:3, aspect_ratio=1,
