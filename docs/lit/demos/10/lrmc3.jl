@@ -127,7 +127,8 @@ Define cost function for optimization problem:
 =#
 
 nucnorm = (X) -> sum(svdvals(X))
-costfun = (X, beta) -> 0.5 * norm(X[Ω] - Y[Ω])^2 + beta * nucnorm(X);
+norm_sqr(X) = sum(abs2, X)
+costfun = (X, beta) -> 0.5 * norm_sqr(X[Ω] - Y[Ω]) + beta * nucnorm(X);
 
 # Define singular value soft thresholding (SVST) function
 function SVST(X, beta)

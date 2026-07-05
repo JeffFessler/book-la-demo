@@ -166,7 +166,8 @@ function sure(sy, reg, v0, M, N)
     big[big .== 0] .= Inf # trick to avoid divide by 0
     big = (sy .* sh) ./ big # [sy[i] * sh[i] / big[i,j] for i in 1:N, j in 1:N]
     big = sum(big)
-    norm(sh - sy)^2 - M*N*v0 + 2*v0*(abs(M-N)*sum(sh ./ sy) + sum(dsoft.(sy,reg)) + 2*big)
+    norm_sqr(x) = sum(abs2, x)
+    norm_sqr(sh - sy) - M*N*v0 + 2*v0*(abs(M-N)*sum(sh ./ sy) + sum(dsoft.(sy,reg)) + 2*big)
 end
 
 # ### Evaluate SURE for each candidate regularization parameter

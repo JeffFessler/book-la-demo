@@ -76,8 +76,9 @@ rad2deg(acos(Q[1])) # very close to 30° as expected
 
 
 # Compare residual norm to prediction
-predict =  norm(A)^2 + norm(B)^2 - 2*sum(s) # sum(s) = nuclear norm
-[norm(residual)^2 predict] # very close
+norm_sqr(X) = sum(abs2, X)
+predict = norm_sqr(A) + norm_sqr(B) - 2*sum(s) # sum(s) = nuclear norm
+[norm_sqr(residual) predict] # very close
 
 
 # ## Fitting function
@@ -86,7 +87,7 @@ function procrustes(A, B)
     C = B * A'
     (U,s,V) = svd(C)
     Q = U*V'
-    scale = sum(s) / norm(A,2)^2
+    scale = sum(s) / norm_sqr(A)
     return Q, scale
 end
 

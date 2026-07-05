@@ -86,7 +86,8 @@ jim(data)
 
 # Choose similarity function
 σ = 2^-2 # tuning parameter
-sfun(x,z) = exp(-norm(x-z)^2/nx/ny/σ^2)
+norm_sqr(x) = sum(abs2, x)
+sfun(x,z) = exp(-norm_sqr(x-z)/nx/ny/σ^2)
 
 # Weight matrix
 slices = eachslice(data, dims=3)

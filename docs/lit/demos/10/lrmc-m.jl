@@ -248,7 +248,8 @@ The optimization problem we will solve is:
 Define cost function for optimization problem
 =#
 nucnorm = (X) -> sum(svdvals(X)) # nuclear norm
-costfun1 = (X,beta) -> 0.5 * norm(M .* (X - Y))^2 + beta * nucnorm(X); # regularized cost
+norm_sqr(X) = sum(abs2, X)
+costfun1 = (X,beta) -> 0.5 * norm_sqr(M .* (X - Y)) + beta * nucnorm(X); # regularized cost
 
 
 #=
@@ -500,7 +501,7 @@ p4 = jimc(xh_fs - Xtrue; title = "FISTA $name: Xh-X",
 
 # Cost function plot
 if false # set to true for HW
-   costfun2 = (X,β) -> 0.5 * norm(M .* (X - Y))^2 + β * norm(svdvals(X), 1/2)
+   costfun2 = (X,β) -> 0.5 * norm_sqr(M .* (X - Y)) + β * norm(svdvals(X), 1/2)
    tmp = niter -> costfun2( fista_schatten(Y, M, reg_fs, niter), reg_fs )
    niter2 = 100
    cost_fista2 = tmp.(0:niter)

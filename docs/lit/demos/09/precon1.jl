@@ -92,7 +92,8 @@ seed!(0)
 A = U * [10 0; 0 3] * V';
 
 # Set up LS cost function and its gradient
-f(x) = 0.5 * norm(A * x)^2
+norm_sqr(x) = sum(abs2, x)
+f(x) = 0.5 * norm_sqr(A * x) # y = 0 here
 ∇f(x) = A' * (A * x)
 
 # Function for generating the matrix ``G`` from a given preconditioner matrix
