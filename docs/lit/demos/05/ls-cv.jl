@@ -175,7 +175,7 @@ end
 cv_loss = sqrt.(sum(abs2, errs, dims=2))
 
 p3 = scatter(degs_cv, cv_loss; legend = :top,
- xaxis = ("degree", (0, 8), [0; argmin(accs); degs[argmin(cv_loss)]; 8]),
+ xaxis = ("degree", (0, 8), [0; 1; argmin(accs); degs[argmin(cv_loss)]; 8]),
  yaxis = ("error", (0, 10), 0:5:10),
  label = "Cross-validation loss",
 )
@@ -191,13 +191,13 @@ Estimate best polynomial degree
 using the cross validation loss.
 
 In this case the estimate is degree=4,
-which happens to match
+which happens to be close to
 the best degree
 in terms of 2-norm fit to the latent function ``f``.
 =#
 
 #
-cv_degree = degs[argmin(cv_loss)]
+cv_degree = degs_cv[argmin(cv_loss)]
 
 #
 oracle_degree = degs[argmin(accs)]
