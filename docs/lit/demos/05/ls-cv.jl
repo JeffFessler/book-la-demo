@@ -163,9 +163,9 @@ prompt()
 
 # ## Cross validation (leave-one-out)
 
-degs = 1:8
-errs = zeros(length(degs), M)
-for (id, deg) in enumerate(degs)
+degs_cv = 1:8
+errs = zeros(length(degs_cv), M)
+for (id, deg) in enumerate(degs_cv)
     for m in 1:M
         mm = (1:M)[[1:(m-1); (m+1):M]]
         pol = fit(xm[mm], y[mm], deg)
@@ -174,9 +174,9 @@ for (id, deg) in enumerate(degs)
 end
 cv_loss = sqrt.(sum(abs2, errs, dims=2))
 
-p3 = scatter(degs, cv_loss; legend = :top,
- xlabel = "degree",
- ylabel = "error",
+p3 = scatter(degs_cv, cv_loss; legend = :top,
+ xaxis = ("degree", (0, 8), [0; argmin(accs); degs[argmin(cv_loss)]; 8]),
+ yaxis = ("error", (0, 10), 0:5:10),
  label = "Cross-validation loss",
 )
 scatter!(p3, degs, accs;
